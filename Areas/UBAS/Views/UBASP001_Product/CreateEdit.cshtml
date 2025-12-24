@@ -1,0 +1,221 @@
+@model powererp.Models.Products
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+    var vendor = new z_sqlVendors();
+    var status = new z_sqlProductStatus();
+    var category = new z_sqlCategorys();
+    var VenderList = vendor.GetDropDownList();
+    var StatusList = status.GetDropDownList();
+    var CategoryList = category.GetDropDownList();
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.IsShowPhoto)
+        @Html.HiddenFor(model => model.ContentText)
+        @Html.HiddenFor(model => model.SpecificationText)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.ProdNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ProdNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ProdNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.BrandName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.BrandName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BrandName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.ProdName)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ProdName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ProdName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.BrandSeriesName)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.BrandSeriesName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BrandSeriesName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.CategoryName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.CategoryNo,CategoryList , new { @class = "form-control selectpicker" , @data_live_search="true" } )
+                        @Html.ValidationMessageFor(model => model.CategoryNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.VendorName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.VendorNo, VenderList, new { @class = "form-control selectpicker" , @data_live_search="true" } )
+                        @Html.ValidationMessageFor(model => model.VendorName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.StatusName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.StatusNo, StatusList , new { @class =  "form-control selectpicker" , @data_live_search="true" } )
+                        @Html.ValidationMessageFor(model => model.StatusNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.BarcodeNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.BarcodeNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BarcodeNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IsEnabled)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsEnabled, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IsEnabled, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IsInventory)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsInventory, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IsInventory, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.CostPrice)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.CostPrice, new { htmlAttributes = new { @class = "form-control" , @type="number"} })
+                        @Html.ValidationMessageFor(model => model.CostPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.MarketPrice)
+                    </div>
+                    <div class="col-md-8">
+                    @Html.EditorFor(model => model.MarketPrice, new { htmlAttributes = new { @class = "form-control" , @type = "number"} })
+                        @Html.ValidationMessageFor(model => model.MarketPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.SalePrice)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.SalePrice, new { htmlAttributes = new { @class = "form-control" , @type = "number"} })
+                        @Html.ValidationMessageFor(model => model.SalePrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.DiscountPrice)
+                    </div>
+                    <div class="col-md-8">
+                    @Html.EditorFor(model => model.DiscountPrice, new { htmlAttributes = new { @class = "form-control" , @type = "number"} })
+                        @Html.ValidationMessageFor(model => model.DiscountPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.InventoryQty)
+                    </div>
+                    <div class="col-md-8">
+                    @Html.EditorFor(model => model.InventoryQty, new { htmlAttributes = new { @class = "form-control" ,  @type = "number"} })
+                        @Html.ValidationMessageFor(model => model.InventoryQty, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.Remark)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await Html.PartialAsync("_PartialFormSubmit")
+    </div>
+}

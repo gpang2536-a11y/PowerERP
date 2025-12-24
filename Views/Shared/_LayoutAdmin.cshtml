@@ -1,0 +1,261 @@
+@{
+    ViewData["Title"] = "首頁";
+    string loginText = (SessionService.IsLogin) ? "登出系統" : "登入系統";
+    string userInfo = (SessionService.IsLogin) ? "登入者：" + SessionService.UserNo + " " + SessionService.UserName : "遊客";
+    string appInfo = $"{AppService.AppName}";
+    string cardSizeClass = (string.IsNullOrEmpty(SessionService.CardSize)) ? "card-size-max" : SessionService.CardSize;
+    using var message = new z_sqlMessages();
+    int int_count = 0;
+    int int_rows = 5;
+    var messageList = message.GetMessagesByReceiverNo("Message", SessionService.UserNo, 0, true);
+    var alertList = message.GetMessagesByReceiverNo("Alert", SessionService.UserNo, 0, true);
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ASP.NET MVC Core - Bootstrap 5 Responsive Admin">
+    <meta name="author" content="Johnson">
+    <meta name="keyword" content="ASP.NET MVC Core, Dashboard, Admin, Template, Theme, Bootstrap, Responsive">
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")">
+    <title>@appInfo - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="@Url.Content("~/lib/jqueryui/themes/base/jquery-ui.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap/dist/css/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap-icons/font/bootstrap-icons.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/toastr.js/toastr.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/datepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/timepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/fontawesome/css/all.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/flag-icons/css/flag-icons.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap-select/css/bootstrap-select.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/sweetalert2/sweetalert2.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/niceadmin/assets/css/style.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js")"></script>
+    <script src="@Url.Content("~/lib/jqueryui/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/lib/Chart.js/chart.umd.min.js")"></script>
+    <script src="@Url.Content("~/lib/fontawesome/js/all.js")"></script>
+    <script src="@Url.Content("~/lib/moment.js/moment.min.js")"></script>
+    <script src="@Url.Content("~/lib/moment.js/locale/zh-tw.min.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/datepicker.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/datepicker-zh-TW.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/timepicker.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/timepicker-zh-TW.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/locales-all.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/bootstrap5/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/google-calendar/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/sweetalert2/sweetalert2.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap-select/js/bootstrap-select.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap-select/js/i18n/defaults-zh_TW.min.js")"></script>
+    <script src="@Url.Content("~/lib/toastr.js/toastr.min.js")"></script>
+    <script src="@Url.Content("~/js/site.js")" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Updated: Apr 7 2025 with Bootstrap v5.3.5
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="logo d-flex align-items-center">
+                    <img src="@Url.Content("~/lib/niceadmin/assets/img/logo.png")" alt="Logo">
+                    <span class="d-none d-lg-block">@appInfo</span>
+                </a>
+                <i class="bi bi-list toggle-sidebar-btn"></i>
+            </div><!-- End Logo -->
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link nav-icon" title="個人行事曆"
+                            href="@Url.Action("Calendar", "Home", new { area = "Admin" })">
+                            <i class="bi bi-calendar3"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" title="通知">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-primary badge-number">@alertList.Count()</span>
+                        </a><!-- End Notification Icon -->
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                            <li class="dropdown-header">
+                                你有 @alertList.Count() 個未讀通知
+                                <a href="@Url.Action("Alert", "Home", new { area = "Admin" })">
+                                    <span class="badge rounded-pill bg-primary p-2 ms-2">顯示全部通知</span>
+                                </a>
+                            </li>
+                            @{
+                                int_count = 0;
+                                foreach (var item in alertList)
+                                {
+                                    int_count++;
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li class="notification-item">
+                                        <i class="bi bi-info-circle text-primary"></i>
+                                        <div>
+                                            <h4>@item.HeaderText</h4>
+                                            <p><strong>通知人員：</strong>@item.SenderName</p>
+                                            <p><strong>通知時間：</strong>@item.SendTime.ToString("yyyy/MM/dd HH:mm")</p>
+                                            <p>@item.MessageText</p>
+                                        </div>
+                                    </li>
+                                    if (int_count >= int_rows) { break; }
+                                }
+                            }
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="@Url.Action("NotFinish", "Home", new { area = "Admin" })">顯示全部通知</a>
+                            </li>
+                        </ul><!-- End Notification Dropdown Items -->
+                    </li><!-- End Notification Nav -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown" title="訊息">
+                            <i class="bi bi-chat-left-text"></i>
+                            <span class="badge bg-success badge-number">@messageList.Count()</span>
+                        </a><!-- End Messages Icon -->
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                            <li class="dropdown-header">
+                                您有 @messageList.Count() 封未讀訊息
+                                <a href="@Url.Action("Message", "Home", new { area = "Admin" })"><span
+                                        class="badge rounded-pill bg-primary p-2 ms-2">顯示全部訊息</span></a>
+                            </li>
+                            @foreach (var item in messageList)
+                            {
+                                int_count++;
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="message-item">
+                                    <a href="@Url.Action("MessageDetail", "Home", new { area = "Admin", id = item.Id })">
+                                        <img src="@Url.Content(item.SenderImageUrl)" alt="" class="rounded-circle">
+                                        <div>
+                                            <h4>@item.SenderName</h4>
+                                            <p>@item.SendTime.ToString("yyyy/MM/dd HH:mm")</p>
+                                            <p>@item.MessageText</p>
+                                        </div>
+                                    </a>
+                                </li>
+                                if (int_count >= int_rows) { break; }
+                            }
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="@Url.Action("Message", "Home", new { area = "Admin" })">顯示全部訊息</a>
+                            </li>
+                        </ul><!-- End Messages Dropdown Items -->
+                    </li><!-- End Messages Nav -->
+                    <li class="nav-item pe-3">
+                        <a class="nav-link nav-icon"
+                            href="@Url.Action("FrontendHome", ActionService.Home, new { area = "Admin" })" title="前台首頁">
+                            <i class="bi bi-house"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown pe-3">
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
+                            data-bs-toggle="dropdown">
+                            <img src="@Url.Content(SessionService.UserImage)" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2">@userInfo</span>
+                        </a><!-- End Profile Iamge Icon -->
+                        @if (SessionService.IsLogin)
+                        {
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                                <li class="dropdown-header">
+                                    <h6>@SessionService.UserName</h6>
+                                    @if (!string.IsNullOrEmpty(SessionService.DeptName) ||
+                                                                    !string.IsNullOrEmpty(SessionService.TitleName))
+                                    {
+                                        <span>@SessionService.DeptName @SessionService.TitleName</span>
+                                    }
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="@Url.Action("Profile", "User", new { area = "" })">
+                                        <i class="bi bi-person"></i>
+                                        <span>我的帳號</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="@Url.Action(action: "ResetPassword", "User", new { area = "" })">
+                                        <i class="bi bi-gear"></i>
+                                        <span>重設密碼</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- End Profile Dropdown Items -->
+                        }
+                    </li><!-- End Profile Nav -->
+                    <li>
+                        <a class="nav-profile" href="@Url.Action("Logout", "User", new { area = "" })">
+                            <span class="pe-2">@loginText</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav><!-- End Icons Navigation -->
+        </header><!-- End Header -->
+
+        <!-- ======= Sidebar ======= -->
+        @await Html.PartialAsync("_PartialFormSidebar")
+        <!-- End Sidebar-->
+
+        <main id="main" class="main">
+            <div class="card border-secondary @cardSizeClass">
+                <div class="card-header bg-secondary text-white">
+                    <div class="float-start">
+                        <h5 style="margin-bottom: 0">@SessionService.PrgInfo</h5>
+                    </div>
+                    @if (!string.IsNullOrEmpty(SessionService.ActionName))
+                    {
+                        <div class="float-end">
+                            <h5 style="margin-bottom: 0">@SessionService.ActionName</h5>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(SessionService.SubActionName))
+                    {
+                        <div class="float-end ms-2">
+                            <h5 style="margin-bottom: 0">@SessionService.SubActionName</h5>
+                        </div>
+                    }
+                </div>
+                <div class="card-body m-1">
+                    @RenderBody()
+                </div>
+            </div>
+        </main><!-- End #main -->
+
+        <!-- ======= Footer ======= -->
+        <footer id="footer" class="footer">
+            <div class="copyright">
+                &copy; @DateTime.Today.Year Copyright <strong><span>@AppService.Designer</span></strong>. 版權所有
+            </div>
+        </footer><!-- End Footer -->
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+                class="bi bi-arrow-up-short"></i></a>
+    </div>
+    <script src="@Url.Content("~/lib/niceadmin/assets/js/main.js")"></script>
+    @await RenderSectionAsync("ScriptsBody", required: false)
+    @await Html.PartialAsync("_PartialAlertMessage")
+    @await Html.PartialAsync("_PartialDeleteData")
+</body>
+
+</html>

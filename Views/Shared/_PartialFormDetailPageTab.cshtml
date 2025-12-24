@@ -1,0 +1,13 @@
+@model IEnumerable<dmDetailTabsModel>
+<ul class="nav nav-pills">
+    @foreach (var tab in Model)
+    {
+        <li class="nav-item">
+            <a class="nav-link @(SessionService.DetailPageTabIndex == tab.TabIndex ? "active" : "")"
+                aria-current="@(SessionService.DetailPageTabIndex == tab.TabIndex ? "page" : "")"
+                href="@Url.ActionLink(ActionService.SelectTab, ActionService.Controller, new { area = ActionService.Area, id = tab.TabIndex })">
+                @tab.TabName
+            </a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,102 @@
+﻿@model IEnumerable<powererp.Models.CodeDatas>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+    var BaseModel = (IEnumerable<SelectListItem>)ViewBag.MasterList;
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+
+@using (Html.BeginForm("ChangeBaseNo", ActionService.Controller,
+new { area = ActionService.Area }, FormMethod.Post, false,
+new { id = "baseNoForm", role = "form" }))
+{
+    <div class="row mx-1 mb-2">
+        <div class="col-md-12">
+            <div class="float-start pt-2 me-1">
+                <span class="control-label fw-bold">主檔類別：</span>
+            </div>
+            <div class="float-start">
+                @Html.DropDownList("BaseNo", BaseModel, new { @class = "form-control", onchange = "BaseNoChanged();" })
+            </div>
+        </div>
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <thead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsEnabled)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SortNo)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.CodeNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CodeName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CodeValue)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                SessionService.RowId = item.Id;
+                SessionService.RowData = $"{item.CodeNo} {item.CodeName}";
+                <tr>
+                    @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                    {
+                        <td>
+                            @await Html.PartialAsync("_PartialFormEdit")
+                            @await Html.PartialAsync("_PartialFormDelete")
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsEnabled)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SortNo)
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.CodeNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodeValue)
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section ScriptsBody
+{
+    <script>
+        function BaseNoChanged() {
+            $("#baseNoForm").submit();
+        }  
+    </script>
+}

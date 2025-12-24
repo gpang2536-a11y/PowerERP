@@ -1,0 +1,488 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+    int delay = 0;
+    string ImagePath = "";
+    string filter = "";
+
+    var comp = new z_sqlCompanys();
+    var carousel = new z_sqlCarousels();
+    var service = new z_sqlServices();
+    var teams = new z_sqlTeams();
+    var priceing = new z_sqlPricings();
+    var priceingDetail = new z_sqlPricingDetails();
+    var question = new z_sqlQuestions();
+    var photo = new z_sqlPhotos();
+    var codedata = new z_sqlCodeDatas();
+    var testimonial = new z_sqlTestimonials();
+
+    var company = comp.GetDefaultCompany();
+    var carouselModel = carousel.GetDataList();
+    var serviceModel = service.GetDataList();
+    var teamModel = teams.GetDataList();
+    var priceingModel = priceing.GetDataList();
+    var priceingDetailModel = priceingDetail.GetDataList();
+    var questionModel = question.GetDataList();
+    var photoModel = photo.GetDataList();
+    var testimonialModel = testimonial.GetDataList();
+    var photoNameModel = codedata.GetDropDownList("Photo", false);
+    string mapUrl = $"https://maps.google.com/maps?q={company.CompAddress}&t=&z=15&ie=UTF8&iwloc=&output=embed";
+}
+
+<!-- Hero Section -->
+<section id="hero" class="hero section dark-background">
+    <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+        @foreach (var item in carouselModel)
+        {
+            ImagePath = $"~/images/carousels/{item.ImageUrl}";
+            <div class="carousel-item @(item.IsActive ? "active" : "")">
+                <img src="@Url.Content(ImagePath)" alt="">
+                <div class="carousel-container">
+                    <h2>@item.HeaderName<br></h2>
+                    <p>@item.Description</p>
+                    <a href="@Url.Content(item.MoreUrl)" class="btn-get-started">更多內容</a>
+                </div>
+            </div>
+            <!-- End Carousel Item -->
+        }
+        <a class="carousel-control-prev" href="#hero-carousel" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next" href="#hero-carousel" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
+        </a>
+        <ol class="carousel-indicators"></ol>
+    </div>
+
+</section><!-- /Hero Section -->
+
+<!-- About Section -->
+<section id="about" class="about section">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>關於我們</h2>
+        <div><span>關於</span> <span class="description-title">@company.ShortName</span></div>
+        @Html.Raw(company.AboutusText)
+    </div><!-- End Section Title -->
+</section><!-- /About Section -->
+
+<!-- Stats Section -->
+<section id="stats" class="stats section">
+    <div class="container section-title" data-aos="fade-up" data-aos-delay="100">
+        <h2>服務經驗</h2>
+        <div><span>關於</span> <span class="description-title">本公司服務經驗</span></div>
+        <div class="row gy-4">
+            <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+                <i class="bi bi-emoji-smile"></i>
+                <div class="stats-item">
+                    <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
+                        class="purecounter"></span>
+                    <p>公司客戶數</p>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+                <i class="bi bi-journal-richtext"></i>
+                <div class="stats-item">
+                    <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1"
+                        class="purecounter"></span>
+                    <p>承包專案數</p>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+                <i class="bi bi-headset"></i>
+                <div class="stats-item">
+                    <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1"
+                        class="purecounter"></span>
+                    <p>服務小時數</p>
+                </div>
+            </div><!-- End Stats Item -->
+            <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+                <i class="bi bi-people"></i>
+                <div class="stats-item">
+                    <span data-purecounter-start="0" data-purecounter-end="75" data-purecounter-duration="1"
+                        class="purecounter"></span>
+                    <p>服務人員數</p>
+                </div>
+            </div><!-- End Stats Item -->
+        </div>
+    </div>
+</section><!-- /Stats Section -->
+
+<!-- Features Section -->
+<section id="features" class="features section">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <h3>公司客戶數</h3>
+                <p>本公司以 MIT
+                    優良的產品品質，準確的交期和以客戶著想的服務，獲得了許多夥伴的肯定，服務範圍遍及歐、美、亞、非等世界各地，我們生產的零件使用在各大知名品牌的產品上，合作客戶相當穩定，每年業務均持續的擴展增加。
+                </p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check2"></i> <span>BRAUN</span></li>
+                    <li><i class="bi bi-check2"></i> <span>BUFFALO</span></li>
+                    <li><i class="bi bi-check2"></i> <span>dyson</span></li>
+                </ul>
+            </div><!-- End feature item-->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <h3>承包專案數</h3>
+                <p>本公司的產品品質高，性能非常穩定，能幫助客戶在最快速的時間內建置專案，十年來應用我們公司的產品而完成的專案愈來愈多，獲得了許多客戶的推薦與讚譽。</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check2"></i> <span>無人載具科技創新實驗計畫</span></li>
+                    <li><i class="bi bi-check2"></i> <span>領航企業研發深耕計畫</span></li>
+                    <li><i class="bi bi-check2"></i> <span>國際鏈結與商業概念驗證專案</span></li>
+                </ul>
+            </div><!-- End feature item-->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <h3>服務小時數</h3>
+                <p>本公司的服務團隊非常的專業，包含科技業、傳產業、服務業、...等不同產業的專業顧問及專業人才，可以依據客戶的產業不同提供最佳的資訊服務及產品，目前累計許多的服務經驗。</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check2"></i> <span>科技業服務時數 200以上</span></li>
+                    <li><i class="bi bi-check2"></i> <span>傳產業服務時數 300以上</span></li>
+                    <li><i class="bi bi-check2"></i> <span>服務業服務時數 400以上</span></li>
+                </ul>
+            </div><!-- End feature item-->
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <h3>服務人員數</h3>
+                <p>本公司依照不同的服務對象，部署不同的服務團隊，針對不同的客戶需求提供最適合的團隊來服務。</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check2"></i> <span>科技業服務團隊 25人</span></li>
+                    <li><i class="bi bi-check2"></i> <span>傳產業服務團隊 25人</span></li>
+                    <li><i class="bi bi-check2"></i> <span>服務業服務團隊 25人</span></li>
+                </ul>
+            </div><!-- End feature item-->
+        </div>
+    </div>
+</section><!-- /Features Section -->
+
+<!-- Services Section -->
+<section id="services" class="services section">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>服務項目</h2>
+        <div><span>關於</span> <span class="description-title">我們的服務項目</span></div>
+    </div><!-- End Section Title -->
+    <div class="container">
+        <div class="row gy-4">
+            @foreach (var item in serviceModel)
+            {
+                delay += 100;
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="@delay">
+                    <div class="service-item  position-relative">
+                        <div class="icon">
+                            <i class="@item.ImageUrl"></i>
+                        </div>
+                        <a href="#" class="stretched-link">
+                            <h3>@item.HeaderName</h3>
+                        </a>
+                        <p>@item.DetailName</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section><!-- /Services Section -->
+
+<!-- Testimonials Section -->
+<section id="testimonials" class="testimonials section light-background">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>客戶評價</h2>
+        <div><span>關於</span> <span class="description-title">客戶給我們的評價</span></div>
+    </div><!-- End Section Title -->
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper init-swiper">
+            <script type="application/json" class="swiper-config">
+        {
+            "loop": true,
+            "speed": 600,
+            "autoplay": {
+            "delay": 5000
+            },
+            "slidesPerView": "auto",
+            "pagination": {
+            "el": ".swiper-pagination",
+            "type": "bullets",
+            "clickable": true
+            },
+            "breakpoints": {
+            "320": {
+                "slidesPerView": 1,
+                "spaceBetween": 40
+            },
+            "1200": {
+                "slidesPerView": 2,
+                "spaceBetween": 20
+            }
+            }
+        }
+        </script>
+            <div class="swiper-wrapper">
+                @foreach (var item in testimonialModel)
+                {
+                    ImagePath = $"~/images/testimonials/{item.UserNo}.jpg";
+                    <div class="swiper-slide">
+                        <div class="testimonial-wrap">
+                            <div class="testimonial-item">
+                                <img src="@Url.Content(ImagePath)" class="testimonial-img" alt="">
+                                <h3>@item.UserName</h3>
+                                <h4>@item.TitleName</h4>
+                                <div class="stars">
+                                    @for (int i = 0; i < item.StarCount; i++)
+                                    {
+                                        <i class="bi bi-star-fill"></i>
+                                    }
+                                </div>
+                                <p>
+                                    <i class="bi bi-quote quote-icon-left"></i>
+                                    <span>@item.MessageText</span>
+                                    <i class="bi bi-quote quote-icon-right"></i>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+</section><!-- /Testimonials Section -->
+
+<!-- Call To Action Section -->
+<section id="call-to-action" class="call-to-action section dark-background">
+    <img src="@Url.Content("~/lib/multi/assets/img/cta-bg.jpg")" alt="">
+    <div class="container">
+        <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
+            <div class="col-xl-10">
+                <div class="text-center">
+                    <h3>呼叫團隊服務</h3>
+                    <p>經營一家小企業已經夠難的了，而不必處理掉線、混亂的設置或「你能再說一遍嗎？我們的雲電話系統通過您可以信賴的清晰、可靠的通信讓您的業務順利運行。
+                        全球通話功能可讓您聯繫 160 多個國家/地區的客戶和團隊。
+                        智慧呼叫路由和自動撥號器更快地連接客戶和收入團隊。
+                        有用的客戶支援和 5 分鐘的回應時間確保您永遠不會等待。</p>
+                    <a class="cta-btn" href="#">連繫銷售人員</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- /Call To Action Section -->
+
+<!-- Portfolio Section -->
+<section id="portfolio" class="portfolio section">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>產品介紹</h2>
+        <div><span>關於</span> <span class="description-title">我們的產品</span></div>
+    </div><!-- End Section Title -->
+    <div class="container">
+        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+            <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
+                <li data-filter="*" class="filter-active">全部</li>
+                @foreach (var item in photoNameModel)
+                {
+                    filter = $".filter-{item.Value.ToLower()}";
+                    <li data-filter="@filter">@item.Text</li>
+                }
+            </ul>
+            <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+                @foreach (var item in photoModel)
+                {
+                    filter = $"filter-{item.CodeNo.ToLower()}";
+                    ImagePath = $"~/images/portfolios/{item.FolderName}.jpg";
+                    <div class="col-lg-4 col-md-6 portfolio-item isotope-item @filter">
+                        <div class="portfolio-content h-100">
+                            <a href="@Url.Content(ImagePath)" data-gallery="portfolio-gallery-app" class="glightbox">
+                                <img src="@Url.Content(ImagePath)" class="img-fluid" alt="">
+                            </a>
+                            <div class="portfolio-info">
+                                <h4><a href="portfolio-details.html" title="More Details">@item.PhotoName</a></h4>
+                                <p>@item.DetailText</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div><!-- End Portfolio Container -->
+        </div>
+    </div>
+</section><!-- /Portfolio Section -->
+
+<!-- Team Section -->
+<section id="team" class="team section">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>服務團隊</h2>
+        <div><span>關於</span> <span class="description-title">我們的服務團隊</span></div>
+    </div><!-- End Section Title -->
+    <div class="container">
+        <div class="row gy-4">
+            @{
+                delay = 0;
+                foreach (var item in teamModel)
+                {
+                    delay += 100;
+                    ImagePath = $"~/images/teams/{item.TeamNo}.jpg";
+                    <div class="col-xl-3 col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="@delay">
+                        <div class="member">
+                            <img src="@Url.Content(ImagePath)" class="img-fluid" alt="">
+                            <div class="member-info">
+                                <div class="member-info-content">
+                                    <h4>@item.TeamName</h4>
+                                    <span>@item.DeptName @item.TitleName</span>
+                                </div>
+                                <div class="social">
+                                    <a href="@item.TwitterUrl"><i class="bi bi-twitter-x"></i></a>
+                                    <a href="@item.FacebookUrl"><i class="bi bi-facebook"></i></a>
+                                    <a href="@item.InstagramUrl"><i class="bi bi-instagram"></i></a>
+                                    <a href="@item.LinkedinUrl"><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Team Member -->
+                }
+            }
+        </div>
+    </div>
+</section><!-- /Team Section -->
+
+<!-- Pricing Section -->
+<section id="pricing" class="pricing section">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>價格方案</h2>
+        <div><span>關於</span> <span class="description-title">產品的價格方案</span></div>
+    </div><!-- End Section Title -->
+    <div class="container">
+        <div class="row gy-4">
+            @{
+                delay = 0;
+                foreach (var item in priceingModel)
+                {
+                    delay += 100;
+                    priceingDetailModel = priceingDetail.GetDataList(item.PricingNo);
+                    <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="@delay">
+                        <div class="pricing-item @(item.IsRecommend ? "featured" : "")">
+                            <h3>@item.PricingName</h3>
+                            <h4><sup>$</sup>@item.ProdPrice<span> / @item.CycleName</span></h4>
+                            <ul>
+                                @foreach (var detail in priceingDetailModel)
+                                {
+                                    if (detail.IsSupport)
+                                    {
+                                        <li><i class="bi bi-check"></i> <span>@detail.ItemName</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="na"><i class="bi bi-x"></i> <span>@detail.ItemName</span></li>
+                                    }
+                                }
+                            </ul>
+                            <a href="#" class="buy-btn">立即購買</a>
+                        </div>
+                    </div>
+                    <!-- End Pricing Item -->
+                }
+            }
+        </div>
+    </div>
+</section><!-- /Pricing Section -->
+
+<!-- Faq Section -->
+<section id="faq" class="faq section">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>常見問題</h2>
+        <div> <span class="description-title">以下為常見的問題及解答</span></div>
+    </div><!-- End Section Title -->
+    <div class="container">
+        @{
+            delay = 0;
+            foreach (var item in questionModel)
+            {
+                delay += 100;
+                <div class="row faq-item" data-aos="fade-up" data-aos-delay="@delay">
+                    <div class="col-lg-5 d-flex">
+                        <i class="bi bi-question-circle"></i>
+                        <h4>@item.QuestionText</h4>
+                    </div>
+                    <div class="col-lg-7">
+                        <p>
+                            @item.AnswerText
+                        </p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section><!-- /Faq Section -->
+
+<!-- Contact Section -->
+<section id="contact" class="contact section light-background">
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>連絡我們</h2>
+        <div><span>您有任何好的意見嗎?</span> <span class="description-title">請連絡我們</span></div>
+    </div><!-- End Section Title -->
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+            <div class="col-lg-6 ">
+                <div class="row gy-4">
+                    <div class="col-lg-12">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center"
+                            data-aos="fade-up" data-aos-delay="200">
+                            <h3>公司地址</h3>
+                            <p>@company.CompAddress</p>
+                            <div class="mt-3" style="width: 100%; max-width: 600px;">
+                                <iframe src="@mapUrl" width="100%" height="300" style="border:0; border-radius: 8px;"
+                                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div><!-- End Info Item -->
+                    <div class="col-md-6">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center"
+                            data-aos="fade-up" data-aos-delay="300">
+                            <i class="bi bi-telephone"></i>
+                            <h3>連絡電話</h3>
+                            <p>@company.CompTel</p>
+                        </div>
+                    </div><!-- End Info Item -->
+                    <div class="col-md-6">
+                        <div class="info-item d-flex flex-column justify-content-center align-items-center"
+                            data-aos="fade-up" data-aos-delay="400">
+                            <i class="bi bi-envelope"></i>
+                            <h3>電子信箱</h3>
+                            <p>@company.ContactEmail</p>
+                        </div>
+                    </div><!-- End Info Item -->
+                </div>
+            </div>
+            <div class="col-lg-6">
+                @using (Html.BeginForm("UserMessage", ActionService.Home, new { area = "" }, FormMethod.Post))
+                {
+                    <h3>意見反應</h3>
+                    <p>若您有任何寶貴意見，歡迎您利用以下方式填寫訊息，我們收到訊息後會以最快度的方式給您回信。</p>
+                    <div class="row gy-4">
+                        <div class="col-md-6">
+                            <input type="text" name="name" class="form-control" placeholder="請輸入您的姓名" required="required">
+                        </div>
+                        <div class="col-md-6 ">
+                            <input type="email" class="form-control" name="email" placeholder="請輸入您的電子信箱"
+                                required="required">
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" name="subject" placeholder="請輸入訊息主旨"
+                                required="required">
+                        </div>
+                        <div class="col-md-12">
+                            <textarea class="form-control" name="message" rows="10" placeholder="請輸入訊息內容"
+                            required=""></textarea>
+                        </div>
+                        <div class="col-md-12 text-end">
+                            <button type="submit" class="btn btn-primary">提交訊息</button>
+                        </div>
+                    </div>
+                }
+            </div><!-- End Contact Form -->
+        </div>
+    </div>
+</section><!-- /Contact Section -->

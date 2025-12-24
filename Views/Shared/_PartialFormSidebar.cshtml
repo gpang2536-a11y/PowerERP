@@ -1,0 +1,68 @@
+@{
+    var modules = new List<Modules>();
+    using var sec = new z_sqlSecuritys();
+    modules = sec.GetMenuModules();
+    string str_target = "";
+    string str_target_id = "";
+    string str_show = "";
+    string str_prg_no = "";
+    string str_style = "";
+    int int_len1 = 0;
+    int int_len2 = 0;
+}
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Home", new { area = "Admin" })">
+                <i class="bi bi-grid fs-5"></i>
+                <h4 class="pt-2 text-primary">系統功能列表</h4>
+            </a>
+        </li><!-- End Dashboard Nav -->
+        @foreach (var module in modules)
+        {
+            if (SessionService.ModuleNo == module.ModuleNo)
+            { str_show = "show"; }
+            else
+            { str_show = ""; }
+            str_target_id = $"{module.ModuleNo}-nav";
+            str_target = $"#{str_target_id}";
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="@str_target" data-bs-toggle="collapse" href="#">
+                    <i class="@module.IconName me-2"></i>
+                    <span class="fs-5 fw-bold">@module.ModuleNo @module.ModuleName</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="@str_target_id" class="nav-content collapse @str_show" data-bs-parent="#sidebar-nav">
+                    @{
+                        var programs = new List<Programs>();
+                        using var sec1 = new z_sqlSecuritys();
+                        programs = sec1.GetMenuPrograms(module.ModuleNo);
+
+                        foreach (var program in programs)
+                        {
+                            if (program.PrgNo == SessionService.PrgNo)
+                            { str_style = "background-color:#fff3cd;color:blue;"; }
+                            else
+                            { str_style = ""; }
+                            int_len1 = module.ModuleNo.Length;
+                            int_len2 = program.PrgNo.Length - int_len1;
+                            str_prg_no = program.PrgNo.Substring(int_len1, int_len2);
+
+                            <li style="@str_style">
+                                <a
+                                    href="@Url.Action("Open", "Home", new { area = "Admin", prgNo = program.PrgNo, id = program.ParmValue })">
+                                    <i class="@program.IconName me-2"></i>
+                                    <span class="fs-6">@str_prg_no @program.PrgName</span>
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+</aside>
+<!-- End Sidebar-->

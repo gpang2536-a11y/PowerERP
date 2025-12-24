@@ -1,0 +1,247 @@
+-- Drop Trigger
+DROP TRIGGER IF EXISTS [dbo].[tr_InventorysDetail]
+DROP TRIGGER IF EXISTS [dbo].[tr_Inventorys]
+DROP TRIGGER IF EXISTS [dbo].[tr_Caterys]
+GO
+-- Drop Views
+DROP PROCEDURE IF EXISTS [dbo].[sp_count_inventory]
+DROP PROCEDURE IF EXISTS [dbo].[sp_add_user]
+GO
+-- Drop Functions
+DROP FUNCTION IF EXISTS [dbo].[fn_get_time_from_now]
+DROP FUNCTION IF EXISTS [dbo].[fn_get_dept_name]
+GO
+-- Drop Default Constraints
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[WorkflowMasters]') AND type in (N'U'))
+ALTER TABLE [dbo].[WorkflowMasters] DROP CONSTRAINT IF EXISTS [DF_WorkflowMasters_GuidNo]
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[WorkflowDetails]') AND type in (N'U'))
+ALTER TABLE [dbo].[WorkflowDetails] DROP CONSTRAINT IF EXISTS [DF_WorkflowDetails_GuidNo]
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Inventorys]') AND type in (N'U'))
+ALTER TABLE [dbo].[Inventorys] DROP CONSTRAINT IF EXISTS [DF_Inventorys_IsAbolish]
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Inventorys]') AND type in (N'U'))
+ALTER TABLE [dbo].[Inventorys] DROP CONSTRAINT IF EXISTS [DF_Inventorys_IsConfirm]
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Forums]') AND type in (N'U'))
+ALTER TABLE [dbo].[Forums] DROP CONSTRAINT IF EXISTS [DF_Forums_GuidNo]
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[ForumBoards]') AND type in (N'U'))
+ALTER TABLE [dbo].[ForumBoards] DROP CONSTRAINT IF EXISTS [DF_ForumBoards_GuidNo]
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[EmployeeAgents]') AND type in (N'U'))
+ALTER TABLE [dbo].[EmployeeAgents] DROP CONSTRAINT IF EXISTS [DF_EmployeeAgents_IsEnabled]
+IF  EXISTS (SELECT *
+FROM sys.objects
+WHERE object_id = OBJECT_ID(N'[dbo].[Aablite2]') AND type in (N'U'))
+ALTER TABLE [dbo].[Aablite2] DROP CONSTRAINT IF EXISTS [DF_Aablite2_UserName]
+GO
+-- Drop Views
+DROP VIEW IF EXISTS [dbo].[vi_SysTableColumn]
+DROP VIEW IF EXISTS [dbo].[vi_SysIndex]
+DROP VIEW IF EXISTS [dbo].[vi_CodeVendor]
+DROP VIEW IF EXISTS [dbo].[vi_CodeVacation]
+DROP VIEW IF EXISTS [dbo].[vi_CodeUser]
+DROP VIEW IF EXISTS [dbo].[vi_TodoList]
+DROP VIEW IF EXISTS [dbo].[vi_CodeTax]
+DROP VIEW IF EXISTS [dbo].[vi_CodeTarget]
+DROP VIEW IF EXISTS [dbo].[vi_CodeSize]
+DROP VIEW IF EXISTS [dbo].[vi_CodeSheet]
+DROP VIEW IF EXISTS [dbo].[vi_CodeResignReason]
+DROP VIEW IF EXISTS [dbo].[vi_CodeProgram]
+DROP VIEW IF EXISTS [dbo].[vi_CodePhoto]
+DROP VIEW IF EXISTS [dbo].[vi_CodeNotification]
+DROP VIEW IF EXISTS [dbo].[vi_CodeNews]
+DROP VIEW IF EXISTS [dbo].[vi_CodeMessage]
+DROP VIEW IF EXISTS [dbo].[vi_CodeMember]
+DROP VIEW IF EXISTS [dbo].[vi_CodeMaterial]
+DROP VIEW IF EXISTS [dbo].[vi_CodeLogCode]
+DROP VIEW IF EXISTS [dbo].[vi_CodeGender]
+DROP VIEW IF EXISTS [dbo].[vi_CodeFormStatus]
+DROP VIEW IF EXISTS [dbo].[vi_CodeCustomer]
+DROP VIEW IF EXISTS [dbo].[vi_CodeColor]
+DROP VIEW IF EXISTS [dbo].[vi_CodeCompany]
+DROP VIEW IF EXISTS [dbo].[vi_CodeCloseDate]
+DROP VIEW IF EXISTS [dbo].[vi_CodeCalendar]
+DROP VIEW IF EXISTS [dbo].[vi_CodeBrand]
+DROP VIEW IF EXISTS [dbo].[vi_CodeAddressBook]
+DROP VIEW IF EXISTS [dbo].[vi_CodeFormLock]
+DROP VIEW IF EXISTS [dbo].[vi_CodeInventory]
+DROP VIEW IF EXISTS [dbo].[vi_CodeLogInterval]
+DROP VIEW IF EXISTS [dbo].[vi_CodeLogLevel]
+DROP VIEW IF EXISTS [dbo].[vi_UserVendor]
+DROP VIEW IF EXISTS [dbo].[vi_UserUser]
+DROP VIEW IF EXISTS [dbo].[vi_UserTarget]
+DROP VIEW IF EXISTS [dbo].[vi_UserOperator]
+DROP VIEW IF EXISTS [dbo].[vi_UserMis]
+DROP VIEW IF EXISTS [dbo].[vi_UserCustomer]
+DROP VIEW IF EXISTS [dbo].[vi_CompVendor]
+DROP VIEW IF EXISTS [dbo].[vi_CompCustomer]
+DROP VIEW IF EXISTS [dbo].[vi_CompCompany]
+GO
+-- Drop Indexes
+DROP INDEX IF EXISTS [IX_News_type_date] ON [dbo].[News]
+DROP INDEX IF EXISTS [IX_CodeBases_admin_no] ON [dbo].[CodeBases]
+DROP INDEX IF EXISTS [IX_WorkflowRoutes_pno_rorder] ON [dbo].[WorkflowRoutes] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_WorkflowRoleUsers_rno_uno] ON [dbo].[WorkflowRoleUsers] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_WorkflowRoles_no] ON [dbo].[WorkflowRoles] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_WorkflowMasters_fguid_fno_stime] ON [dbo].[WorkflowMasters] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_WorkflowDetails_mguid_rguid_rorder] ON [dbo].[WorkflowDetails] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Warehouses_wno] ON [dbo].[Warehouses] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Vacations_no] ON [dbo].[Vacations] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_TodoLists_uno_date] ON [dbo].[TodoLists] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Titles_no] ON [dbo].[Titles] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Teams_sort_no] ON [dbo].[Teams] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_TableRelations] ON [dbo].[TableRelations] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Shippings_no] ON [dbo].[Shippings] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Services_sort_name] ON [dbo].[Services] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Securitys_rno_tno_mno_pno] ON [dbo].[Securitys] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Roles_no] ON [dbo].[Roles] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Questions_sno] ON [dbo].[Questions] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Propertys_no] ON [dbo].[Propertys] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_PropertyNames_name] ON [dbo].[PropertyNames] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Promotions_stime_etime_pno] ON [dbo].[Promotions] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Programs_mno_sort_pno] ON [dbo].[Programs] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_ProductTags_pno_tname] ON [dbo].[ProductTags] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_ProductStatus_sno] ON [dbo].[ProductStatus] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Products_no] ON [dbo].[Products] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_ProductPropertys_pno_prodno] ON [dbo].[ProductPropertys] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_ProductInventorys_pno_propno] ON [dbo].[ProductInventorys] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_ProductFeatureds_pno_sort_name] ON [dbo].[ProductFeatureds] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Pricings_sort_no] ON [dbo].[Pricings] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_PricingDetails_pno_sort] ON [dbo].[PricingDetails] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Photos_type_folder] ON [dbo].[Photos] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Payments_no] ON [dbo].[Payments] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_OrdersStatus_sno] ON [dbo].[OrdersStatus] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Orders_sno] ON [dbo].[Orders] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_OrderDetails_sno] ON [dbo].[OrderDetails] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Notifications_rno_date_time] ON [dbo].[Notifications] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_NewsLetter_email] ON [dbo].[NewsLetter] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_News_date] ON [dbo].[News] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Modules_role_sort_no] ON [dbo].[Modules] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_MapPositions_code_no] ON [dbo].[MapPositions] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Logs_date_time] ON [dbo].[Logs] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_LogCodes_CodeNo] ON [dbo].[LogCodes] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Languages_no] ON [dbo].[Languages] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_InvMasters_pno] ON [dbo].[InvMasters] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_InventorysType_tno] ON [dbo].[InventorysType] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_InventorysDetail_pid_pno] ON [dbo].[InventorysDetail] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Inventorys_tno_scode_sno] ON [dbo].[Inventorys] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_InvDetails_wno_pno] ON [dbo].[InvDetails] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Forums_pid_sort_name] ON [dbo].[Forums] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_ForumBoards_pid_sort_no] ON [dbo].[ForumBoards] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_FormMaster_code_user_no] ON [dbo].[FormMaster] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_FormLocks_lno] ON [dbo].[FormLocks] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_FormDetail] ON [dbo].[FormDetail] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Featureds_sort_pno] ON [dbo].[Featureds] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_ExtensionTables_pid_sort_name] ON [dbo].[ExtensionTables] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Employees_no] ON [dbo].[Employees] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Departments_no] ON [dbo].[Departments] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_CodeBases_no] ON [dbo].[CodeBases] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_CloseDates_code_start] ON [dbo].[CloseDates] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Clients_sort_name] ON [dbo].[Clients] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Citys_sort_name] ON [dbo].[Citys] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_CityAreas_city_area] ON [dbo].[CityAreas] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Caterys_pno_sno_cno] ON [dbo].[Caterys] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Carts_lno_pno] ON [dbo].[Carts] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Carousels_sort_name] ON [dbo].[Carousels] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Calendars_code_target_date] ON [dbo].[Calendars] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Applications_name] ON [dbo].[Applications] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_AddressBooks_uno_no] ON [dbo].[AddressBooks] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_AboutUsDetails_sort_name] ON [dbo].[AboutUsDetails] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_AboutUs_name] ON [dbo].[AboutUs] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_BaseDatas_no_pno_sort_code] ON [dbo].[CodeDatas] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Users_no] ON [dbo].[Users] WITH ( ONLINE = OFF )
+DROP INDEX IF EXISTS [IX_Companys_code_no] ON [dbo].[Companys] WITH ( ONLINE = OFF )
+GO
+-- Drop Tables
+DROP TABLE IF EXISTS [dbo].[WorkflowRoutes]
+DROP TABLE IF EXISTS [dbo].[WorkflowRoleUsers]
+DROP TABLE IF EXISTS [dbo].[WorkflowRoles]
+DROP TABLE IF EXISTS [dbo].[WorkflowMasters]
+DROP TABLE IF EXISTS [dbo].[WorkflowDetails]
+DROP TABLE IF EXISTS [dbo].[Warehouses]
+DROP TABLE IF EXISTS [dbo].[Vendors]
+DROP TABLE IF EXISTS [dbo].[Vacations]
+DROP TABLE IF EXISTS [dbo].[TodoLists]
+DROP TABLE IF EXISTS [dbo].[Titles]
+DROP TABLE IF EXISTS [dbo].[Testimonials]
+DROP TABLE IF EXISTS [dbo].[TempUser]
+DROP TABLE IF EXISTS [dbo].[Teams]
+DROP TABLE IF EXISTS [dbo].[TableRelations]
+DROP TABLE IF EXISTS [dbo].[Shippings]
+DROP TABLE IF EXISTS [dbo].[Services]
+DROP TABLE IF EXISTS [dbo].[Securitys]
+DROP TABLE IF EXISTS [dbo].[Roles]
+DROP TABLE IF EXISTS [dbo].[Questions]
+DROP TABLE IF EXISTS [dbo].[Propertys]
+DROP TABLE IF EXISTS [dbo].[PropertyNames]
+DROP TABLE IF EXISTS [dbo].[Promotions]
+DROP TABLE IF EXISTS [dbo].[Programs]
+DROP TABLE IF EXISTS [dbo].[ProductTags]
+DROP TABLE IF EXISTS [dbo].[ProductStatus]
+DROP TABLE IF EXISTS [dbo].[Products]
+DROP TABLE IF EXISTS [dbo].[ProductPropertys]
+DROP TABLE IF EXISTS [dbo].[ProductInventorys]
+DROP TABLE IF EXISTS [dbo].[ProductFeatureds]
+DROP TABLE IF EXISTS [dbo].[Pricings]
+DROP TABLE IF EXISTS [dbo].[PricingDetails]
+DROP TABLE IF EXISTS [dbo].[Photos]
+DROP TABLE IF EXISTS [dbo].[Payments]
+DROP TABLE IF EXISTS [dbo].[OrdersStatus]
+DROP TABLE IF EXISTS [dbo].[Orders]
+DROP TABLE IF EXISTS [dbo].[OrderDetails]
+DROP TABLE IF EXISTS [dbo].[Notifications]
+DROP TABLE IF EXISTS [dbo].[NewsLetter]
+DROP TABLE IF EXISTS [dbo].[News]
+DROP TABLE IF EXISTS [dbo].[Modules]
+DROP TABLE IF EXISTS [dbo].[Messages]
+DROP TABLE IF EXISTS [dbo].[MapPositions]
+DROP TABLE IF EXISTS [dbo].[Logs]
+DROP TABLE IF EXISTS [dbo].[LogCodes]
+DROP TABLE IF EXISTS [dbo].[Languages]
+DROP TABLE IF EXISTS [dbo].[InvMasters]
+DROP TABLE IF EXISTS [dbo].[InventorysType]
+DROP TABLE IF EXISTS [dbo].[InventorysDetail]
+DROP TABLE IF EXISTS [dbo].[Inventorys]
+DROP TABLE IF EXISTS [dbo].[InvDetails]
+DROP TABLE IF EXISTS [dbo].[Forums]
+DROP TABLE IF EXISTS [dbo].[ForumBoards]
+DROP TABLE IF EXISTS [dbo].[FormMaster]
+DROP TABLE IF EXISTS [dbo].[FormLocks]
+DROP TABLE IF EXISTS [dbo].[FormDetail]
+DROP TABLE IF EXISTS [dbo].[Featureds]
+DROP TABLE IF EXISTS [dbo].[ExtensionTables]
+DROP TABLE IF EXISTS [dbo].[EmployeeSchools]
+DROP TABLE IF EXISTS [dbo].[Employees]
+DROP TABLE IF EXISTS [dbo].[EmployeeExperiences]
+DROP TABLE IF EXISTS [dbo].[EmployeeAgents]
+DROP TABLE IF EXISTS [dbo].[Departments]
+DROP TABLE IF EXISTS [dbo].[Customers]
+DROP TABLE IF EXISTS [dbo].[CodeBases]
+DROP TABLE IF EXISTS [dbo].[CloseDates]
+DROP TABLE IF EXISTS [dbo].[Clients]
+DROP TABLE IF EXISTS [dbo].[Citys]
+DROP TABLE IF EXISTS [dbo].[CityAreas]
+DROP TABLE IF EXISTS [dbo].[Categorys]
+DROP TABLE IF EXISTS [dbo].[Carts]
+DROP TABLE IF EXISTS [dbo].[Carousels]
+DROP TABLE IF EXISTS [dbo].[Calendars]
+DROP TABLE IF EXISTS [dbo].[Applications]
+DROP TABLE IF EXISTS [dbo].[AddressBooks]
+DROP TABLE IF EXISTS [dbo].[AboutUsDetails]
+DROP TABLE IF EXISTS [dbo].[AboutUs]
+DROP TABLE IF EXISTS [dbo].[Aablite2]
+DROP TABLE IF EXISTS [dbo].[CodeDatas]
+DROP TABLE IF EXISTS [dbo].[Users]
+DROP TABLE IF EXISTS [dbo].[Companys]
+GO

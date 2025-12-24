@@ -1,0 +1,72 @@
+@model powererp.Models.News
+@{
+    ViewData["Title"] = "最新消息";
+    Layout = "_LayoutAdmin";
+    string img_url = Model.ImageUrl + "?t=" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
+}
+
+<div class="row form-group">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.CodeName, null, new { @class = "control-label" })：
+            </div>
+            <div class="col-md-8 pt-2">
+                @Html.DisplayFor(model => model.CodeName, new { htmlAttributes =
+                new { @class = "control-data" } })
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.PublishDate, null, new { @class = "control-label" })：
+            </div>
+            <div class="col-md-8 pt-2">
+                @Html.DisplayFor(model => model.PublishDate, new { htmlAttributes =
+                                new { @class = "control-data" } })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.HeaderName, null, new { @class = "control-label" })：
+            </div>
+            <div class="col-md-10 pt-2">
+                @Html.DisplayFor(model => model.HeaderName, new { htmlAttributes =
+                                new { @class = "control-data" } })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.DetailText, null, new { @class = "control-label" })：
+            </div>
+            <div class="col-md-10 pt-2">
+                @Html.TextAreaFor(model => model.DetailText, 10, 0,
+                                new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.ImageUrl, null, new { @class = "control-label" })：
+            </div>
+            <div class="col-md-10 pt-2">
+                <img src="@Url.Content(img_url)" class="img-thumbnail" style="max-width:300px;cursor:pointer" />
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+@Html.ActionLink("返回", ActionService.Index, ActionService.Controller, new { area = ActionService.Area } , new {@class =
+"btn btn-success"})

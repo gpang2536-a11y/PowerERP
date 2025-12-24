@@ -1,0 +1,72 @@
+﻿@model powererp.Models.vmUINVP003_InvStatus
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var DetailPageTabList = new List<dmDetailTabsModel>();
+    DetailPageTabList.Add(new dmDetailTabsModel { TabIndex = 1, TabName = "明細資料" });
+    DetailPageTabList.Add(new dmDetailTabsModel { TabIndex = 2, TabName = "統計圖表" });
+}
+
+<div class="row mb-0">
+    <div class="col-md-12">
+        <div class="float-start me-1">@await Html.PartialAsync("_PartialFormMasterNavigator")</div>
+        <div class="float-start me-1">@await Html.PartialAsync("_PartialFormMasterButton")</div>
+        <div class="float-start me-1 my-2">@await Html.PartialAsync("_PartialFormMasterPageinfo")</div>
+    </div>
+</div>
+<hr />
+<div class="card border-secondary mb-0">
+    <div class="card-body bg-secondary text-white bg-opacity-50 pt-2">
+        <div class="row">
+            <div class="col-md-8">
+                <span class="text-dark fw-bold">
+                    @Html.DisplayNameFor(m => m.MasterModel.ProductNo)：
+                </span>
+                <span class="text-dark">
+                    @Html.DisplayFor(m => m.MasterModel.ProductNo)
+                </span>
+            </div>
+            <div class="col-md-4">
+                <span class="text-dark fw-bold">
+                    @Html.DisplayNameFor(m => m.MasterModel.Qty)：
+                </span>
+                <span class="text-dark">
+                    @Html.DisplayFor(m => m.MasterModel.Qty)
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="text-dark fw-bold">
+                    @Html.DisplayNameFor(m => m.MasterModel.ProductName)：
+                </span>
+                <span class="text-dark">
+                    @Html.DisplayFor(m => m.MasterModel.ProductName)
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="text-dark fw-bold">
+                    @Html.DisplayNameFor(m => m.MasterModel.Remark)：
+                </span>
+                <span class="text-dark">
+                    @Html.DisplayFor(m => m.MasterModel.Remark)
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    @if (SessionService.DetailPageTabIndex == 1)
+    {
+        @await Html.PartialAsync("_PartialUINVP003Detail", Model)
+    }
+    @if (SessionService.DetailPageTabIndex == 2)
+    {
+        @await Html.PartialAsync("_PartialUINVP003Chart")
+    }
+</div>
+<hr />
+@await Html.PartialAsync("_PartialFormDetailPageTab", DetailPageTabList)

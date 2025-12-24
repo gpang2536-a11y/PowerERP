@@ -1,0 +1,99 @@
+﻿@model IEnumerable<powererp.Models.Pricings>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th>
+                    @await Html.PartialAsync("_PartialFormFunction")
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsEnabled)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsAdvanced)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsRecommend)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SortNo)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.PricingNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.PricingName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ProdPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CycleName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                SessionService.RowId = item.Id;
+                SessionService.RowData = $"{item.PricingNo} {item.PricingName}";
+                <tr>
+                    @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                    {
+                        <td>
+                            @await Html.PartialAsync("_PartialFormEdit")
+                            @await Html.PartialAsync("_PartialFormDelete")
+                        </td>
+                    }
+                    <td>
+                        @await Html.PartialAsync("_PartialFormDetail")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsEnabled)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsAdvanced)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsRecommend)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SortNo)
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.PricingNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PricingName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CycleName)
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

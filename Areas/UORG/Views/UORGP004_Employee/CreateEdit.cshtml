@@ -1,0 +1,237 @@
+@model powererp.Models.Employees
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+    var code = new z_sqlCodeDatas();
+    var dept = new z_sqlDepartments();
+    var title = new z_sqlTitles();
+    var city = new z_sqlCitys();
+    var area = new z_sqlCityAreas();
+    var GenderList = code.GetDropDownList("Gender", false);
+    var DepartmentList = dept.GetDropDownList(true);
+    var TitleList = title.GetDropDownList(true);
+    var CityList = city.GetDropDownList(false);
+    var AreaList = area.GetDropDownList(Model.CityName);
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.EmpNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.EmpNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EmpNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.EmpName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.EmpName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EmpName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IsValid)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsValid, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IsValid, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.GenderName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.GenderCode, GenderList , new { @class = "form-control selectpicker" , @data_live_search="false"} )
+                        @Html.ValidationMessageFor(model => model.GenderCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.DeptName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.DeptNo, DepartmentList , new { @class = "form-control selectpicker" , @data_live_search="true"} )
+                        @Html.ValidationMessageFor(model => model.DeptNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.TitleName)
+                    </div>
+                    <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.TitleNo, TitleList , new { @class = "form-control selectpicker" , @data_live_search = "true"} )
+                        @Html.ValidationMessageFor(model => model.TitleNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.OnboardDate)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.OnboardDate, new { htmlAttributes = new { @class = "form-control datepicker" , @type="text" } })
+                        @Html.ValidationMessageFor(model => model.OnboardDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.LeaveDate)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.LeaveDate, new { htmlAttributes = new { @class = "form-control datepicker" , @type="text" } })
+                        @Html.ValidationMessageFor(model => model.LeaveDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.Birthday)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control datepicker" , @type="text" } })
+                        @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.ContactTel)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ContactTel, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ContactTel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.ContactEmail)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ContactEmail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.CityName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.CityName, CityList , new { @class = "form-control selectpicker" , @data_live_search = "true"} )
+                        @Html.ValidationMessageFor(model => model.CityName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.CityArea)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.CityArea, AreaList , new { @class = "form-control"} )
+                        @Html.ValidationMessageFor(model => model.CityArea, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.ContactAddress)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ContactAddress, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ContactAddress, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.Remark)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @await Html.PartialAsync("_PartialFormSubmit")
+    </div>
+}
+@section ScriptsBody {
+    <script>
+        $(document).ready(function () {
+            $("#CityName").change(function () {
+                $("#CityArea").empty();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCityAreaList", ActionService.Controller, new { area = ActionService.Area })',
+                    dataType: "json",
+                    data: { id: $("#CityName").val() },
+                    success: function (values) {
+                        $.each(values, function (i, data) {
+                            $("#CityArea").append(
+                                '<option value="' + data.Value + '">' + data.Text + '</option>'
+                            );
+                        });
+                    },
+                    error: function (ex) {
+                        alert("無法讀取縣市區域資料!! :" + ex);
+                    }
+                });
+            });
+        });
+    </script>
+}

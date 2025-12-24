@@ -1,0 +1,16 @@
+{
+  "claudeCode.model": "claude-4.5-sonnet",
+  "claudeCode.language": "zh-TW",
+  "claudeCode.contextSize": "large",
+  "claudeCode.autoApply": false,
+  "editor.formatOnSave": true,
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
+  },
+  "dotnet.format.enable": true,
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true,
+  },
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
+}

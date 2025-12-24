@@ -1,0 +1,37 @@
+﻿@{
+    int int_page = SessionService.PageMaster;
+    int int_pageCount = SessionService.PageCountMaster;
+    string str_button = "btn btn-secondary";
+    string str_list = "btn btn-info";
+    string str_class = str_button;
+}
+@{
+    str_class = (int_pageCount > 0) ? str_list : str_list + " disabled";
+}
+@Html.ActionLink(SessionService.GetActionName(enAction.List), ActionService.List, ActionService.Controller,
+new { area = ActionService.Area },
+new { @class = str_class })
+@{
+    str_class = (int_page <= 1) ? str_button + " disabled" : str_button;
+}
+@Html.ActionLink(SessionService.GetActionName(enAction.First), ActionService.First, ActionService.Controller,
+new { area = ActionService.Area },
+new { @class = str_class })
+@{
+    str_class = (int_page > 1) ? str_button : str_button + " disabled";
+}
+@Html.ActionLink(SessionService.GetActionName(enAction.Prior), ActionService.Prior, ActionService.Controller,
+new { area = ActionService.Area },
+new { @class = str_class })
+@{
+    str_class = (int_page < int_pageCount) ? str_button : str_button + " disabled";
+}
+@Html.ActionLink(SessionService.GetActionName(enAction.Next), ActionService.Next, ActionService.Controller,
+new { area = ActionService.Area },
+new { @class = str_class })
+@{
+    str_class = (int_page < int_pageCount) ? str_button : str_button + " disabled";
+}
+@Html.ActionLink(SessionService.GetActionName(enAction.Last), ActionService.Last, ActionService.Controller,
+new { area = ActionService.Area },
+new { @class = str_class })

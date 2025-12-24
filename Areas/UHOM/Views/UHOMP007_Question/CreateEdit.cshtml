@@ -1,0 +1,70 @@
+@model powererp.Models.Questions
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.SortNo)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.SortNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SortNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.QuestionText)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.QuestionText, 5, 0, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.QuestionText, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.AnswerText)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.AnswerText, 5, 0, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AnswerText, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.Remark)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await Html.PartialAsync("_PartialFormSubmit")
+    </div>
+}

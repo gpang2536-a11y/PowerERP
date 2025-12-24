@@ -1,0 +1,824 @@
+-- Create Indexes
+CREATE CLUSTERED INDEX [IX_Companys_code_no] ON [dbo].[Companys]
+(
+	[CodeNo] ASC,
+	[CompNo] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Users_no] ON [dbo].[Users]
+(
+	[UserNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_BaseDatas_no_pno_sort_code] ON [dbo].[CodeDatas]
+(
+	[BaseNo] ASC,
+	[ParentNo] ASC,
+	[SortNo] ASC,
+	[CodeNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_AboutUs_name] ON [dbo].[AboutUs]
+(
+	[HeaderName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_AboutUsDetails_sort_name] ON [dbo].[AboutUsDetails]
+(
+	[SortNo] ASC,
+	[ItemName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_AddressBooks_uno_no] ON [dbo].[AddressBooks]
+(
+	[UserNo] ASC,
+	[CodeNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Applications_name] ON [dbo].[Applications]
+(
+	[AppName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Calendars_code_target_date] ON [dbo].[Calendars]
+(
+	[TargetCode] ASC,
+	[TargetNo] ASC,
+	[StartDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Carousels_sort_name] ON [dbo].[Carousels]
+(
+	[SortNo] ASC,
+	[HeaderName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Carts_lno_pno] ON [dbo].[Carts]
+(
+	[LotNo] ASC,
+	[ProdNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Categorys_pno_sno_cno] ON [dbo].[Categorys]
+(
+	[ParentNo] ASC,
+	[SortNo] ASC,
+	[CategoryNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_CityAreas_city_area] ON [dbo].[CityAreas]
+(
+	[CityName] ASC,
+	[AreaName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Citys_sort_name] ON [dbo].[Citys]
+(
+	[SortNo] ASC,
+	[CityName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Clients_sort_name] ON [dbo].[Clients]
+(
+	[SortNo] ASC,
+	[ClientName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_CloseDates_code_start] ON [dbo].[CloseDates]
+(
+	[CodeNo] ASC,
+	[StartDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_CodeBases_no] ON [dbo].[CodeBases]
+(
+	[BaseNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE UNIQUE CLUSTERED INDEX [IX_Departments_no] ON [dbo].[Departments]
+(
+	[DeptNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Employees_no] ON [dbo].[Employees]
+(
+	[EmpNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_ExtensionTables_pid_sort_name] ON [dbo].[ExtensionTables]
+(
+	[ParentId] ASC,
+	[SortNo] ASC,
+	[ExtName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Featureds_sort_pno] ON [dbo].[Featureds]
+(
+	[SortNo] ASC,
+	[ProdNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_FormDetail] ON [dbo].[FormDetail]
+(
+	[FormCode] ASC,
+	[FormNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_FormLocks_lno] ON [dbo].[FormLocks]
+(
+	[LockNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_FormMaster_code_user_no] ON [dbo].[FormMaster]
+(
+	[FormCode] ASC,
+	[UserNo] ASC,
+	[FormNo] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_ForumBoards_pid_sort_no] ON [dbo].[ForumBoards]
+(
+	[SortNo] ASC,
+	[BoardNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Forums_pid_sort_name] ON [dbo].[Forums]
+(
+	[BoardNo] ASC,
+	[ParentGuid] ASC,
+	[SubjectDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_InvDetails_wno_pno] ON [dbo].[InvDetails]
+(
+	[WareHouseNo] ASC,
+	[ProductNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Inventorys_tno_scode_sno] ON [dbo].[Inventorys]
+(
+	[TypeNo] ASC,
+	[SheetCode] ASC,
+	[SheetNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_InventorysDetail_pid_pno] ON [dbo].[InventorysDetail]
+(
+	[ParentNo] ASC,
+	[ProductNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_InventorysType_tno] ON [dbo].[InventorysType]
+(
+	[TypeNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_InvMasters_pno] ON [dbo].[InvMasters]
+(
+	[ProductNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Languages_no] ON [dbo].[Languages]
+(
+	[LangNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_LogCodes_CodeNo] ON [dbo].[LogCodes]
+(
+	[CodeNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Logs_date_time] ON [dbo].[Logs]
+(
+	[LogDate] DESC,
+	[LogTime] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_MapPositions_code_no] ON [dbo].[MapPositions]
+(
+	[TargetCode] ASC,
+	[TargetNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Modules_role_sort_no] ON [dbo].[Modules]
+(
+	[RoleNo] ASC,
+	[SortNo] ASC,
+	[ModuleNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_News_date] ON [dbo].[News]
+(
+	[PublishDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_NewsLetter_email] ON [dbo].[NewsLetter]
+(
+	[UserEmail] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Notifications_rno_date_time] ON [dbo].[Notifications]
+(
+	[ReceiverNo] ASC,
+	[SendDate] DESC,
+	[SendTime] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_OrderDetails_sno] ON [dbo].[OrderDetails]
+(
+	[ParentNo] ASC,
+	[ProdNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Orders_sno] ON [dbo].[Orders]
+(
+	[SheetNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_OrdersStatus_sno] ON [dbo].[OrdersStatus]
+(
+	[StatusNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Payments_no] ON [dbo].[Payments]
+(
+	[PaymentNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Photos_type_folder] ON [dbo].[Photos]
+(
+	[CodeNo] ASC,
+	[FolderName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_PricingDetails_pno_sort] ON [dbo].[PricingDetails]
+(
+	[PricingNo] ASC,
+	[SortNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Pricings_sort_no] ON [dbo].[Pricings]
+(
+	[SortNo] ASC,
+	[PricingNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_ProductFeatureds_pno_sort_name] ON [dbo].[ProductFeatureds]
+(
+	[ProdNo] ASC,
+	[SortNo] ASC,
+	[FeaturedName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_ProductInventorys_pno_propno] ON [dbo].[ProductInventorys]
+(
+	[ProdNo] ASC,
+	[PropertyNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_ProductPropertys_pno_prodno] ON [dbo].[ProductPropertys]
+(
+	[ProdNo] ASC,
+	[PropertyNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Products_no] ON [dbo].[Products]
+(
+	[ProdNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_ProductStatus_sno] ON [dbo].[ProductStatus]
+(
+	[StatusNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_ProductTags_pno_tname] ON [dbo].[ProductTags]
+(
+	[ProdNo] ASC,
+	[TagName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Programs_mno_sort_pno] ON [dbo].[Programs]
+(
+	[ModuleNo] ASC,
+	[SortNo] ASC,
+	[PrgNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Promotions_stime_etime_pno] ON [dbo].[Promotions]
+(
+	[StartTime] DESC,
+	[EndTime] DESC,
+	[ProdNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_PropertyNames_name] ON [dbo].[PropertyNames]
+(
+	[PropName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Propertys_no] ON [dbo].[Propertys]
+(
+	[PropertyNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Questions_sno] ON [dbo].[Questions]
+(
+	[SortNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Roles_no] ON [dbo].[Roles]
+(
+	[RoleNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Securitys_rno_tno_mno_pno] ON [dbo].[Securitys]
+(
+	[RoleNo] ASC,
+	[TargetNo] ASC,
+	[ModuleNo] ASC,
+	[PrgNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Services_sort_name] ON [dbo].[Services]
+(
+	[SortNo] ASC,
+	[HeaderName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Shippings_no] ON [dbo].[Shippings]
+(
+	[ShippingNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_TableRelations] ON [dbo].[TableRelations]
+(
+	[LeftColumnName] ASC,
+	[RightColumnName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Teams_sort_no] ON [dbo].[Teams]
+(
+	[SortNo] ASC,
+	[TeamNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE UNIQUE CLUSTERED INDEX [IX_Titles_no] ON [dbo].[Titles]
+(
+	[TitleNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_TodoLists_uno_date] ON [dbo].[TodoLists]
+(
+	[UserNo] ASC,
+	[DeadlineDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Vacations_no] ON [dbo].[Vacations]
+(
+	[VacYear] DESC,
+	[StartDate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_Warehouses_wno] ON [dbo].[Warehouses]
+(
+	[WarehouseNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_WorkflowDetails_mguid_rguid_rorder] ON [dbo].[WorkflowDetails]
+(
+	[MasterGuidNo] ASC,
+	[RouteGuidNo] ASC,
+	[RouteOrder] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_WorkflowMasters_fguid_fno_stime] ON [dbo].[WorkflowMasters]
+(
+	[FlowGuidNo] ASC,
+	[SheetNo] ASC,
+	[StartTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_WorkflowRoles_no] ON [dbo].[WorkflowRoles]
+(
+	[RoleNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_WorkflowRoleUsers_rno_uno] ON [dbo].[WorkflowRoleUsers]
+(
+	[RoleNo] ASC,
+	[UserNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE CLUSTERED INDEX [IX_WorkflowRoutes_pno_rorder] ON [dbo].[WorkflowRoutes]
+(
+	[PrgNo] ASC,
+	[RouteOrder] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_CodeBases_admin_no] ON [dbo].[CodeBases]
+(
+	[IsAdmin] ASC,
+	[BaseNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_News_type_date] ON [dbo].[News]
+(
+	[CodeNo] ASC,
+	[PublishDate] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+-- Create Views
+CREATE VIEW [dbo].[vi_CompCompany]
+AS
+    SELECT Id, IsDefault, IsEnabled, CodeNo, CompNo, CompName, ShortName, EngName, EngShortName, RegisterDate, BossName, ContactName, CompTel, ContactTel, CompFax, CompID, ContactEmail, CompAddress, CompUrl, TwitterUrl, FacebookUrl, InstagramUrl, SkypeUrl, LinkedinUrl, Latitude, Longitude, AboutusText, SupportText, ReturnText, ShippingText, PaymentText, Remark
+    FROM dbo.Companys
+    WHERE (CodeNo = N'Company')
+GO
+
+CREATE VIEW [dbo].[vi_CompCustomer]
+AS
+    SELECT Id, IsDefault, IsEnabled, CodeNo, CompNo, CompName, ShortName, EngName, EngShortName, RegisterDate, BossName, ContactName, CompTel, ContactTel, CompFax, CompID, ContactEmail, CompAddress, CompUrl, TwitterUrl, FacebookUrl, InstagramUrl, SkypeUrl, LinkedinUrl, Latitude, Longitude, AboutusText, SupportText, ReturnText, ShippingText, PaymentText, Remark
+    FROM dbo.Companys
+    WHERE (CodeNo = N'Customer')
+GO
+
+CREATE VIEW [dbo].[vi_CompVendor]
+AS
+    SELECT Id, IsDefault, IsEnabled, CodeNo, CompNo, CompName, ShortName, EngName, EngShortName, RegisterDate, BossName, ContactName, CompTel, ContactTel, CompFax, CompID, ContactEmail, CompAddress, CompUrl, TwitterUrl, FacebookUrl, InstagramUrl, SkypeUrl, LinkedinUrl, Latitude, Longitude, AboutusText, SupportText, ReturnText, ShippingText, PaymentText, Remark
+    FROM dbo.Companys
+    WHERE (CodeNo = N'Vendor')
+GO
+
+CREATE VIEW [dbo].[vi_UserCustomer]
+AS
+    SELECT Id, IsValid, UserNo, UserName, Password, CodeNo, RoleNo, GenderCode, DeptNo, TitleNo, Birthday, OnboardDate, LeaveDate, ContactEmail, ContactTel, ContactAddress, ValidateCode, Remark
+    FROM dbo.Users
+    WHERE (CodeNo = N'Customer')
+GO
+
+CREATE VIEW [dbo].[vi_UserMis]
+AS
+    SELECT Id, IsValid, UserNo, UserName, Password, CodeNo, RoleNo, GenderCode, DeptNo, TitleNo, Birthday, OnboardDate, LeaveDate, ContactEmail, ContactTel, ContactAddress, ValidateCode, Remark
+    FROM dbo.Users
+    WHERE (CodeNo = N'Mis')
+GO
+
+CREATE VIEW [dbo].[vi_UserOperator]
+AS
+    SELECT Id, IsValid, UserNo, UserName, Password, CodeNo, RoleNo, GenderCode, DeptNo, TitleNo, Birthday, OnboardDate, LeaveDate, ContactEmail, ContactTel, ContactAddress, ValidateCode, Remark
+    FROM dbo.Users
+    WHERE (CodeNo = N'Operator')
+GO
+
+CREATE VIEW [dbo].[vi_UserTarget]
+AS
+    SELECT Id, IsValid, UserNo, UserName, Password, CodeNo, RoleNo, GenderCode, DeptNo, TitleNo, Birthday, OnboardDate, LeaveDate, ContactEmail, ContactTel, ContactAddress, ValidateCode, Remark
+    FROM dbo.Users
+    WHERE (CodeNo = N'Target')
+GO
+
+CREATE VIEW [dbo].[vi_UserUser]
+AS
+    SELECT Id, IsValid, UserNo, UserName, Password, CodeNo, RoleNo, GenderCode, DeptNo, TitleNo, Birthday, OnboardDate, LeaveDate, ContactEmail, ContactTel, ContactAddress, ValidateCode, Remark
+    FROM dbo.Users
+    WHERE (CodeNo = N'User')
+GO
+
+CREATE VIEW [dbo].[vi_UserVendor]
+AS
+    SELECT Id, IsValid, UserNo, UserName, Password, CodeNo, RoleNo, GenderCode, DeptNo, TitleNo, Birthday, OnboardDate, LeaveDate, ContactEmail, ContactTel, ContactAddress, ValidateCode, Remark
+    FROM dbo.Users
+    WHERE (CodeNo = N'Vendor')
+GO
+
+CREATE VIEW [dbo].[vi_CodeLogLevel]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'LogLevel')
+GO
+
+CREATE VIEW [dbo].[vi_CodeLogInterval]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'LogInterval')
+GO
+
+CREATE VIEW [dbo].[vi_CodeInventory]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE   (BaseNo = N'Inventory')
+GO
+
+CREATE VIEW [dbo].[vi_CodeFormLock]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'FormLock')
+GO
+
+CREATE VIEW [dbo].[vi_CodeAddressBook]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'AddressBook')
+GO
+
+CREATE VIEW [dbo].[vi_CodeBrand]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Brand')
+GO
+
+CREATE VIEW [dbo].[vi_CodeCalendar]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Calendar')
+GO
+
+CREATE VIEW [dbo].[vi_CodeCompany]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Company')
+GO
+
+CREATE VIEW [dbo].[vi_CodeColor]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Color')
+GO
+
+CREATE VIEW [dbo].[vi_CodeCustomer]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Customer')
+GO
+
+CREATE VIEW [dbo].[vi_CodeFormStatus]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'FormStatus')
+GO
+
+CREATE VIEW [dbo].[vi_CodeGender]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Gender')
+GO
+
+CREATE VIEW [dbo].[vi_CodeLogCode]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE   (BaseNo = N'LogCode')
+GO
+
+CREATE VIEW [dbo].[vi_CodeMaterial]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Material')
+GO
+
+CREATE VIEW [dbo].[vi_CodeMember]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Member')
+GO
+
+CREATE VIEW [dbo].[vi_CodeMessage]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Message')
+GO
+
+CREATE VIEW [dbo].[vi_CodeNews]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'News')
+GO
+
+CREATE VIEW [dbo].[vi_CodeNotification]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Notification')
+GO
+
+CREATE VIEW [dbo].[vi_CodePhoto]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Photo')
+GO
+
+CREATE VIEW [dbo].[vi_CodeProgram]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Program')
+GO
+
+CREATE VIEW [dbo].[vi_CodeResignReason]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'ResignReason')
+GO
+
+CREATE VIEW [dbo].[vi_CodeSheet]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Sheet')
+GO
+
+CREATE VIEW [dbo].[vi_CodeSize]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Size')
+GO
+
+CREATE VIEW [dbo].[vi_CodeTarget]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Target')
+GO
+
+CREATE VIEW [dbo].[vi_CodeTax]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Tax')
+GO
+
+CREATE VIEW [dbo].[vi_TodoList]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'TodoList')
+GO
+
+CREATE VIEW [dbo].[vi_CodeUser]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'User')
+GO
+
+CREATE VIEW [dbo].[vi_CodeVacation]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Vacation')
+GO
+
+CREATE VIEW [dbo].[vi_CodeVendor]
+AS
+    SELECT Id, IsEnabled, BaseNo, ParentNo, SortNo, CodeNo, CodeName, CodeValue, Remark
+    FROM dbo.CodeDatas
+    WHERE (BaseNo = N'Vendor')
+GO
+
+CREATE VIEW [dbo].[vi_SysIndex]
+AS
+    SELECT Distinct
+        t.object_id AS TableId ,
+        t.name AS TableName,
+        i.name AS IndexName,
+        STUFF(REPLACE(REPLACE((
+        SELECT c.name + CASE WHEN ic.is_descending_key = 1 THEN ' DESC' ELSE '' END AS [data()]
+        FROM sys.index_columns AS ic
+            INNER JOIN sys.columns AS c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+        WHERE ic.object_id = i.object_id AND ic.index_id = i.index_id AND ic.is_included_column = 0
+        ORDER BY ic.key_ordinal
+        FOR XML PATH
+    ), '<row>', ', '), '</row>', ''), 1, 2, '') AS IndexColumn ,
+        CASE WHEN i.type_desc = 'CLUSTERED' THEN 'Y' ELSE 'N' END AS IsClustered ,
+        CASE WHEN i.is_primary_key = 1 THEN 'Y' ELSE 'N' END AS IsPrimaryKey,
+        CASE WHEN i.is_unique = 1 THEN 'Y' ELSE 'N' END AS IsUnique
+    FROM sys.tables AS t
+        INNER JOIN sys.indexes AS i ON t.object_id = i.object_id
+        LEFT JOIN sys.dm_db_index_usage_stats AS u ON i.object_id = u.object_id AND i.index_id = u.index_id
+    WHERE t.is_ms_shipped = 0 AND i.type <> 0 
+GO
+
+CREATE VIEW [dbo].[vi_SysTableColumn]
+AS
+    SELECT OBJECT_SCHEMA_NAME(tab.id, DB_ID()) AS SchemaName, tab.id AS TableId, tab.xtype AS TableType,
+        tab.name AS TableName, col.colid AS ColumnId, col.name AS ColumnName, CASE WHEN CHARINDEX('char', 
+                            typ.name) > 0 THEN CASE col.prec WHEN - 1 THEN typ.name + '(max)' ELSE typ.name + '(' + CAST(col.prec AS varchar)
+                             + ')' END WHEN typ.name = 'decimal' THEN 'decimal(' + CAST(col.prec AS varchar) + ',' + CAST(col.scale AS varchar) 
+                            + ')' ELSE CAST(typ.name AS varchar) END AS DataTypeName, typ.name AS DataType, col.prec AS DataTypePrec,
+        col.scale AS DataTypeScale, col.length AS DataTypeLength, com.text AS DefaultValue,
+        CASE WHEN col.isnullable = 1 THEN 'Y' ELSE 'N' END AS IsNullable,
+        CASE WHEN col.status = 128 THEN 'Y' ELSE 'N' END AS IsIdentity,
+        (SELECT value
+        FROM sys.extended_properties
+        WHERE           (major_id = OBJECT_ID(tab.name)) AND (minor_id = col.colid)) AS Comments
+    FROM sys.sysobjects AS tab INNER JOIN
+        sys.syscolumns AS col LEFT OUTER JOIN
+        sys.syscomments AS com INNER JOIN
+        sys.sysobjects AS obj ON com.id = obj.id ON col.cdefault = com.id AND com.colid = 1 ON tab.id = col.id INNER JOIN
+        sys.systypes AS typ ON col.xusertype = typ.xusertype
+    WHERE          (tab.xtype = 'U') OR
+        (tab.xtype = 'V')
+GO
+-- Add Default Constraints
+ALTER TABLE [dbo].[Aablite2] ADD  CONSTRAINT [DF_Aablite2_UserName]  DEFAULT (space((0))) FOR [UserName]
+ALTER TABLE [dbo].[EmployeeAgents] ADD  CONSTRAINT [DF_EmployeeAgents_IsEnabled]  DEFAULT ((0)) FOR [IsEnabled]
+ALTER TABLE [dbo].[ForumBoards] ADD  CONSTRAINT [DF_ForumBoards_GuidNo]  DEFAULT (newid()) FOR [GuidNo]
+ALTER TABLE [dbo].[Forums] ADD  CONSTRAINT [DF_Forums_GuidNo]  DEFAULT (newid()) FOR [GuidNo]
+ALTER TABLE [dbo].[Inventorys] ADD  CONSTRAINT [DF_Inventorys_IsConfirm]  DEFAULT ((0)) FOR [IsConfirm]
+ALTER TABLE [dbo].[Inventorys] ADD  CONSTRAINT [DF_Inventorys_IsAbolish]  DEFAULT ((0)) FOR [IsCancel]
+ALTER TABLE [dbo].[WorkflowDetails] ADD  CONSTRAINT [DF_WorkflowDetails_GuidNo]  DEFAULT (newid()) FOR [GuidNo]
+ALTER TABLE [dbo].[WorkflowMasters] ADD  CONSTRAINT [DF_WorkflowMasters_GuidNo]  DEFAULT (newid()) FOR [GuidNo]
+GO

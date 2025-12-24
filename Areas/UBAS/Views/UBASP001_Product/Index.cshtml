@@ -1,0 +1,193 @@
+﻿@model IEnumerable<powererp.Models.Products>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <tdead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th>
+                    @await Html.PartialAsync("_PartialFormFunction")
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ImageUrl)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.ProdNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ProdName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.InventoryQty)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.BrandName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.BrandSeriesName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsEnabled)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsInventory)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.VendorName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.BarcodeNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.StatusName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CostPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.MarketPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SalePrice)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.DiscountPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    SessionService.RowId = item.Id;
+                    SessionService.RowData = $"{item.ProdNo} {item.ProdName}";
+                    <tr>
+                        @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                        {
+                            <td>
+                                @await Html.PartialAsync("_PartialFormEdit")
+                                @await Html.PartialAsync("_PartialFormDelete")
+                            </td>
+                        }
+                        <td>
+                            <div class="dropdown" style="position: static;">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="z-index: 9999;">
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="@Url.Action("Upload", ActionService.Controller, new { area = ActionService.Area, id = item.Id })">
+                                            <table>
+                                                <tr>
+                                                    <td class="action-popup">
+                                                        <i class="fas fa-image fa-2x"></i>
+                                                    </td>
+                                                    <td class="fs-6">圖片上傳</td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="@Url.Action("Attachment", ActionService.Controller, new { area = ActionService.Area, id = item.Id })">
+                                            <table>
+                                                <tr>
+                                                    <td class="action-popup">
+                                                        <i class="fas fa-paperclip fa-2x"></i>
+                                                    </td>
+                                                    <td class="fs-6">附件管理</td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
+                            <img src="@Url.Content(item.ImageUrl)" class="img-thumbnail"
+                                style="max-width:50px;cursor:pointer"
+                                onclick="showImageModal('@Url.Content(item.ImageUrl)')" />
+                        </td>
+                        <td class="fixedcolumn fixedcolumn-data">
+                            @Html.DisplayFor(modelItem => item.ProdNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProdName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InventoryQty)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BrandName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BrandSeriesName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsEnabled)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsInventory)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BarcodeNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StatusName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CostPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MarketPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SalePrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DiscountPrice)
+                        </td>
+                        <td class="table-wrap">
+                            @Html.DisplayFor(modelItem => item.Remark)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+    </table>
+</div>
+
+
+@await Html.PartialAsync("_PartialFormImageModal")
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/imagemodal/imagemodal.css")" />
+}
+
+@section ScriptsBody {
+    <script src="@Url.Content("~/lib/imagemodal/imagemodal.js")"></script>
+}

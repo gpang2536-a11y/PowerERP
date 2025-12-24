@@ -1,0 +1,123 @@
+@model powererp.Models.Users
+
+@{
+    ViewData["Title"] = "編輯個人資料";
+    if (SessionService.RoleNo == "Member")
+    { Layout = "_Layout"; }
+    else
+    { Layout = "_LayoutAdmin"; }
+    List<SelectListItem> GenderList = new List<SelectListItem>();
+    List<SelectListItem> DepartmentList = new List<SelectListItem>();
+    List<SelectListItem> TitleList = new List<SelectListItem>();
+    using var codeDatas = new z_sqlCodeDatas();
+    using var dept = new z_sqlDepartments();
+    using var title = new z_sqlTitles();
+    GenderList = codeDatas.GetDropDownList("Gender", false);
+    DepartmentList = dept.GetDropDownList("DeptNo", "DeptName", "DeptNo", true);
+    TitleList = title.GetDropDownList("TitleNo", "TitleName", "TitleNo", true);
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.IsValid)
+    @Html.HiddenFor(m => m.UserNo)
+    @Html.HiddenFor(m => m.UserName)
+    @Html.HiddenFor(m => m.CodeNo)
+    @Html.HiddenFor(m => m.RoleNo)
+    @Html.HiddenFor(m => m.Password)
+    @Html.HiddenFor(m => m.Birthday)
+    @Html.HiddenFor(m => m.OnboardDate)
+    @Html.HiddenFor(m => m.LeaveDate)
+
+    <div class="form-horizontal mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.UserNo, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-9">
+            @Html.EditorFor(model => model.UserNo, new { htmlAttributes = new { @class = "form-control", @readonly =
+            "readonly", @disabled = "disabled" } })
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" ,
+                @readonly = "readonly" , @disabled = "disabled" } })
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.LabelFor(model => model.GenderCode, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-md-9">
+        @Html.DropDownListFor(model => model.GenderCode, GenderList, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.GenderCode, "", new { @class = "text-danger" })
+    </div>
+</div>
+@if (SessionService.RoleNo != "Member")
+{
+    <div class="row form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.DeptName, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-9">
+            @Html.DropDownListFor(model => model.DeptNo, DepartmentList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.DeptNo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.TitleName, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-9">
+            @Html.DropDownListFor(model => model.TitleNo, TitleList, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.TitleNo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.LabelFor(model => model.ContactEmail, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ContactEmail, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.LabelFor(model => model.ContactTel, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.ContactTel, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ContactTel, "", new { @class = "text-danger" })
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-md-3">
+        @Html.LabelFor(model => model.ContactAddress, htmlAttributes: new { @class = "control-label" })
+    </div>
+    <div class="col-md-9">
+        @Html.EditorFor(model => model.ContactAddress, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ContactAddress, "", new { @class = "text-danger" })
+    </div>
+</div>
+<hr>
+<div class="row form-group">
+    <div class="col-md-12">
+        <div class="float-start">
+            <input type="submit" value="更新記錄" class="btn btn-primary" />
+        </div>
+        <div class="float-end">
+            @Html.ActionLink("返回我的帳號", "Profile", "User", new { area = "" }, new { @class = "btn btn-success" })
+        </div>
+    </div>
+</div>
+}

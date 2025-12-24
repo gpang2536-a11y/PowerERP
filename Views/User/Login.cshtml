@@ -1,0 +1,72 @@
+@model vmLogin
+
+@{
+    ViewData["Title"] = "使用者登入";
+    Layout = "_LayoutLite";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.UserNo, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-9">
+            @Html.EditorFor(model => model.UserNo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.UserNo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-9">
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.CaptchaCode, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-9">
+            <div class="float-start me-2">
+                <input type="text" class="form-control" id="captcha-input" required autocomplete="off"
+                    placeholder="請輸入驗證碼 ...">
+                <span id="errCaptcha"></span>
+            </div>
+            <div class="float-start me-2">
+                <div class="captcha-code code dynamic-code float-start"></div>
+            </div>
+            <div class="float-start">
+                <div class="captcha-reload float-start" role="button"><i class="fas fa-sync-alt"></i></div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <div class="float-start">
+                <input type="submit" value="登入系統" class="btn btn-primary" />
+            </div>
+            <div class="float-end">
+                @Html.ActionLink("註冊帳號", "Register", ActionService.Controller, new
+                { area = ActionService.Area }, new { @class = "btn btn-success" })
+            @Html.ActionLink("忘記密碼", "Forget", ActionService.Controller, new
+                        { area = ActionService.Area }, new { @class = "btn btn-danger" })
+        </div>
+    </div>
+</div>
+}
+
+@section Styles {
+    <link href="@Url.Content("~/lib/Captcha/captcha.css")" rel="stylesheet" />
+}
+
+@section ScriptsBody {
+    <script src="@Url.Content("~/lib/Captcha/captcha.js")"></script>
+}

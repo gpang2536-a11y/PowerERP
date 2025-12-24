@@ -1,0 +1,127 @@
+@model powererp.Models.Pricings
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.PricingNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.PricingNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PricingNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.PricingName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.PricingName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PricingName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.SortNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.SortNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SortNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IsEnabled)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsEnabled, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.IsEnabled, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IsAdvanced)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsAdvanced, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IsAdvanced, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IsRecommend)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsRecommend, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IsRecommend, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.ProdPrice)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ProdPrice, new { htmlAttributes = new { @class = "form-control" , @type="number"} })
+                        @Html.ValidationMessageFor(model => model.ProdPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.CycleName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.CycleName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CycleName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.Remark)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await Html.PartialAsync("_PartialFormSubmit")
+    </div>
+}

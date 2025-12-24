@@ -1,0 +1,71 @@
+﻿@{
+    var formSecurity = SessionService.FormSecurity;
+    bool bln_readonly = SessionService.IsReadonlyMode;
+    bool bln_cancel = SessionService.IsCancel;
+    bool bln_confirm = SessionService.IsConfirm;
+    bool bln_locked = SessionService.IsFormLocked;
+    bool bln_disabled = (SessionService.IsFormLocked || SessionService.IsConfirm || SessionService.IsCancel);
+    bool bln_hasrows = (SessionService.MasterId > 0 && SessionService.PageCountMaster > 0);
+    string str_class = "";
+}
+
+@if (!bln_readonly)
+{
+    str_class = "btn btn-primary";
+    if (formSecurity.IsAdd || AppService.DebugMode)
+    { str_class += ""; }
+    else
+    { str_class += " disabled"; }
+    @Html.ActionLink(SessionService.GetActionName(enAction.Create), ActionService.CreateMaster, ActionService.Controller,
+    new { area = ActionService.Area },new { @class = str_class })
+
+str_class = "btn btn-success";
+    if (!bln_disabled && bln_hasrows && ((formSecurity.IsEdit) || AppService.DebugMode))
+    { str_class += ""; }
+    else
+    { str_class += " disabled"; }
+    @Html.ActionLink(SessionService.GetActionName(enAction.Edit), ActionService.EditMaster, ActionService.Controller,
+    new { area = ActionService.Area, id = SessionService.MasterId },new { @class = str_class })
+
+str_class = "btn btn-danger";
+    if (!bln_disabled && bln_hasrows && ((formSecurity.IsDelete) || AppService.DebugMode))
+    { str_class += ""; }
+    else
+    { str_class += " disabled"; }
+    <input type="button" id="@ActionService.DeleteMaster" value="@SessionService.GetActionName(enAction.Delete)"
+        class="@str_class" onclick="DeleteMasterData(@SessionService.MasterId , '@SessionService.MasterNo' )" />
+
+    if (SessionService.IsConfirmMode)
+    {
+        str_class = "btn btn-success";
+        if (bln_hasrows && !bln_cancel && !bln_locked && !bln_confirm && ((formSecurity.IsConfirm) ||
+        AppService.DebugMode))
+        { str_class += ""; }
+        else
+        { str_class += " disabled"; }
+        <input type="button" id="@ActionService.Confirm" value="@SessionService.GetActionName(enAction.Confirm)"
+            class="@str_class"
+            onclick="ConfirmAction(@SessionService.MasterId , '@SessionService.MasterNo' , 'Confirm' , '設定為已確認狀態' )" />
+
+        str_class = "btn btn-danger";
+        if (bln_hasrows && !bln_cancel && !bln_locked && bln_confirm && (formSecurity.IsUndo ||
+        AppService.DebugMode))
+        { str_class += ""; }
+        else
+        { str_class += " disabled"; }
+        <input type="button" id="@ActionService.Undo" value="@SessionService.GetActionName(enAction.Undo)" class="@str_class"
+            onclick="ConfirmAction(@SessionService.MasterId , '@SessionService.MasterNo' , 'Undo' , '解除確認狀態' )" />
+    }
+
+    if (SessionService.IsCancelMode)
+    {
+        str_class = "btn btn-warning";
+        if (bln_hasrows && !bln_cancel && !bln_locked && (formSecurity.IsCancel || AppService.DebugMode))
+        { str_class += ""; }
+        else
+        { str_class += " disabled"; }
+        <input type="button" id="@ActionService.Cancel" value="@SessionService.GetActionName(enAction.Cancel)"
+            class="@str_class"
+            onclick="ConfirmAction(@SessionService.MasterId , '@SessionService.MasterNo' , 'Cancel' , '設定為已作廢狀態' )" />
+    }
+}

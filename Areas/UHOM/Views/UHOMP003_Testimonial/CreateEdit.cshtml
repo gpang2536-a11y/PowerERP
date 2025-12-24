@@ -1,0 +1,103 @@
+@model powererp.Models.Testimonials
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.UserNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.UserNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.UserName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.TitleName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TitleName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TitleName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.SendDate)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.SendDate, new { htmlAttributes = new { @class = "form-control datepicker" , @type="text" } })
+                        @Html.ValidationMessageFor(model => model.SendDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.StarCount)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.StarCount, new { htmlAttributes = new { @class = "form-control" , @type="number" } })
+                        @Html.ValidationMessageFor(model => model.StarCount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.Remark)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                    @Html.LabelRequiredFor(model => model.MessageText)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.MessageText, 5, 0, new { @class = "form-control", @style = "width: 100%;" })
+                        @Html.ValidationMessageFor(model => model.MessageText, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await Html.PartialAsync("_PartialFormSubmit")
+    </div>
+}

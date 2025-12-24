@@ -1,0 +1,371 @@
+CREATE PROCEDURE [dbo].[sp_add_user]
+    @UserNo nvarchar(50),
+    @UserName nvarchar(50),
+    @IsValid bit
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Users
+        (UserNo , UserName , IsValid)
+    VALUES
+        (@UserNo , @UserName , @IsValid)
+END
+GO
+
+CREATE PROCEDURE [dbo].[sp_count_inventory]
+    @WarehouseNo nvarchar(50) ,
+    @ProductNo nvarchar(50) ,
+    @Qty int
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    --檢查庫存現況表頭
+    IF NOT EXISTS(SELECT *
+    FROM InvMasters
+    WHERE ProductNo = @ProductNo)
+		INSERT INTO InvMasters
+        (ProductNo , Qty , Remark)
+    VALUES
+        (@ProductNo , 0 , '')
+
+    --檢查庫存現況明細
+    IF NOT EXISTS(SELECT *
+    FROM InvDetails
+    WHERE WareHouseNo = @WarehouseNo AND ProductNo = @ProductNo)
+		INSERT INTO InvDetails
+        (WareHouseNo , ProductNo , Qty , Remark)
+    VALUES
+        (@WarehouseNo , @ProductNo , 0 , '')
+
+    --更新庫存現況明細庫存量
+    UPDATE InvDetails SET Qty += @Qty WHERE WareHouseNo = @WarehouseNo AND ProductNo = @ProductNo
+
+    --重算庫存現況表頭庫存量
+    UPDATE InvMasters SET Qty = (SELECT SUM(Qty)
+    FROM InvDetails
+    WHERE ProductNo = @ProductNo) WHERE ProductNo = @ProductNo
+
+    --刪除庫存量為 0 的庫存現況明細資料
+    DELETE FROM InvDetails WHERE Qty = 0
+
+    --刪除庫存量為 0 的庫存現況表頭資料
+    DELETE FROM InvDetails WHERE Qty = 0
+
+    --刪除無明細的庫存現況表頭資料
+    DELETE FROM InvMasters WHERE (SELECT COUNT(*)
+    FROM InvDetails
+    WHERE ProductNo = InvMasters.ProductNo) = 0
+END
+GO
+
+CREATE TRIGGER [dbo].[tr_Categorys]  
+   ON [dbo].[Categorys] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	SET NOCOUNT ON;
+
+    DECLARE @Id int = 0
+	DECLARE @IsCategory bit = 0
+	DECLARE @Command nvarchar(50) = ''
+	DECLARE @RouteName nvarchar(500) = ''
+	DECLARE @CategoryName nvarchar(50) = ''
+	DECLARE @CategoryNo nvarchar(50) = ''
+	DECLARE @ParentNo nvarchar(50) = ''
+
+	IF EXISTS(SELECT * FROM inserted) AND NOT EXISTS(SELECT * FROM deleted) SET @Command = 'INSERT'
+	IF NOT EXISTS(SELECT * FROM inserted) AND EXISTS(SELECT * FROM deleted) SET @Command = 'DELETE'
+	IF EXISTS(SELECT * FROM inserted) AND EXISTS(SELECT * FROM deleted) SET @Command = 'UPDATE'
+
+	IF (@Command = 'INSERT' OR @Command = 'UPDATE')
+	BEGIN
+		SET @Id = (SELECT TOP 1 Id FROM inserted)
+		--檢查是否有子階
+		SET @IsCategory = 0
+		SET @CategoryNo = (SELECT TOP 1 CategoryNo FROM inserted)
+		IF NOT EXISTS(SELECT * FROM Categorys WHERE ParentNo = @CategoryNo) SET @IsCategory = 1
+		--設定路徑名稱
+		SET @ParentNo = (SELECT TOP 1 ParentNo FROM inserted)
+		WHILE (@ParentNo <> '')
+		BEGIN
+			SET @CategoryName = (SELECT CategoryName FROM Categorys WHERE CategoryNo = @ParentNo)
+			IF (@RouteName <> '') SET @RouteName = '\' + @RouteName
+			SET @RouteName = @CategoryName + @RouteName
+			SET @ParentNo = (SELECT ParentNo FROM Categorys WHERE CategoryNo = @ParentNo)
+		END
+		--更新是否有子階及路徑名稱
+		UPDATE Categorys SET IsCategory = @IsCategory , RouteName = @RouteName WHERE Id = @Id
+	END
+END
+GO
+
+ALTER TABLE [dbo].[Categorys] ENABLE TRIGGER [tr_Categorys]
+GO
+
+CREATE TRIGGER [dbo].[tr_Inventorys] 
+   ON  [dbo].[Inventorys]
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	SET NOCOUNT ON;
+	--表單自動編號參數
+	DECLARE @LeadCode nvarchar(50) = ''  --前置碼
+	DECLARE @CycleCode nvarchar(50) = 'YMD'  --編碼週期 Y=年 YM=年月 YMD =年月日
+	DECLARE @NoLength int = 3 --流水序號長度
+
+	--宣告變數
+	DECLARE @Id int = 0
+	DECLARE @seq int = 1 --目前最大流水序號
+	DECLARE @IsCancel bit = 0 -- 作廢
+	DECLARE @SheetNo nvarchar(50) = '' --表單編號
+	DECLARE @FindNo nvarchar(50) = '' --尋找編號
+	DECLARE @TypeNo nvarchar(50) = '' --庫存類別
+	DECLARE @Command nvarchar(50) = ''  --Trigger 指令類型 (Insert , Delete , Update)
+	DECLARE @SheetDate date --表單日期
+	DECLARE @BaseNo nvarchar(50) = ''
+	DECLARE @SheetCode nvarchar(50) = ''
+	DECLARE @ProductNo nvarchar(50) = ''
+	DECLARE @WareHouseNo nvarchar(50) = ''
+	DECLARE @Qty int = 0
+
+	IF EXISTS(SELECT * FROM inserted) AND NOT EXISTS(SELECT * FROM deleted) SET @Command = 'INSERT'
+	IF NOT EXISTS(SELECT * FROM inserted) AND EXISTS(SELECT * FROM deleted) SET @Command = 'DELETE'
+	IF EXISTS(SELECT * FROM inserted) AND EXISTS(SELECT * FROM deleted) SET @Command = 'UPDATE'
+	
+	--庫存單據表單編號自動編號(不同類別分別編號)
+	IF (@Command = 'INSERT')
+	BEGIN
+		--取出 Inserted 緩衝區中使用者輸入的日期及 Id
+		SET @Id = (SELECT Id FROM inserted)
+		SET @TypeNo = (SELECT TypeNo FROM inserted)
+		SET @SheetDate = (SELECT SheetDate FROM inserted)
+		-- 如果沒有輸入日期取系統日期
+		IF (@SheetDate IS NULL)
+		BEGIN
+			SET @SheetDate = GetDate()
+			UPDATE Inventorys SET SheetDate = @SheetDate WHERE Id = @Id
+		END
+		--自動編號程式開始
+		SET @SheetNo = @LeadCode  --表單編號一開始為前置碼
+		--表單編號加入週期值(年 / 年月 / 年月日)
+		IF (@CycleCode = 'Y') SET @SheetNo += CONVERT(varchar(4) , @SheetDate , 112)
+		IF (@CycleCode = 'YM') SET @SheetNo += CONVERT(varchar(6) , @SheetDate , 112)
+		IF (@CycleCode = 'YMD') SET @SheetNo += CONVERT(varchar(8) , @SheetDate , 112)
+		--到資料庫中找是否相相週期已經有編過了,
+		--有的話抓出最大編號+1
+		SET @FindNo = @SheetNo + '%'
+		IF (EXISTS(SELECT * FROM Inventorys WHERE TypeNo = @TypeNo AND SheetNo LIKE @FindNo))
+		BEGIN
+			SET @FindNo = (SELECT TOP 1 SheetNo FROM Inventorys WHERE TypeNo = @TypeNo AND SheetNo LIKE @FindNo ORDER BY SheetNo DESC)
+			SET @seq = CAST(RIGHT(@FindNo , @NoLength) AS int) + 1
+		END
+		--將最大序號加入表單編號中, 例: 000 + 3 後 = 0003 再取右邊 3 碼 = 003
+		SET @SheetNo += RIGHT(REPLICATE('0' ,  @NoLength)  + CAST(@seq AS varchar) , @NoLength)
+		--將表單編號寫回資料表 Purchase 中
+		UPDATE Inventorys SET SheetNo = @SheetNo WHERE Id = @Id
+		--自動編號程式結束
+	END
+
+	--庫存單據新增及修改
+	IF (@Command = 'INSERT' OR @Command = 'UPDATE')
+	BEGIN
+		IF (UPDATE(SheetCode) OR UPDATE(WareHouseNo))
+		BEGIN
+			--庫存量減少
+			IF (@Command = 'UPDATE')
+			BEGIN
+				SET @Id = (SELECT Id FROM deleted)
+				SET @BaseNo = (SELECT BaseNo FROM deleted)
+				SET @SheetCode = (SELECT SheetCode FROM deleted)
+				SET @WareHouseNo = (SELECT WareHouseNo FROM deleted)
+
+				DECLARE delete_cursor CURSOR FOR 
+					SELECT ProductNo , Qty FROM InventorysDetail WHERE ParentNo = @BaseNo
+				OPEN delete_cursor  
+				FETCH NEXT FROM delete_cursor INTO  @ProductNo , @Qty
+				WHILE @@FETCH_STATUS = 0  
+				BEGIN  
+					IF (@SheetCode = 'I') SET @Qty *= -1
+					EXEC dbo.sp_count_inventory @WareHouseNo , @ProductNo , @Qty
+
+					FETCH NEXT FROM delete_cursor INTO  @ProductNo , @Qty
+				END
+				CLOSE delete_cursor;  
+				DEALLOCATE delete_cursor;
+			END
+			--庫存量增加
+			IF (@Command = 'INSERT' OR @Command = 'UPDATE')
+			BEGIN
+				SET @Id = (SELECT Id FROM inserted)
+				SET @BaseNo = (SELECT BaseNo FROM inserted)
+				SET @SheetCode = (SELECT SheetCode FROM inserted)
+				SET @WareHouseNo = (SELECT WareHouseNo FROM inserted)
+
+				DECLARE update_cursor CURSOR FOR 
+					SELECT ProductNo , Qty FROM InventorysDetail WHERE ParentNo = @BaseNo
+				OPEN update_cursor  
+				FETCH NEXT FROM update_cursor INTO  @ProductNo , @Qty
+				WHILE @@FETCH_STATUS = 0  
+				BEGIN  
+					IF (@SheetCode = 'O') SET @Qty *= -1
+					EXEC dbo.sp_count_inventory @WareHouseNo , @ProductNo , @Qty
+
+					FETCH NEXT FROM update_cursor INTO  @ProductNo , @Qty
+				END
+				CLOSE update_cursor;  
+				DEALLOCATE update_cursor;
+			END
+		END
+	END
+
+	--庫存單據作廢，異動庫存現況
+	IF (@Command = 'UPDATE')
+	BEGIN
+		SET @IsCancel = (SELECT IsCancel FROM inserted)
+		IF (UPDATE(IsCancel) AND @IsCancel = 1)
+		BEGIN
+			SET @Id = (SELECT Id FROM inserted)
+			SET @BaseNo = (SELECT BaseNo FROM inserted)
+			SET @SheetCode = (SELECT SheetCode FROM inserted)
+			SET @WareHouseNo = (SELECT WareHouseNo FROM inserted)
+			DECLARE update_cursor CURSOR FOR 
+				SELECT ProductNo , Qty FROM InventorysDetail WHERE ParentNo = @BaseNo
+			OPEN update_cursor  
+			FETCH NEXT FROM update_cursor INTO  @ProductNo , @Qty
+			WHILE @@FETCH_STATUS = 0  
+			BEGIN  
+				IF (@SheetCode = 'I') SET @Qty *= -1
+				EXEC dbo.sp_count_inventory @WareHouseNo , @ProductNo , @Qty
+
+				FETCH NEXT FROM update_cursor INTO  @ProductNo , @Qty
+			END
+			CLOSE update_cursor;  
+			DEALLOCATE update_cursor;
+		END
+	END
+END
+GO
+
+ALTER TABLE [dbo].[Inventorys] ENABLE TRIGGER [tr_Inventorys]
+GO
+
+CREATE TRIGGER [dbo].[tr_InventorysDetail] 
+   ON  [dbo].[InventorysDetail] 
+   AFTER INSERT,DELETE,UPDATE
+AS 
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @Command nvarchar(50) = ''
+	DECLARE @ParentNo nvarchar(50) = ''
+	DECLARE @Qty int = 0
+	DECLARE @SheetCode nvarchar(50) = ''
+	DECLARE @WarehouseNo nvarchar(50) = ''
+	DECLARE @ProductNo nvarchar(50) = ''
+
+	IF EXISTS(SELECT * FROM inserted) AND NOT EXISTS(SELECT * FROM deleted) SET @Command = 'INSERT'
+	IF NOT EXISTS(SELECT * FROM inserted) AND EXISTS(SELECT * FROM deleted) SET @Command = 'DELETE'
+	IF EXISTS(SELECT * FROM inserted) AND EXISTS(SELECT * FROM deleted) SET @Command = 'UPDATE'
+
+	--減少庫存量
+	IF (@Command = 'DELETE' OR @Command = 'UPDATE')
+	BEGIN
+		DECLARE delete_cursor CURSOR FOR 
+			SELECT ParentNo , ProductNo , Qty  FROM deleted 
+		OPEN delete_cursor  
+		FETCH NEXT FROM delete_cursor INTO @ParentNo, @ProductNo , @Qty ;  
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN
+			SET @SheetCode = (SELECT SheetCode FROM Inventorys WHERE BaseNo = @ParentNo)
+			SET @WarehouseNo = (SELECT WarehouseNo FROM Inventorys WHERE BaseNo = @ParentNo)
+			IF (@SheetCode = 'I') SET @Qty *= -1
+			EXEC dbo.sp_count_inventory @WarehouseNo , @ProductNo , @Qty
+
+			FETCH NEXT FROM delete_cursor INTO @ParentNo, @ProductNo , @Qty ; 
+		END
+		CLOSE delete_cursor;  
+		DEALLOCATE delete_cursor;  
+	END
+	-- 增加庫存量
+	IF (@Command = 'INSERT' OR @Command = 'UPDATE')
+	BEGIN
+		DECLARE insert_cursor CURSOR FOR 
+			SELECT ParentNo , ProductNo , Qty  FROM inserted 
+		OPEN insert_cursor  
+		FETCH NEXT FROM insert_cursor INTO @ParentNo, @ProductNo , @Qty ;  
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN
+			SET @SheetCode = (SELECT SheetCode FROM Inventorys WHERE BaseNo = @ParentNo)
+			SET @WarehouseNo = (SELECT WarehouseNo FROM Inventorys WHERE BaseNo = @ParentNo)
+			IF (@SheetCode = 'O') SET @Qty *= -1
+			EXEC dbo.sp_count_inventory @WarehouseNo , @ProductNo , @Qty
+
+			FETCH NEXT FROM insert_cursor INTO @ParentNo, @ProductNo , @Qty ; 
+		END
+		CLOSE insert_cursor;  
+		DEALLOCATE insert_cursor;
+	END
+END
+GO
+
+ALTER TABLE [dbo].[InventorysDetail] ENABLE TRIGGER [tr_InventorysDetail]
+GO
+
+CREATE FUNCTION [dbo].[fn_get_dept_name] 
+(
+	@DeptNoList nvarchar(50)
+)
+RETURNS nvarchar(250)
+AS
+BEGIN
+	DECLARE @ReturnValue nvarchar(250) = ''
+	DECLARE @DeptNo nvarchar(50) = ''
+	DECLARE @DeptName nvarchar(50) = ''
+
+	DECLARE DeptCursor Cursor FOR SELECT value FROM STRING_SPLIT(@DeptNoList, ',');
+	OPEN DeptCursor 
+
+	FETCH NEXT FROM DeptCursor INTO @DeptNo
+	WHILE (@@FETCH_STATUS <> -1)
+	BEGIN
+		SET @DeptName = (SELECT DeptName FROM Departments WHERE DeptNo = @DeptNo)
+		IF (@DeptName IS NULL) SET @DeptName = @DeptNo
+		IF (@ReturnValue <> '') SET @ReturnValue += ','
+		SET @ReturnValue += @DeptName
+		FETCH NEXT FROM DeptCursor INTO @DeptNo
+	END
+	CLOSE DeptCursor
+	DEALLOCATE DeptCursor
+
+	RETURN @ReturnValue
+END
+GO
+
+CREATE FUNCTION [dbo].[fn_get_time_from_now]
+(
+	@StartDate datetime
+)
+RETURNS nvarchar(50)
+AS
+BEGIN
+	-- Declare the return variable here
+	DECLARE @return_value nvarchar(50) = '即刻起'
+	DECLARE @NowDate datetime 
+	DECLARE @Minutes int
+	SET @NowDate = GetDate()
+	IF (@StartDate <= @NowDate) RETURN @return_value
+	SET @Minutes = DATEDIFF(minute , @NowDate , @StartDate)
+	IF (@Minutes > 0)
+	BEGIN
+		IF (@Minutes < (60)) RETURN CAST(@Minutes AS varchar) + '分鐘'
+		IF (@Minutes < (24 * 60)) RETURN CAST(@Minutes / (60) AS varchar) + '小時'
+		IF (@Minutes < (7 * 24 * 60)) RETURN CAST(@Minutes / (24 * 60)  AS varchar) + '天'
+		IF (@Minutes < (30 * 24 * 60)) RETURN CAST(@Minutes / (7 * 24 * 60)  AS varchar) + '週'
+		IF (@Minutes < (365 * 24 * 60)) RETURN CAST(@Minutes / (30 * 24 * 60)  AS varchar) + '月'
+		RETURN CAST(@Minutes / (365 * 24 * 60)  AS varchar) + '年'
+	END
+	RETURN @return_value
+END
+GO

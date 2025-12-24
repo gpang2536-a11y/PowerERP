@@ -1,0 +1,335 @@
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutAdmin";
+}
+
+@{
+    List<SelectListItem> CalendarTypeList = new List<SelectListItem>();
+    List<SelectListItem> HourList = new List<SelectListItem>();
+    List<SelectListItem> MinuteList = new List<SelectListItem>();
+    using var codeDatas = new z_sqlCodeDatas();
+    using var listData = new ListItemData();
+    CalendarTypeList = codeDatas.GetDropDownList("Calendar", false);
+    HourList = listData.CalendarHourList();
+    MinuteList = listData.CalendarMinuteList();
+}
+
+
+<div id="calendar" style="width: 100%"></div>
+
+<!-- 修改/刪除行程視窗 -->
+<div class="modal fade" id="EventWindow" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="EventWindowLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title" id="EventWindowLabel">
+                    <label id="eventHeader">@string.Format("{0}{1}", "行事曆", "行程")</label>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AddEditEvent", "Home", new { area = "Admin" }, FormMethod.Post))
+                {
+                    @Html.Hidden("eventid")
+                    <div class="row form-group mb-2">
+                        <div class="col-md-2">
+                            <label for="EventTitle" class="form-label pt-2">行程標題</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" id="EventTitle" name="EventTitle" required="required" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="StartDate" class="form-label pt-2">開始日期</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="StartDate" name="StartDate" required="required"
+                                        class="form-control datepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="StartHour" class="form-label pt-2">開始時間</label>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.DropDownList("StartHour", HourList, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.DropDownList("StartMinute", MinuteList, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EndDate" class="form-label pt-2">結束日期</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="EndDate" name="EndDate" required="required"
+                                        class="form-control datepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EndHour" class="form-label pt-2">結束時間</label>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.DropDownList("EndHour", HourList, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.DropDownList("EndMinute", MinuteList, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <div class="col-md-2">
+                            <label for="EventPlace" class="form-label pt-2">地點名稱</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" id="EventPlace" name="EventPlace" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row form-group mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EventContactor" class="form-label pt-2">連絡人員</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="EventContactor" name="EventContactor" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EventContactTel" class="form-label pt-2">連絡電話</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="EventContactTel" name="EventContactTel" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <div class="col-md-2">
+                            <label for="EventAddress" class="form-label pt-2">前往地址</label>
+                        </div>
+                        <div class="col-md-10">
+                            <input type="text" id="EventAddress" name="EventAddress" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EventRoomNo" class="form-label pt-2">房間編號</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="EventRoomNo" name="EventRoomNo" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="EventCodeNo" class="form-label pt-2">行程分類</label>
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownList("EventCodeNo", CalendarTypeList, new { @class = "form-control" ,
+                                    required = "required" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group mb-2">
+                    <div class="col-md-2">
+                        <label for="EventResource" class="form-label pt-2">攜帶物品</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input type="text" id="EventResource" name="EventResource" class="form-control">
+                    </div>
+                </div>
+                <div class="row form-group mb-2">
+                    <div class="col-md-2">
+                        <label for="EventDescription" class="form-label pt-2">詳細說明</label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextArea("EventDescription", new { @class = "form-control", @rows = 5 })
+                    </div>
+                </div>
+                <div class="row form-group mb-2">
+                    <div class="col-md-2">
+                        <label class="form-label pt-2" for="eEventAllDay">全天行程</label>
+                    </div>
+                    <div class="col-md-10 pl-4 pt-2">
+                        <input type="checkbox" id="EventAllDay" name="EventAllDay" class="form-check-input pt-2">
+                    </div>
+                </div>
+                <hr />
+                <div class="row form-group mb-2">
+                    <div class="col-md-12">
+                        <div class="float-start">
+                            <input type="submit" id="confirmEventButton" value="行程存檔" class="btn btn-primary" />
+                            @Html.ActionLink("刪除行程", "DeleteEvent", "Calendar", new { area = "" }, new { @id =
+                                                        "deleteButton",
+                                                        @class = "btn btn-danger", onclick = "return confirm('是否確定要刪除?');" })
+                        </div>
+                        <div class="float-end">
+                            <button type="button" class="btn btn-success" data-bs-dismiss="modal">關閉視窗</button>
+                        </div>
+                    </div>
+                </div>
+                                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsBody
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var today = new Date();
+            var initialLocaleCode = 'zh-tw';
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: { // 設定上方功能列
+                    left: 'prev,next today',  // 左方為 上月,下月,今天
+                    center: 'title', // 中間為 年度/月份
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'  // 力方為 月曆,週曆,日曆,活動列表
+                },
+                themeSystem: 'bootstrap5', // 佈景主題
+                initialDate: today, // 一開始指向日期
+                dayCellDidMount: function (arg) {
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0); // 將今天的時間設為午夜，以便比較日期
+
+                    if (arg.date < today) {
+                        arg.el.style.backgroundColor = '#f2f2f2'; // 設定為灰色，你可以調整顏色
+                    }
+                },
+                defaultDate: moment().format("YYYY/MM/DD"),  // 設定日期的格式
+                firstDay: 1, // 從星期幾開始排, 1=週一, 0=週日
+                locale: initialLocaleCode, // 語系設定 (zh-tw 為繁體中文語系)
+                buttonIcons: true, // 按鈕顯示為圖示
+                weekNumbers: false, // 顯示週別
+                droppable: true, // 是否可拖曳行程
+                editable: true, // 是否可以編輯
+                selectable: true, // 是否可以選取日期
+                nowIndicator: true, // 是否顯示指示當前時間的標記
+                dayMaxEvents: true, // 在dayGrid檢視中，給定日期內的最大事件數，不包括 +more 連結。其餘的將顯示在彈出視窗中。
+                businessHours: [ //設定週一至週五營業時間，週六=6及週日=0 不營業
+                    {
+                        daysOfWeek: [1, 2, 3], // 星期一到星期三
+                        startTime: '08:00', // 營業時間 08:00 開始
+                        endTime: '18:00' // 營業時間 18:00 結束
+                    },
+                    {
+                        daysOfWeek: [4, 5], // 星期四及星期五
+                        startTime: '10:00', // 營業時間 10:00 開始
+                        endTime: '16:00' // 營業時間 16:00 結束
+                    }
+                ],
+                events: '@Url.Action("GetEvents", "Home", new { area = "Admin" })',
+                eventClick: function (info) {
+                    //取消導到其它網頁功能
+                    info.jsEvent.preventDefault();
+                    // 改變外框顏色
+                    info.el.style.borderColor = 'red';
+                    //讀出資料庫中的資訊
+                    $.ajax({
+                        type: "GET",
+                        contentType: "application/json; charset=utf-8",
+                        url: '@Url.Action("GetEvent", "Home", new { area = "Admin" })',
+                        data: { "id": info.event.id },
+                        dataType: "json",
+                        success: function (value) {
+                            $('#eventid').val(value.Id);
+                            $('#StartDate').val(value.EventStart);
+                            $('#StartHour').val(value.StartHour);
+                            $('#StartMinute').val(value.StartMinute);
+                            $('#EndDate').val(value.EventEnd);
+                            $('#EndHour').val(value.EndHour);
+                            $('#EndMinute').val(value.EndMinute);
+                            $('#EventTitle').val(value.SubjectName);
+                            $('#EventDescription').val(value.Description);
+                            $('#EventPlace').val(value.PlaceName);
+                            $('#EventContactor').val(value.ContactName);
+                            $('#EventContactTel').val(value.ContactTel);
+                            $('#EventAddress').val(value.PlaceAddress);
+                            $('#EventRoomNo').val(value.RoomNo);
+                            $('#EventCodeNo').val(value.CodeNo);
+                            $('#EventResource').val(value.ResourceText);
+                            $("#EventAllDay").prop("checked", value.IsFullday);
+
+                            document.getElementById('eventHeader').innerHTML = '修改 / 刪除';
+                            document.getElementById('confirmEventButton').value = '確認存檔';
+                            document.getElementById('deleteButton').style.visibility = 'visible';
+                            var editModal = new bootstrap.Modal(document.getElementById('EventWindow'));
+                            editModal.show();
+
+                            //$.each(response, function (key, value) {
+                            //})
+                        },
+                        error: function (result) {
+                            alert('無法載入行事曆資料!!');
+                        }
+                    });
+                }
+            });
+
+            // 渲染行事曆畫面
+            calendar.render();
+
+            // 新增行程(並設定新增各欄位的預設值)
+            calendar.on('dateClick', function (info) {
+                var selectDate = info.dateStr.replace("-", "/");
+                var newDate = selectDate.replace("-", "/");
+                $('#eventid').val('0');
+                $('#StartDate').val(newDate);
+                $('#StartHour').val('08');
+                $('#StartMinute').val('00');
+                $('#EndDate').val(newDate);
+                $('#EndHour').val('09');
+                $('#EndMinute').val('00');
+                $('#EventTitle').val('');
+                $('#EventDescription').val('');
+                $('#EventPlace').val('');
+                $('#EventContactor').val('');
+                $('#EventContactTel').val('');
+                $('#EventAddress').val('');
+                $('#EventRoomNo').val('');
+                $('#EventCodeNo').val('Public');
+                $('#EventResource').val('');
+                $("#EventAllDay").prop("checked", false);
+                document.getElementById('eventHeader').innerHTML = '新增行程';
+                document.getElementById('confirmEventButton').value = '行程存檔';
+                document.getElementById('deleteButton').style.visibility = 'hidden';
+                var editModal = new bootstrap.Modal(document.getElementById('EventWindow'));
+                editModal.show();
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .modal-content {
+            width: 600px !important;
+        }
+    </style>
+}

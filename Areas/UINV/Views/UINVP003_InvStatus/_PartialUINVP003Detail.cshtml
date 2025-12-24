@@ -1,0 +1,57 @@
+@model powererp.Models.vmUINVP003_InvStatus
+@{
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+}
+
+<table class="table table-bordered mb-0">
+    <thead class="table-secondary">
+        <tr>
+            @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+            {
+                <th>
+                    @await Html.PartialAsync("_PartialFormCreate")
+                </th>
+            }
+            <th class="fixedcolumn">
+                @Html.DisplayNameSortFor(model => model.DetailModel.FirstOrDefault().WareHouseNo)
+            </th>
+            <th>
+                @Html.DisplayNameSortFor(model => model.DetailModel.FirstOrDefault().WareHouseName)
+            </th>
+            <th>
+                @Html.DisplayNameSortFor(model => model.DetailModel.FirstOrDefault().Qty)
+            </th>
+            <th>
+                @Html.DisplayNameSortFor(model => model.DetailModel.FirstOrDefault().Remark)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DetailModel)
+        {
+            SessionService.RowId = item.Id;
+            SessionService.RowData = $"{item.WareHouseNo} {item.WareHouseName}";
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <td>
+                        @await Html.PartialAsync("_PartialFormEdit")
+                        @await Html.PartialAsync("_PartialFormDelete")
+                    </td>
+                }
+                <td class="fixedcolumn fixedcolumn-data">
+                    @Html.DisplayFor(modelItem => item.WareHouseNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WareHouseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Qty)
+                </td>
+                <td class="table-wrap">
+                    @Html.DisplayFor(modelItem => item.Remark)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

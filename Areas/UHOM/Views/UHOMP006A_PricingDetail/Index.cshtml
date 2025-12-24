@@ -1,0 +1,77 @@
+﻿@model IEnumerable<powererp.Models.PricingDetails>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+<div class="row mx-0 bg-secondary text-white">
+    <div class="col-md-12">
+        <div class="float-start my-2">
+            <h5>@SessionService.SubActionName 明細</h5>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                        @await Html.PartialAsync("_PartialFormReturn")
+                    </th>
+                }
+                else
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormReturn")
+                    </th>
+                }
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsSupport)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SortNo)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.ItemName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                SessionService.RowId = item.Id;
+                SessionService.RowData = $"{item.SortNo} {item.ItemName}";
+                <tr>
+                    @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                    {
+                        <td>
+                            @await Html.PartialAsync("_PartialFormEdit")
+                            @await Html.PartialAsync("_PartialFormDelete")
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsSupport)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SortNo)
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.ItemName)
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

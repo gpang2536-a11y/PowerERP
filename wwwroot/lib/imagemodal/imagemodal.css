@@ -1,0 +1,31 @@
+/* Modal 樣式 */
+.img-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.img-modal-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px #333;
+    background: #fff;
+}
+
+.img-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}

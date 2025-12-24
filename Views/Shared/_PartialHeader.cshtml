@@ -1,0 +1,37 @@
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+<div class="row mx-1">
+    <div class="col-md-12">
+        <div class="float-start page-info">
+            頁數:
+        </div>
+        <div class="float-start ms-1">
+            @Html.PagedListPager((IPagedList)Model, x =>
+            Url.Action(ActionService.Index, ActionService.Controller, new { area = ActionService.Area, id = x }))
+        </div>
+        <div class="float-start ms-1 page-info">
+            @ViewBag.PageInfo
+        </div>
+        <div class="float-end">
+            @using (Html.BeginForm(ActionService.Search, ActionService.Controller, new { area = ActionService.Area },
+                        FormMethod.Post))
+            {
+                <table>
+                    <tr>
+                        <td>
+                            <span class="control-label fw-bold">查詢條件：</span>
+                        </td>
+                        <td class="pe-2">
+                            <input id="SearchText" name="SearchText" type="text" class="form-control data-list-search-text"
+                                placeholder="請輸入查詢條件..." value="@ViewBag.SearchText" style="width:200px;" />
+                        </td>
+                        <td>
+                            <input type="submit" value="查詢" class="btn btn-primary" />
+                        </td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<powererp.Models.Citys>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+    decimal ldcm_lat = 0;
+    decimal ldcm_lng = 0;
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <thead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SortNo)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.CityName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Latitude)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Longitude)
+                </th>
+                <th>
+                    地圖
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                ldcm_lat = item.Latitude ?? 0;
+                ldcm_lng = item.Longitude ?? 0;
+                SessionService.RowId = item.Id;
+                SessionService.RowData = item.CityName;
+                <tr>
+                    @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                    {
+                        <td>
+                            @await Html.PartialAsync("_PartialFormEdit")
+                            @await Html.PartialAsync("_PartialFormDelete")
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SortNo)
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.CityName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Latitude)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Longitude)
+                    </td>
+                    <td>
+                        @if (ldcm_lat > 0 && ldcm_lng > 0)
+                        {
+                            <button type="button" class="btn btn-sm btn-primary"
+                                onclick="openGoogleMap('@item.Latitude', '@item.Longitude')">
+                                <i class="bi bi-geo-alt-fill"></i> 查看
+                            </button>
+                        }
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section ScriptsBody {
+    <script>
+        function openGoogleMap(lat, lng) {
+            var url = 'https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng;
+            window.open(url, '_blank');
+        }
+    </script>
+}

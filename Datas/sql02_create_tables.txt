@@ -1,0 +1,1515 @@
+-- Create Tables
+CREATE TABLE [dbo].[Companys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsDefault] [bit] NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [CompNo] [nvarchar](50) NULL,
+    [CompName] [nvarchar](250) NULL,
+    [ShortName] [nvarchar](50) NULL,
+    [EngName] [nvarchar](250) NULL,
+    [EngShortName] [nvarchar](50) NULL,
+    [RegisterDate] [datetime] NOT NULL,
+    [BossName] [nvarchar](50) NULL,
+    [ContactName] [nvarchar](50) NULL,
+    [CompTel] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [CompFax] [nvarchar](50) NULL,
+    [CompID] [nvarchar](50) NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [CompAddress] [nvarchar](250) NULL,
+    [CompUrl] [nvarchar](250) NULL,
+    [TwitterUrl] [nvarchar](250) NULL,
+    [FacebookUrl] [nvarchar](250) NULL,
+    [InstagramUrl] [nvarchar](250) NULL,
+    [SkypeUrl] [nvarchar](250) NULL,
+    [LinkedinUrl] [nvarchar](250) NULL,
+    [Latitude] [decimal](20, 15) NOT NULL,
+    [Longitude] [decimal](20, 15) NOT NULL,
+    [AboutusText] [nvarchar](max) NULL,
+    [SupportText] [nvarchar](max) NULL,
+    [ReturnText] [nvarchar](max) NULL,
+    [ShippingText] [nvarchar](max) NULL,
+    [PaymentText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Companys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CodeDatas]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [BaseNo] [nvarchar](50) NULL,
+    [ParentNo] [nvarchar](50) NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [CodeName] [nvarchar](50) NULL,
+    [CodeValue] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_CodeDatas] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Aablite2]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [UserName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Aablite] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[AboutUs]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [HeaderName] [nvarchar](250) NULL,
+    [TitleName] [nvarchar](500) NULL,
+    [Description] [nvarchar](500) NULL,
+    [DetailText] [nvarchar](500) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_AboutUs] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[AddressBooks]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [FirstName] [nvarchar](50) NULL,
+    [LastName] [nvarchar](50) NULL,
+    [EngName] [nvarchar](50) NULL,
+    [GenderCode] [nvarchar](50) NULL,
+    [Birthday] [date] NULL,
+    [CompName] [nvarchar](250) NULL,
+    [CompID] [nvarchar](50) NULL,
+    [DeptName] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [CompTel] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [ContactAddress] [nvarchar](250) NULL,
+    [LineID] [nvarchar](50) NULL,
+    [FacebookID] [nvarchar](50) NULL,
+    [TwitterID] [nvarchar](50) NULL,
+    [InstagramID] [nvarchar](50) NULL,
+    [LinkedInID] [nvarchar](50) NULL,
+    [Remark] [nvarchar](500) NULL,
+    CONSTRAINT [PK_AddressBooks] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Applications]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [IsDebug] [bit] NOT NULL,
+    [AppName] [nvarchar](50) NULL,
+    [AdminName] [nvarchar](50) NULL,
+    [ShopName] [nvarchar](50) NULL,
+    [AppVersion] [nvarchar](50) NULL,
+    [EncryptionMode] [bit] NOT NULL,
+    [PowerBy] [nvarchar](50) NULL,
+    [LanguageNo] [nvarchar](50) NULL,
+    [GoogleMapKey] [nvarchar](50) NULL,
+    [MailSenderName] [nvarchar](50) NULL,
+    [MailSenderEmail] [nvarchar](50) NULL,
+    [MailReceiverName] [nvarchar](50) NULL,
+    [MailReceiverEmail] [nvarchar](50) NULL,
+    [MailAppPassword] [nvarchar](50) NULL,
+    [MailHostUrl] [nvarchar](250) NULL,
+    [MailHostPort] [int] NOT NULL,
+    [MailUseSSL] [bit] NOT NULL,
+    [WebSiteUrl] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Applications] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Calendars]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [TargetCode] [nvarchar](50) NULL,
+    [TargetNo] [nvarchar](50) NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [SubjectName] [nvarchar](50) NULL,
+    [StartDate] [datetime] NOT NULL,
+    [StartTime] [nvarchar](50) NULL,
+    [StartDateTime] [datetime] NOT NULL,
+    [EndDate] [datetime] NOT NULL,
+    [EndTime] [nvarchar](50) NULL,
+    [EndDateTime] [datetime] NOT NULL,
+    [ColorName] [nvarchar](50) NULL,
+    [IsFullday] [bit] NOT NULL,
+    [PlaceName] [nvarchar](250) NULL,
+    [ContactName] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [PlaceAddress] [nvarchar](250) NULL,
+    [RoomNo] [nvarchar](50) NULL,
+    [ResourceText] [nvarchar](500) NULL,
+    [Description] [nvarchar](500) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Calendars] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Carousels]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsActive] [bit] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [HeaderName] [nvarchar](50) NULL,
+    [Description] [nvarchar](max) NULL,
+    [ImageUrl] [nvarchar](250) NULL,
+    [MoreUrl] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Carousels] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[AboutUsDetails]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [ItemName] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_AboutUsDetails] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Carts]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [LotNo] [nvarchar](50) NULL,
+    [MemberNo] [nvarchar](50) NULL,
+    [VendorNo] [nvarchar](50) NULL,
+    [CategoryNo] [nvarchar](50) NULL,
+    [CateryName] [nvarchar](250) NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [ProdName] [nvarchar](250) NULL,
+    [ProdSpec] [nvarchar](250) NULL,
+    [OrderQty] [int] NOT NULL,
+    [OrderPrice] [int] NOT NULL,
+    [OrderAmount] [int] NOT NULL,
+    [CreateTime] [datetime] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Carts] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Categorys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [IsCategory] [bit] NOT NULL,
+    [ParentNo] [nvarchar](50) NULL,
+    [CategoryNo] [nvarchar](50) NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [CategoryName] [nvarchar](50) NULL,
+    [RouteName] [nvarchar](500) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Categorys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CityAreas]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [CityName] [nvarchar](50) NULL,
+    [AreaName] [nvarchar](50) NULL,
+    [Latitude] [decimal](18, 15) NULL,
+    [Longitude] [decimal](18, 15) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_CityAreas] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Citys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [CityName] [nvarchar](50) NULL,
+    [Latitude] [decimal](18, 15) NULL,
+    [Longitude] [decimal](18, 15) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Citys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Clients]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [ClientName] [nvarchar](50) NULL,
+    [ImageUrl] [nvarchar](250) NULL,
+    [WebsiteUrl] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Clients] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CloseDates]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [StartDate] [date] NOT NULL,
+    [EndDate] [date] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_CloseDates] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[CodeBases]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsAdmin] [bit] NOT NULL,
+    [BaseNo] [nvarchar](50) NULL,
+    [BaseName] [nvarchar](50) NULL,
+    [DefaultValue] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_CodeBases] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Customers]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsDefault] [bit] NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [CompNo] [nvarchar](50) NULL,
+    [CompName] [nvarchar](250) NULL,
+    [ShortName] [nvarchar](50) NULL,
+    [EngName] [nvarchar](250) NULL,
+    [EngShortName] [nvarchar](50) NULL,
+    [RegisterDate] [datetime] NOT NULL,
+    [BossName] [nvarchar](50) NULL,
+    [ContactName] [nvarchar](50) NULL,
+    [CompTel] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [CompFax] [nvarchar](50) NULL,
+    [CompID] [nvarchar](50) NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [CompAddress] [nvarchar](250) NULL,
+    [CompUrl] [nvarchar](250) NULL,
+    [TwitterUrl] [nvarchar](250) NULL,
+    [FacebookUrl] [nvarchar](250) NULL,
+    [InstagramUrl] [nvarchar](250) NULL,
+    [SkypeUrl] [nvarchar](250) NULL,
+    [LinkedinUrl] [nvarchar](250) NULL,
+    [Latitude] [decimal](20, 15) NOT NULL,
+    [Longitude] [decimal](20, 15) NOT NULL,
+    [AboutusText] [nvarchar](max) NULL,
+    [SupportText] [nvarchar](max) NULL,
+    [ReturnText] [nvarchar](max) NULL,
+    [ShippingText] [nvarchar](max) NULL,
+    [PaymentText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Customers] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Departments]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [DeptNo] [nvarchar](50) NULL,
+    [DeptName] [nvarchar](50) NULL,
+    [BossNo] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Departments] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[EmployeeAgents]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [EmpNo] [nvarchar](50) NULL,
+    [AgentNo] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_EmployeeAgents] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[EmployeeExperiences]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [EmpNo] [nvarchar](50) NULL,
+    [CompName] [nvarchar](50) NULL,
+    [DeptName] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [BossName] [nvarchar](50) NULL,
+    [Salary] [int] NULL,
+    [StartDate] [date] NULL,
+    [EndDate] [date] NULL,
+    [QuitReason] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_EmployeeExperiences] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Employees]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsValid] [bit] NOT NULL,
+    [EmpNo] [nvarchar](50) NULL,
+    [EmpName] [nvarchar](50) NULL,
+    [GenderCode] [nvarchar](50) NULL,
+    [DeptNo] [nvarchar](50) NULL,
+    [TitleNo] [nvarchar](50) NULL,
+    [Birthday] [date] NULL,
+    [OnboardDate] [date] NULL,
+    [LeaveDate] [date] NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [CityName] [nvarchar](50) NULL,
+    [CityArea] [nvarchar](50) NULL,
+    [ContactAddress] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Employees] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[EmployeeSchools]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [EmpNo] [nvarchar](50) NULL,
+    [EducationName] [nvarchar](50) NULL,
+    [SchoolName] [nvarchar](50) NULL,
+    [SubjectName] [nvarchar](50) NULL,
+    [StartDate] [date] NULL,
+    [EndDate] [date] NULL,
+    [IsGraduate] [bit] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_EmployeeSchools] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ExtensionTables]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ParentId] [int] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [ExtName] [nvarchar](50) NULL,
+    [ExtNo] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_ExtensionTables] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Featureds]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Featureds] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[FormDetail]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ParentId] [int] NULL,
+    [FormCode] [nvarchar](50) NULL,
+    [FormNo] [nvarchar](50) NULL,
+    [GuidNo] [nvarchar](50) NULL,
+    [TargetNo] [nvarchar](50) NULL,
+    [TargetName] [nvarchar](50) NULL,
+    [DeptNo] [nvarchar](50) NULL,
+    [DeptName] [nvarchar](50) NULL,
+    [TitleNo] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [StartDate] [date] NULL,
+    [StartTime] [datetime] NULL,
+    [EndDate] [date] NULL,
+    [EndTime] [datetime] NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [CodeName] [nvarchar](50) NULL,
+    [Qty1] [int] NOT NULL,
+    [Qty2] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_FormDetail] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[FormLocks]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [LockNo] [nvarchar](50) NULL,
+    [LockDate] [date] NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_FormLocks] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[FormMaster]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [FormCode] [nvarchar](50) NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [StatusCode] [nvarchar](50) NULL,
+    [FormNo] [nvarchar](50) NULL,
+    [FormDate] [date] NULL,
+    [FormTime] [datetime] NULL,
+    [TargetNo] [nvarchar](50) NULL,
+    [TargetName] [nvarchar](50) NULL,
+    [DeptNo] [nvarchar](50) NULL,
+    [DeptName] [nvarchar](50) NULL,
+    [TitleNo] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [StartDate] [date] NULL,
+    [StartTime] [datetime] NULL,
+    [EndDate] [date] NULL,
+    [EndTime] [datetime] NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [CodeName] [nvarchar](50) NULL,
+    [Qty1] [int] NOT NULL,
+    [Qty2] [int] NOT NULL,
+    [ApproveTime] [datetime] NULL,
+    [RejectTime] [datetime] NULL,
+    [SourceNo] [nvarchar](50) NULL,
+    [ApproveNo] [nvarchar](50) NULL,
+    [RejectNo] [nvarchar](50) NULL,
+    [NextNo] [nvarchar](50) NULL,
+    [GuidNo] [nvarchar](50) NULL,
+    [NotifyKey] [nvarchar](50) NULL,
+    [FormDescribe] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_FormMaster] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ForumBoards]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [BoardNo] [nvarchar](50) NULL,
+    [BoardName] [nvarchar](250) NULL,
+    [IconName] [nvarchar](50) NULL,
+    [DescriptionText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    [GuidNo] [nvarchar](50) NULL,
+    CONSTRAINT [PK_ForumBoards] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Forums]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ParentGuid] [nvarchar](50) NULL,
+    [ReplyGuid] [nvarchar](50) NULL,
+    [BoardNo] [nvarchar](50) NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [IsClosed] [bit] NOT NULL,
+    [SubjectDate] [datetime] NOT NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [SubjectName] [nvarchar](250) NULL,
+    [SubjectContent] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    [GuidNo] [nvarchar](50) NULL,
+    CONSTRAINT [PK_Forums] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[InvDetails]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [WareHouseNo] [nvarchar](50) NULL,
+    [ProductNo] [nvarchar](50) NULL,
+    [Qty] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_InvDetails] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Inventorys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [BaseNo] [nvarchar](50) NULL,
+    [IsConfirm] [bit] NOT NULL,
+    [IsCancel] [bit] NOT NULL,
+    [TypeNo] [nvarchar](50) NULL,
+    [SheetCode] [nvarchar](50) NULL,
+    [SheetNo] [nvarchar](50) NULL,
+    [SheetDate] [date] NULL,
+    [WarehouseNo] [nvarchar](50) NULL,
+    [TargetNo] [nvarchar](50) NULL,
+    [TargetName] [nvarchar](50) NULL,
+    [HandleNo] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Inventorys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[InventorysDetail]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ParentNo] [nvarchar](50) NULL,
+    [ProductNo] [nvarchar](50) NULL,
+    [Qty] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_InventorysDetail] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[InventorysType]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [TypeNo] [nvarchar](50) NULL,
+    [TypeName] [nvarchar](50) NULL,
+    [QtyCode] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_InventorysType] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[InvMasters]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [BaseNo] [nvarchar](50) NULL,
+    [ProductNo] [nvarchar](50) NULL,
+    [Qty] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_InvMasters] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Languages]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [LangNo] [nvarchar](50) NULL,
+    [LangName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Languages] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[LogCodes]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [CodeName] [nvarchar](50) NULL,
+    [LogLevel] [nvarchar](50) NULL,
+    [LogInterval] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_LogCodes] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Logs]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [KeyNo] [nvarchar](50) NULL,
+    [LogDate] [date] NULL,
+    [LogTime] [datetime] NULL,
+    [LastDate] [date] NULL,
+    [LastTime] [datetime] NULL,
+    [LogCode] [nvarchar](50) NULL,
+    [LogLevel] [nvarchar](50) NULL,
+    [LogInterval] [nvarchar](50) NULL,
+    [LogMessage] [nvarchar](500) NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [UserName] [nvarchar](50) NULL,
+    [TargetNo] [nvarchar](50) NULL,
+    [IpAddress] [nvarchar](50) NULL,
+    [LogNo] [nvarchar](50) NULL,
+    [LogQty] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Logs] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[MapPositions]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [TargetCode] [nvarchar](50) NULL,
+    [TargetNo] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [ContactName] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [ContactAddress] [nvarchar](250) NULL,
+    [Latitude] [decimal](18, 15) NOT NULL,
+    [Longitude] [decimal](18, 15) NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_MapPositions] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Messages]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsRead] [bit] NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [SenderNo] [nvarchar](50) NULL,
+    [ReceiverNo] [nvarchar](50) NULL,
+    [SendTime] [datetime] NOT NULL,
+    [HeaderText] [nvarchar](250) NULL,
+    [MessageText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Messages] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Modules]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [IsWorkflow] [bit] NOT NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [ModuleNo] [nvarchar](50) NULL,
+    [ModuleName] [nvarchar](50) NULL,
+    [IconName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Modules] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[News]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [PublishDate] [datetime] NOT NULL,
+    [HeaderName] [nvarchar](50) NULL,
+    [DetailText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_News] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[NewsLetter]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [UserEmail] [nvarchar](50) NULL,
+    [SubscribeDate] [datetime] NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_NewsLetter] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Notifications]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsRead] [bit] NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [SourceNo] [nvarchar](50) NULL,
+    [SenderNo] [nvarchar](50) NULL,
+    [ReceiverNo] [nvarchar](50) NULL,
+    [SendDate] [date] NOT NULL,
+    [SendTime] [date] NOT NULL,
+    [HeaderText] [nvarchar](250) NULL,
+    [MessageText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Notifications] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[OrderDetails]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ParentNo] [nvarchar](50) NULL,
+    [VendorNo] [nvarchar](50) NULL,
+    [CategoryNo] [nvarchar](50) NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [ProdName] [nvarchar](250) NULL,
+    [ProdSpec] [nvarchar](250) NULL,
+    [OrderPrice] [int] NOT NULL,
+    [OrderQty] [int] NOT NULL,
+    [OrderAmount] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_OrderDetails] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Orders]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [SheetNo] [nvarchar](50) NULL,
+    [SheetDate] [datetime] NOT NULL,
+    [StatusCode] [nvarchar](50) NULL,
+    [IsClosed] [bit] NOT NULL,
+    [IsValid] [bit] NOT NULL,
+    [CustNo] [nvarchar](50) NULL,
+    [CustName] [nvarchar](50) NULL,
+    [PaymentNo] [nvarchar](50) NULL,
+    [ShippingNo] [nvarchar](50) NULL,
+    [ReceiverName] [nvarchar](50) NULL,
+    [ReceiverEmail] [nvarchar](50) NULL,
+    [ReceiverAddress] [nvarchar](250) NULL,
+    [OrderAmount] [int] NOT NULL,
+    [TaxAmount] [int] NOT NULL,
+    [TotalAmount] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    [GuidNo] [nvarchar](50) NULL,
+    CONSTRAINT [PK_Orders] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[OrdersStatus]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsPayed] [bit] NOT NULL,
+    [IsClosed] [bit] NOT NULL,
+    [StatusNo] [nvarchar](50) NULL,
+    [StatusName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_OrdersStatus] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Payments]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [PaymentNo] [nvarchar](50) NULL,
+    [PaymentName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Payments] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Photos]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [FolderName] [nvarchar](50) NULL,
+    [PhotoName] [nvarchar](250) NULL,
+    [PriceName] [nvarchar](250) NULL,
+    [SaleDate] [date] NOT NULL,
+    [DetailText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Photos] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[PricingDetails]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [PricingNo] [nvarchar](50) NULL,
+    [IsSupport] [bit] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [ItemName] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_PricingDetails] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Pricings]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [IsAdvanced] [bit] NOT NULL,
+    [IsRecommend] [bit] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [PricingNo] [nvarchar](50) NULL,
+    [PricingName] [nvarchar](50) NULL,
+    [ProdPrice] [int] NOT NULL,
+    [CycleName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Pricings] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ProductFeatureds]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [FeaturedName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_ProductFeatureds] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ProductInventorys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [PropertyNo] [nvarchar](50) NULL,
+    [IsInventory] [bit] NOT NULL,
+    [InventoryQty] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_ProductInventorys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ProductPropertys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsSelect] [bit] NOT NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [PropertyNo] [nvarchar](50) NULL,
+    [PropertyValue] [nvarchar](500) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_ProductPropertys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Products]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [IsInventory] [bit] NOT NULL,
+    [IsShowPhoto] [bit] NOT NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [ProdName] [nvarchar](250) NULL,
+    [BrandName] [nvarchar](50) NULL,
+    [BrandSeriesName] [nvarchar](50) NULL,
+    [BarcodeNo] [nvarchar](50) NULL,
+    [StatusNo] [nvarchar](50) NULL,
+    [VendorNo] [nvarchar](50) NULL,
+    [CategoryNo] [nvarchar](50) NULL,
+    [CostPrice] [int] NOT NULL,
+    [MarketPrice] [int] NOT NULL,
+    [SalePrice] [int] NOT NULL,
+    [DiscountPrice] [int] NOT NULL,
+    [InventoryQty] [int] NOT NULL,
+    [ContentText] [nvarchar](max) NULL,
+    [SpecificationText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Products] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ProductStatus]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [StatusNo] [nvarchar](50) NULL,
+    [StatusName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_ProductStatus] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[ProductTags]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [TagName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_ProductTags] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Programs]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [IsPageSize] [bit] NOT NULL,
+    [IsSearch] [bit] NOT NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [ModuleNo] [nvarchar](50) NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [PrgNo] [nvarchar](50) NULL,
+    [PrgName] [nvarchar](50) NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [LockNo] [nvarchar](50) NULL,
+    [AreaName] [nvarchar](50) NULL,
+    [ControllerName] [nvarchar](50) NULL,
+    [ActionName] [nvarchar](50) NULL,
+    [ParmValue] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Programs] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Promotions]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [ProdNo] [nvarchar](50) NULL,
+    [StartTime] [datetime] NOT NULL,
+    [EndTime] [datetime] NOT NULL,
+    [SalePrice] [int] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Promotions] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[PropertyNames]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [PropName] [nvarchar](50) NULL,
+    [DisplayName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_PropertyNames] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Propertys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsSelect] [bit] NOT NULL,
+    [PropertyNo] [nvarchar](50) NULL,
+    [PropertyName] [nvarchar](50) NULL,
+    [PropertyValue] [nvarchar](500) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Propertys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Questions]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [QuestionText] [nvarchar](500) NULL,
+    [AnswerText] [nvarchar](500) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Questions] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Roles]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [RoleName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Securitys]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [TargetNo] [nvarchar](50) NULL,
+    [ModuleNo] [nvarchar](50) NULL,
+    [PrgNo] [nvarchar](50) NULL,
+    [IsAdd] [bit] NOT NULL,
+    [IsEdit] [bit] NOT NULL,
+    [IsDelete] [bit] NOT NULL,
+    [IsConfirm] [bit] NOT NULL,
+    [IsUndo] [bit] NOT NULL,
+    [IsCancel] [bit] NOT NULL,
+    [IsUpload] [bit] NOT NULL,
+    [IsDownload] [bit] NOT NULL,
+    [IsPrint] [bit] NOT NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Securitys] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Services]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [HeaderName] [nvarchar](250) NULL,
+    [DetailName] [nvarchar](250) NULL,
+    [ImageUrl] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Services] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Shippings]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [ShippingNo] [nvarchar](50) NULL,
+    [ShippingName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Shippings] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[TableRelations]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [RelationName] [nvarchar](250) NULL,
+    [LeftTableName] [nvarchar](50) NULL,
+    [RightTableName] [nvarchar](50) NULL,
+    [LeftColumnName] [nvarchar](50) NULL,
+    [LeftDataType] [nvarchar](50) NULL,
+    [RightColumnName] [nvarchar](50) NULL,
+    [RightDataType] [nvarchar](50) NULL,
+    [RelationType] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_TableRelations] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Teams]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [SortNo] [nvarchar](50) NULL,
+    [TeamNo] [nvarchar](50) NULL,
+    [TeamName] [nvarchar](50) NULL,
+    [EngName] [nvarchar](50) NULL,
+    [GenderCode] [nvarchar](50) NULL,
+    [DeptName] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [TwitterUrl] [nvarchar](50) NULL,
+    [FacebookUrl] [nvarchar](50) NULL,
+    [LinkedinUrl] [nvarchar](50) NULL,
+    [InstagramUrl] [nvarchar](50) NULL,
+    [SkypeUrl] [nvarchar](50) NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [DetailText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Teams] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[TempUser]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [UserName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_TempUser] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Testimonials]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [SendDate] [datetime] NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [UserName] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [StarCount] [int] NOT NULL,
+    [MessageText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](50) NULL,
+    CONSTRAINT [PK_Testimonials] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Titles]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [TitleNo] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Titles] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[TodoLists]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsFinished] [bit] NOT NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [TitleName] [nvarchar](250) NULL,
+    [DeadlineDate] [datetime] NOT NULL,
+    [Remark] [nvarchar](500) NULL,
+    CONSTRAINT [PK_TodoLists] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Users]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsValid] [bit] NOT NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [UserName] [nvarchar](50) NULL,
+    [Password] [nvarchar](250) NULL,
+    [EmpNo] [nvarchar](50) NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [GenderCode] [nvarchar](50) NULL,
+    [DeptNo] [nvarchar](50) NULL,
+    [TitleNo] [nvarchar](50) NULL,
+    [Birthday] [date] NULL,
+    [OnboardDate] [date] NULL,
+    [LeaveDate] [date] NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [ContactAddress] [nvarchar](250) NULL,
+    [ValidateCode] [nvarchar](250) NULL,
+    [NotifyPassword] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Vacations]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [VacYear] [int] NOT NULL,
+    [StartDate] [date] NOT NULL,
+    [EndDate] [date] NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Vacations] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Vendors]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsDefault] [bit] NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [CodeNo] [nvarchar](50) NULL,
+    [CompNo] [nvarchar](50) NULL,
+    [CompName] [nvarchar](250) NULL,
+    [ShortName] [nvarchar](50) NULL,
+    [EngName] [nvarchar](250) NULL,
+    [EngShortName] [nvarchar](50) NULL,
+    [RegisterDate] [datetime] NOT NULL,
+    [BossName] [nvarchar](50) NULL,
+    [ContactName] [nvarchar](50) NULL,
+    [CompTel] [nvarchar](50) NULL,
+    [ContactTel] [nvarchar](50) NULL,
+    [CompFax] [nvarchar](50) NULL,
+    [CompID] [nvarchar](50) NULL,
+    [ContactEmail] [nvarchar](50) NULL,
+    [CompAddress] [nvarchar](250) NULL,
+    [CompUrl] [nvarchar](250) NULL,
+    [TwitterUrl] [nvarchar](250) NULL,
+    [FacebookUrl] [nvarchar](250) NULL,
+    [InstagramUrl] [nvarchar](250) NULL,
+    [SkypeUrl] [nvarchar](250) NULL,
+    [LinkedinUrl] [nvarchar](250) NULL,
+    [Latitude] [decimal](20, 15) NOT NULL,
+    [Longitude] [decimal](20, 15) NOT NULL,
+    [AboutusText] [nvarchar](max) NULL,
+    [SupportText] [nvarchar](max) NULL,
+    [ReturnText] [nvarchar](max) NULL,
+    [ShippingText] [nvarchar](max) NULL,
+    [PaymentText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Vendors] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[WorkflowDetails]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsClose] [bit] NOT NULL,
+    [IsApprove] [bit] NOT NULL,
+    [IsReject] [bit] NOT NULL,
+    [MasterGuidNo] [nvarchar](50) NULL,
+    [RouteGuidNo] [nvarchar](50) NULL,
+    [RouteOrder] [nvarchar](50) NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [RoleName] [nvarchar](50) NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [UserName] [nvarchar](50) NULL,
+    [AgentNo] [nvarchar](50) NULL,
+    [AgentName] [nvarchar](50) NULL,
+    [CreateTime] [datetime] NOT NULL,
+    [UserReadTime] [datetime] NULL,
+    [AgentReadTime] [datetime] NULL,
+    [SignUserNo] [nvarchar](50) NULL,
+    [SignUserName] [nvarchar](50) NULL,
+    [SignTime] [datetime] NULL,
+    [SignComment] [nvarchar](250) NULL,
+    [Remark] [nvarchar](250) NULL,
+    [GuidNo] [nvarchar](50) NULL,
+    CONSTRAINT [PK_WorkflowDetails] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[WorkflowMasters]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsClose] [bit] NOT NULL,
+    [IsApprove] [bit] NOT NULL,
+    [IsReject] [bit] NOT NULL,
+    [FlowGuidNo] [nvarchar](50) NULL,
+    [SheetNo] [nvarchar](50) NULL,
+    [SheetName] [nvarchar](50) NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [UserName] [nvarchar](50) NULL,
+    [DeadlineTime] [datetime] NOT NULL,
+    [StartTime] [datetime] NOT NULL,
+    [EndTime] [datetime] NULL,
+    [ContentText] [nvarchar](max) NULL,
+    [Remark] [nvarchar](250) NULL,
+    [GuidNo] [nvarchar](50) NULL,
+    CONSTRAINT [PK_WorkflowMasters] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[WorkflowRoles]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [RoleName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_WorkflowRoles] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[WorkflowRoleUsers]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [IsEnabled] [bit] NOT NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [UserNo] [nvarchar](50) NULL,
+    [AgentNo] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_RoleUsers] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[WorkflowRoutes]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [PrgNo] [nvarchar](50) NULL,
+    [RouteOrder] [nvarchar](50) NULL,
+    [RoleNo] [nvarchar](50) NULL,
+    [RoleName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_WorkflowRoutes] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[Warehouses]
+(
+    [Id] [int] IDENTITY(1,1) NOT NULL,
+    [WarehouseNo] [nvarchar](50) NULL,
+    [WarehouseName] [nvarchar](50) NULL,
+    [Remark] [nvarchar](250) NULL,
+    CONSTRAINT [PK_Warehouses] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO

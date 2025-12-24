@@ -1,0 +1,156 @@
+﻿@model IEnumerable<powererp.Models.Programs>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+    var ModuleList = (List<SelectListItem>)ViewBag.ModuleList;
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+
+@using (Html.BeginForm("ChangeBaseNo", ActionService.Controller,
+new { area = ActionService.Area }, FormMethod.Post, false,
+new { id = "baseNoForm", role = "form" }))
+{
+    <div class="row mx-1 mb-2">
+        <div class="col-md-12">
+            <div class="float-start pt-2 me-1">
+                <span class="control-label fw-bold">程式模組：</span>
+            </div>
+            <div class="float-start">
+                @Html.DropDownList("BaseNo", ModuleList, new { @class = "form-control", onchange = "BaseNoChanged();" })
+            </div>
+        </div>
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <thead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsEnabled)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsPageSize)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsSearch)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.RoleNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ModuleNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SortNo)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.PrgNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.PrgName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CodeName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.LockName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.AreaName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ControllerName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ActionName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ParmValue)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                SessionService.RowId = item.Id;
+                SessionService.RowData = $"{item.RoleNo} {item.RoleName}";
+                <tr>
+                    @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                    {
+                        <td>
+                            @await Html.PartialAsync("_PartialFormEdit")
+                            @await Html.PartialAsync("_PartialFormDelete")
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsEnabled)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsPageSize)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsSearch)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoleNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModuleNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SortNo)
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.PrgNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrgName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LockName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AreaName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ControllerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActionName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParmValue)
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section ScriptsBody
+{
+    <script>
+        function BaseNoChanged() {
+            $("#baseNoForm").submit();
+        }  
+    </script>
+}

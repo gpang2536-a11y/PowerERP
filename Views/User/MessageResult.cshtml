@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "MessageResult";
+    if (SessionService.RoleNo == "Member")
+    { Layout = "_Layout"; }
+    else
+    { Layout = "_LayoutAdmin"; }
+    string str_area = "";
+    string str_controller = "Home";
+    string str_action = "Index";
+    if (SessionService.RoleNo != "Member") str_area = "Admin";
+}
+
+<div class="card card-size-small mt-5">
+    <div class="card-header bg-secondary text-white">
+        <div class="pt-2 px-2">
+            <div class="float-start">
+                <h4>訊息提示</h4>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-2">
+        <h5 class="text-danger">
+            訊息內容：
+        </h5>
+        <br />
+        <h5>
+            @ViewBag.MessageText
+        </h5>
+        <br />
+        <hr />
+        @Html.ActionLink("返回首頁", str_action, str_controller, new { area = str_area }, new { @class = "btn btn-success"
+                })
+    </div>
+</div>

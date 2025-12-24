@@ -1,0 +1,59 @@
+@model IEnumerable<powererp.Models.InvMasters>
+
+@{
+    ViewData["Title"] = "資料列表";
+    Layout = "_LayoutAdmin";
+}
+<div class="row mx-1">
+    <div class="col-md-12">
+        <div class="float-start">@await Html.PartialAsync("_PartialFormPage")</div>
+        <div class="float-end">@await Html.PartialAsync("_PartialFormSearch")</div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <thead class="table-secondary">
+            <tr>
+                <th>
+                    選取
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.ProductNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ProductName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Qty)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                SessionService.RowId = item.Id;
+                SessionService.RowData = $"{item.ProductNo} {item.ProductName}";
+                <tr>
+                    <td>
+                        @await Html.PartialAsync("_PartialFormSelect")
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.ProductNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qty)
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

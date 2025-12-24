@@ -1,0 +1,36 @@
+{
+  "$schema": "https://claude.ai/config.schema.json",
+  "projectName": "MultiLang Dev Project",
+  "description": "VS Code 專案，包含 .NET 10.0 預覽版程式。",
+  "model": "claude-3.5-sonnet",
+  "defaultLanguage": "zh-TW",
+  "preferredFrameworks": [
+    ".NET"
+  ],
+  "codeBase": {
+    "include": [
+      "src/",
+      "app/",
+      "scripts/",
+      "api/",
+      "tests/"
+    ],
+    "exclude": [
+      "bin/",
+      "obj/"
+    ]
+  },
+  "instructions": [
+    "請使用繁體中文回答。",
+    "程式範例請加上必要註解。",
+    "針對 .NET 使用 10.0 預覽版語法（C# 13）。"
+  ],
+  "codingStyle": {
+    "dotnet": {
+      "formatter": "dotnet-format",
+      "nullable": true,
+      "implicitUsings": true
+    }
+  },
+  "promptLibrary": "claude.prompts.md"
+}

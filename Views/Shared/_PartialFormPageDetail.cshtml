@@ -1,0 +1,22 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@if (((IPagedList)(Model.DetailModel)).PageCount > 0)
+{
+    int int_page_detail = SessionService.PageDetail;
+    if (SessionService.PageDetail > 0)
+    {
+        <div class="float-start page-info me-2">明細頁數:</div>
+        <div class="float-start me-2">
+            @Html.PagedListPager((IPagedList)(Model.DetailModel), x => Url.Action(ActionService.DetailPage,
+            ActionService.Controller, new
+            {
+                area = ActionService.Area,
+                id = x
+            }))
+</div>
+}
+    <div class="float-start page-info">
+        @ViewBag.PageDetailInfo
+    </div>
+}

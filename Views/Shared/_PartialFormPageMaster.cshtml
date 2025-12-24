@@ -1,0 +1,22 @@
+﻿@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@{
+    var pageModel = (SessionService.IsMultiMode) ? (IPagedList)(Model.MasterModel) : (IPagedList)Model;
+}
+
+@if (pageModel.PageCount > 0)
+{
+    <div class="float-start page-info me-2">頁數:</div>
+    <div class="float-start me-2">
+        @Html.PagedListPager(pageModel, x => Url.Action(ActionService.MasterPage,
+        ActionService.Controller, new
+        {
+            area = ActionService.Area,
+            id = x
+        }))
+</div>
+<div class="float-start page-info">
+    @ViewBag.PageMasterInfo
+</div>
+}

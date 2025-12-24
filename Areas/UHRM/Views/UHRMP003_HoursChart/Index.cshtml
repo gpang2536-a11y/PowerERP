@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+}
+
+<div style="width: 100%; height: 100%;">
+    <canvas id="myChart"></canvas>
+</div>
+<script>
+    // 獲取 canvas 元素
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    // 使用 AJAX 從後端讀取圖表資料
+    fetch('@Url.Action(ActionService.ChartData, ActionService.Controller, new { area = ActionService.Area })')
+        .then(response => response.json())
+        .then(data => {
+            // 建立圖表
+            const myChart = new Chart(ctx, {
+                type: 'line', // 圖表類型
+                data: {
+                    labels: data.Labels,
+                    datasets: [{
+                        type: 'line',
+                        label: data.SerialName[0],
+                        data: data.DataIntValue1,
+                        backgroundColor: '#ea464d',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        lineTension: 0,
+                        borderWidth: 2,
+                        pointRadius: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            align: 'start',
+                            labels: { font: { size: 16 } }
+                        },
+                        title: {
+                            display: true,
+                            text: data.Title,
+                            font: { size: 24 }
+                        },
+                        subtitle: {
+                            display: true,
+                            text: data.SubTitle,
+                            font: { size: 16 }
+                        },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            },
+                            title: {
+                                display: true,
+                                text: data.XAxisTitle,
+                                font: { size: 16 }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            title: {
+                                display: true,
+                                text: data.YAxisTitle,
+                                font: { size: 16 }
+                            }
+                        }
+                    },
+                    locale: 'zh-TW',
+                    animation: true
+                }
+            });
+        })
+        .catch(error => console.error('載入圖表資料失敗:', error));
+</script>

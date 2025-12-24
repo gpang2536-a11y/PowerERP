@@ -1,0 +1,31 @@
+// main: ../main.scss
+/*--------------------------------------------------------------
+# Features Section
+--------------------------------------------------------------*/
+.features {
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 15px;
+    color: color-mix(in srgb, var(--default-color), transparent 20%);
+  }
+
+  ul {
+    li {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      padding-top: 10px;
+      color: color-mix(in srgb, var(--default-color), transparent 30%);
+
+      i {
+        font-size: 16px;
+        color: var(--accent-color);
+        margin-right: 6px;
+      }
+    }
+  }
+}

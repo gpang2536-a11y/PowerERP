@@ -1,0 +1,127 @@
+@model IEnumerable<FileInfo>
+
+@{
+    string str_command = "員工附件";
+    ViewData["Title"] = $"{SessionService.StringValue1} ({SessionService.StringValue2})-{str_command} ({Model?.Count() ??
+    0})";
+    Layout = "_LayoutAdmin";
+    string extName = "";
+    bool isImage = false;
+    bool isPdf = false;
+}
+
+<div class="card border-secondary card-size-max">
+    <div class="card-header bg-primary bg-opacity-50 text-dark">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+    <div class="card-body">
+        <div class="my-3">
+            <form method="post" enctype="multipart/form-data"
+                action="@Url.Action(ActionService.Attachment, ActionService.Controller, new { area = ActionService.Area })">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="file" id="file" name="file" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <div class="float-start">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-upload"></i> 上傳檔案
+                            </button>
+                        </div>
+                        <div class="float-start ms-2">
+                            <a class="btn btn-success"
+                                href="@Url.Action(ActionService.Index, ActionService.Controller, new { area = ActionService.Area })">
+                                <i class="fas fa-arrow-left"></i> 返回列表
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- 檔案結構列表 -->
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>刪除</th>
+                            <th>下載</th>
+                            <th>檔名</th>
+                            <th>預覽</th>
+                            <th>大小 (bytes)</th>
+                            <th>建立時間</th>
+                            <th>最後修改時間</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var file in Model)
+                        {
+                            extName = file.Extension.ToLower();
+                            isPdf = (extName == ".pdf");
+                            isImage = (extName == ".jpg" || extName == ".png" || extName == ".bmp" || extName == ".gif");
+                            string str_fileName = $"~/files/employee/{SessionService.StringValue1}/{file.Name}";
+
+                            <tr>
+                                <td>
+                                    <form method="post"
+                                        action="@Url.Action("DeleteAttachment", ActionService.Controller, new { area = ActionService.Area })"
+                                        onsubmit="return confirmDelete();">
+                                        <input type="hidden" name="fileName" id="fileName" value="@file.Name" />
+                                        <input type="hidden" name="fileFullName" id="fileFullName" value="@file.FullName" />
+                                        <button type="submit" class="btn btn-danger btn-sm">刪除</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("DownloadAttachment", ActionService.Controller, new { area = ActionService.Area, fileName = file.Name })"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="fas fa-download"></i> 下載
+                                    </a>
+                                </td>
+                                <td>@file.Name</td>
+                                <td>
+                                    @if (isImage)
+                                    {
+                                        <img src="@Url.Content(str_fileName)" title="@file.FullName" alt="@file.Name"
+                                            style="max-width:50px;cursor:pointer;"
+                                            onclick="showImageModal('@Url.Content(str_fileName)')" />
+                                    }
+                                    else if (isPdf)
+                                    {
+                                        <a href="@Url.Content(str_fileName)" target="_blank" class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-file-pdf me-2"></i>開啟
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    @file.Length
+                                </td>
+                                <td>
+                                    @file.CreationTime.ToString("yyyy/MM/dd HH:mm")
+                                </td>
+                                <td class="table-wrap">
+                                    @file.LastWriteTime.ToString("yyyy/MM/dd HH:mm")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">目前沒有檔案資料。</div>
+        }
+    </div>
+</div>
+
+@await Html.PartialAsync("_PartialFormImageModal")
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/imagemodal/imagemodal.css")" />
+}
+
+@section ScriptsBody {
+    <script src="@Url.Content("~/lib/imagemodal/imagemodal.js")"></script>
+}

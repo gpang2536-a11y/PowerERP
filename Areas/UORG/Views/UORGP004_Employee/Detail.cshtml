@@ -1,0 +1,102 @@
+@model powererp.Models.Employees
+
+@{
+    ViewData["Title"] = "明細";
+    Layout = "_LayoutAdmin";
+    using var emp = new z_sqlEmployees();
+    string photoPath = emp.EmployeeImage(Model.EmpNo);
+}
+<div class="row">
+    <div class="col-md-4">
+        <img src="@Url.Content(photoPath)" class="img-thumbnail" alt="@Model.EmpName"
+            style="max-width:200px;cursor:pointer" onclick="showImageModal('@Url.Content(photoPath)')" />
+    </div>
+    <div class=" col-md-8 fs-6">
+        <div class="row">
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.EmpNo)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.EmpNo)</span>
+            </div>
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.EmpName)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.EmpName)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.IsValid)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.IsValid)</span>
+            </div>
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.GenderName)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.GenderName)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.DeptName)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.DeptName)</span>
+            </div>
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.TitleName)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.TitleName)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.Birthday)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.Birthday)</span>
+            </div>
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.ContactTel)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.ContactTel)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.OnboardDate)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.OnboardDate)</span>
+            </div>
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.LeaveDate)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.LeaveDate)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.CityName)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.CityName)</span>
+            </div>
+            <div class="col-md-6">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.CityArea)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.CityArea)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.FullAddress)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.FullAddress)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.ContactEmail)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.ContactEmail)</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="col-caption">@Html.DisplayNameFor(model => model.Remark)：</span>
+                <span class="col-data">@Html.DisplayFor(model => model.Remark)</span>
+            </div>
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("_PartialReturn")
+@await Html.PartialAsync("_PartialFormImageModal")
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/imagemodal/imagemodal.css")" />
+}
+@section ScriptsBody {
+    <script src="@Url.Content("~/lib/imagemodal/imagemodal.js")"></script>
+}

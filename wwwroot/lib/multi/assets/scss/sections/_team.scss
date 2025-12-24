@@ -1,0 +1,85 @@
+// main: ../main.scss
+/*--------------------------------------------------------------
+# Team Section
+--------------------------------------------------------------*/
+.team {
+  .member {
+    --default-color: #ffffff;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+
+    .member-info {
+      opacity: 0;
+      position: absolute;
+      inset: 0;
+      transition: 0.2s;
+    }
+
+    .member-info-content {
+      position: absolute;
+      left: 50px;
+      right: 0;
+      bottom: 0;
+      transition: bottom 0.4s;
+
+      h4 {
+        color: var(--contrast-color);
+        font-weight: 700;
+        margin-bottom: 2px;
+        font-size: 18px;
+      }
+
+      span {
+        font-style: italic;
+        display: block;
+        font-size: 13px;
+      }
+    }
+
+    .social {
+      position: absolute;
+      left: -50px;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      transition: left ease-in-out 0.3s;
+      background: rgba(0, 0, 0, .6);
+      text-align: center;
+
+      a {
+        transition: color 0.3s;
+        display: block;
+        color: var(--default-color);
+        margin-top: 15px;
+
+        &:hover {
+          color: var(--accent-color);
+        }
+      }
+
+      i {
+        font-size: 18px;
+        margin: 0 2px;
+      }
+    }
+
+    &:hover {
+      .member-info {
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.8) 20%, rgba(255, 255, 255, 0) 100%);
+        opacity: 1;
+        transition: 0.4s;
+      }
+
+      .member-info-content {
+        bottom: 30px;
+        transition: bottom 0.4s;
+      }
+
+      .social {
+        left: 0;
+        transition: left ease-in-out 0.3s;
+      }
+    }
+  }
+}

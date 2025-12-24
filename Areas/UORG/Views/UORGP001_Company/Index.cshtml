@@ -1,0 +1,267 @@
+﻿@model IEnumerable<powererp.Models.Companys>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <tdead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th>
+                    <span class="text-primary">功能</span>
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsDefault)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.IsEnabled)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CodeName)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.CompNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CompName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ShortName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.EngName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.RegisterDate)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.BossName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ContactName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CompTel)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ContactTel)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CompFax)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CompID)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.ContactEmail)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CompAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CompUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.TwitterUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.FacebookUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.InstagramUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SkypeUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.LinkedinUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Latitude)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Longitude)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    SessionService.RowId = item.Id;
+                    SessionService.RowData = $"{item.CompNo} {item.ShortName}";
+                    <tr>
+                        @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                        {
+                            <td>
+                                @await Html.PartialAsync("_PartialFormEdit")
+                                @await Html.PartialAsync("_PartialFormDelete")
+                            </td>
+                        }
+                        <td>
+                            <div class="dropdown" style="position: static;">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fas fa-bars"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="z-index: 9999;">
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="@Url.Action("Aboutus", ActionService.Controller, new { area = ActionService.Area, id = item.Id })">
+                                            <table>
+                                                <tr>
+                                                    <td class="action-popup">
+                                                        <i class="fa-regular fa-file-lines fa-2x"></i>
+                                                    </td>
+                                                    <td class="fs-6">公司簡介</td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="@Url.Action("Support", ActionService.Controller, new { area = ActionService.Area, id = item.Id })">
+                                            <table>
+                                                <tr>
+                                                    <td class="action-popup">
+                                                        <i class="fa-regular fa-file-lines fa-2x"></i>
+                                                    </td>
+                                                    <td class="fs-6">支援說明</td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="@Url.Action("Return", ActionService.Controller, new { area = ActionService.Area, id = item.Id })">
+                                            <table>
+                                                <tr>
+                                                    <td class="action-popup">
+                                                        <i class="fa-regular fa-file-lines fa-2x"></i>
+                                                    </td>
+                                                    <td class="fs-6">退貨說明</td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="@Url.Action("Shipping", ActionService.Controller, new { area = ActionService.Area, id = item.Id })">
+                                            <table>
+                                                <tr>
+                                                    <td class="action-popup">
+                                                        <i class="fa-regular fa-file-lines fa-2x"></i>
+                                                    </td>
+                                                    <td class="fs-6">出貨說明</td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="@Url.Action("Payment", ActionService.Controller, new { area = ActionService.Area, id = item.Id })">
+                                            <table>
+                                                <tr>
+                                                    <td class="action-popup">
+                                                        <i class="fa-regular fa-file-lines fa-2x"></i>
+                                                    </td>
+                                                    <td class="fs-6">付款說明</td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsDefault)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsEnabled)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CodeName)
+                        </td>
+                        <td class="fixedcolumn fixedcolumn-data">
+                            @Html.DisplayFor(modelItem => item.CompNo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShortName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EngName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RegisterDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BossName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContactName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompTel)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContactTel)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompFax)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContactEmail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompUrl)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TwitterUrl)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FacebookUrl)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InstagramUrl)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SkypeUrl)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LinkedinUrl)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Latitude)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Longitude)
+                        </td>
+                        <td class="table-wrap">
+                            @Html.DisplayFor(modelItem => item.Remark)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+    </table>
+</div>

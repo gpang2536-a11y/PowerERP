@@ -1,0 +1,89 @@
+@model powererp.Models.Users
+@{
+    ViewData["Title"] = "我的帳號";
+    if (SessionService.RoleNo == "Member")
+    { Layout = "_Layout"; }
+    else
+    { Layout = "_LayoutAdmin"; }
+}
+
+<div class="row">
+    <div class="col-md-3 pt-2 border-bottom border-start border-end border-top">
+        <img src="@Url.Content(SessionService.UserImage)" class="img-fluid rounded-start" />
+    </div>
+    <div class="col-md-9 border-top">
+        <div class="row">
+            <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                @Html.LabelFor(model => model.UserNo, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-9 border-bottom border-end pt-1">
+                @Html.DisplayFor(model => model.UserNo, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-9 border-bottom border-end pt-1">
+                @Html.DisplayFor(model => model.UserName, new { @class = "control-label" })
+            </div>
+        </div>
+        @if (SessionService.RoleNo != "Member")
+        {
+            <div class="row">
+                <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                    @Html.LabelFor(model => model.DeptName, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9 border-bottom border-end pt-1">
+                    @Html.DisplayFor(model => model.DeptName, new { @class = "control-label" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                    @Html.LabelFor(model => model.TitleName, htmlAttributes: new { @class = "control-label" })
+                </div>
+                <div class="col-md-9 border-bottom border-end pt-1">
+                    @Html.DisplayFor(model => model.TitleName, new { @class = "control-label" })
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                @Html.LabelFor(model => model.GenderName, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-9 border-bottom border-end pt-1">
+                @Html.DisplayFor(model => model.GenderName, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                @Html.LabelFor(model => model.ContactTel, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-9 border-bottom border-end pt-1">
+                @Html.DisplayFor(model => model.ContactTel, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                @Html.LabelFor(model => model.ContactEmail, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-9 border-bottom border-end pt-1">
+                @Html.DisplayFor(model => model.ContactEmail, new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 border-bottom border-end fw-bold text-primary">
+                @Html.LabelFor(model => model.ContactAddress, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-9 border-bottom border-end pt-1">
+                @Html.DisplayFor(model => model.ContactAddress, new { @class = "control-label" })
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-md-12">
+        @Html.ActionLink("上傳照片", "PhotoUpload", "User", new { area = "" }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("修改記錄", "EditProfile", "User", new { area = "" }, new { @class = "btn btn-success" })
+    </div>
+</div>

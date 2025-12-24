@@ -1,0 +1,148 @@
+@model powererp.Models.Logs
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+    var code = new z_sqlCodeDatas();
+    var LogCodeList = code.GetDropDownList("LogCode", true);
+    var LogLevelList = code.GetDropDownList("LogLevel", true);
+    var LogIntervalList = code.GetDropDownList("LogInterval", true);
+    LogCodeList.Where(m => m.Value == Model.LogCode).ToList().ForEach(m => m.Selected = true);
+    LogLevelList.Where(m => m.Value == Model.LogLevel).ToList().ForEach(m => m.Selected = true);
+    LogIntervalList.Where(m => m.Value == Model.LogInterval).ToList().ForEach(m => m.Selected = true);
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.LogDate)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.LogDate, new { htmlAttributes = new { @class = "form-control datepicker" , @type="text" } })
+                        @Html.ValidationMessageFor(model => model.LogDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.LogTime)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.LogTime, new { htmlAttributes = new { @class = "form-control timepicker" , @type="text" } })
+                        @Html.ValidationMessageFor(model => model.LogTime, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                    @Html.LabelRequiredFor(model => model.CodeName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.LogCode, LogCodeList , new { @class = "form-control selectpicker" , @data_live_search = "true" })
+                        @Html.ValidationMessageFor(model => model.LogCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IpAddress)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.IpAddress, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IpAddress, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                    @Html.LabelRequiredFor(model => model.LogMessage)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.LogMessage, 5, 0, new { @class = "form-control", @style = "width: 100%;" })
+                        @Html.ValidationMessageFor(model => model.LogMessage, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.UserNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.UserNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.UserName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.LogNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.LogNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.LogNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.LogQty)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.LogQty, new { htmlAttributes = new { @class = "form-control" ,
+                                            @type = "number" } })
+                        @Html.ValidationMessageFor(model => model.LogQty, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelRequiredFor(model => model.Remark)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @await Html.PartialAsync("_PartialFormSubmit")
+    </div>
+}

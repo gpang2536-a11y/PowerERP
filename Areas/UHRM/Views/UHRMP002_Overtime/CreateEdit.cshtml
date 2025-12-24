@@ -1,0 +1,126 @@
+@model powererp.Models.Overtimes
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+    using var codes = new z_sqlCodeDatas();
+    using var emp = new z_sqlEmployees();
+    var EmpList = emp.GetDropDownList(true);
+    var TypeList = codes.GetDropDownList("Overtime", false);
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.SheetNo)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.SheetNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.SheetNo, new { htmlAttributes = new { @class = "form-control",
+                        @readonly = "readonly", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.SheetNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelRequiredFor(model => model.SheetDate)
+                </div>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.SheetDate, new { htmlAttributes = new { @class = "form-control                    datepicker", @type = "text" } })
+                    @Html.ValidationMessageFor(model => model.SheetDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelRequiredFor(model => model.EmpName)
+                </div>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.EmpNo, EmpList, new { @class = "form-control selectpicker",
+                                        @data_live_search = "true" } )
+                    @Html.ValidationMessageFor(model => model.EmpNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelRequiredFor(model => model.TypeName)
+                </div>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.TypeNo, TypeList, new { @class = "form-control selectpicker",
+                                        @data_live_search = "true" } )
+                    @Html.ValidationMessageFor(model => model.TypeNo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelRequiredFor(model => model.StartTime)
+                </div>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control              datetimepicker", @type = "text" } })
+                    @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelRequiredFor(model => model.EndTime)
+                </div>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control      datetimepicker", @type = "text" } })
+                    @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelRequiredFor(model => model.ReasonText)
+                </div>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.ReasonText, 5, 0, new { @class = "form-control", @style = "width: 100%;" })
+                    @Html.ValidationMessageFor(model => model.ReasonText, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelRequiredFor(model => model.Remark)
+                </div>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @await Html.PartialAsync("_PartialFormSubmit")
+</div>
+}

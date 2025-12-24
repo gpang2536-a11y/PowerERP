@@ -1,0 +1,100 @@
+@model IEnumerable<powererp.Models.Inventorys>
+
+@{
+    ViewData["Title"] = "資料列表";
+    Layout = "_LayoutAdmin";
+}
+<div class="row mx-1">
+    <div class="col-md-12">
+        <div class="float-start">@await Html.PartialAsync("_PartialFormPage")</div>
+        <div class="float-end">@await Html.PartialAsync("_PartialFormSearch")</div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <thead class="table-secondary">
+            <tr>
+                <th>
+                    選取
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StatusName)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.SheetNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.SheetDate)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.WarehouseName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.TargetNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.TargetName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.HandleNo)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.HandleName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                SessionService.RowId = item.Id;
+                SessionService.RowData = item.SheetNo;
+                <tr>
+                    <td>
+                        @await Html.PartialAsync("_PartialFormSelect")
+                    </td>
+                    <td>
+                        @if (item.IsCancel)
+                        {
+                            <span class="text-danger">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                        }
+                        else if (item.IsConfirm)
+                        {
+                            <span class="text-success">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                        }
+                        else
+                        {
+                            <span class="text-secondary">@Html.DisplayFor(modelItem => item.StatusName)</span>
+                        }
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.SheetNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SheetDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WarehouseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TargetNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TargetName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HandleNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HandleName)
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

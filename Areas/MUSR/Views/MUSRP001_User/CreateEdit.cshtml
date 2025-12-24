@@ -1,0 +1,181 @@
+@model powererp.Models.Users
+
+@{
+    string str_command = (Model.Id == 0) ? "新增" : "修改";
+    ViewData["Title"] = $"資料{str_command}";
+    Layout = "_LayoutAdmin";
+    using var emp = new z_sqlEmployees();
+    using var dept = new z_sqlDepartments();
+    using var title = new z_sqlTitles();
+    var code = new z_sqlCodeDatas();
+    var EmpList = emp.GetDropDownList(true);
+    var DeptList = dept.GetDropDownList(true);
+    var TitleList = title.GetDropDownList(true);
+    var GenderList = code.GetDropDownList("Gender", false);
+    var UserList = code.GetDropDownList("User", false);
+    EmpList.Insert(0, new SelectListItem() { Text = "未指定", Value = "", Selected = (Model.Id == 0) });
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal  mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.RoleNo)
+        @Html.HiddenFor(model => model.Password)
+        @Html.HiddenFor(model => model.OnboardDate)
+        @Html.HiddenFor(model => model.LeaveDate)
+        @Html.HiddenFor(model => model.ValidateCode)
+        @Html.HiddenFor(model => model.NotifyPassword)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.UserNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.UserNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.UserName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.IsValid)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(model => model.IsValid, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.IsValid, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.CodeName)
+                    </div>
+                    <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.CodeNo, UserList, new { @class = "form-control selectpicker" , @data_live_search = "true" } )
+                        @Html.ValidationMessageFor(model => model.CodeNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.GenderName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.GenderCode, GenderList, new { @class = "form-control selectpicker" , @data_live_search = "false" } )
+                        @Html.ValidationMessageFor(model => model.GenderCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.EmpName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.EmpNo, EmpList, new { @class = "form-control selectpicker" , @data_live_search = "true" } )
+                        @Html.ValidationMessageFor(model => model.EmpNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.DeptName)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.DeptNo, DeptList, new { @class = "form-control selectpicker" , @data_live_search = "true" } )
+                        @Html.ValidationMessageFor(model => model.DeptNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.TitleName)
+                    </div>
+                    <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.TitleNo, TitleList, new { @class = "form-control selectpicker" , @data_live_search = "true" } )
+                        @Html.ValidationMessageFor(model => model.TitleNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.ContactTel)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ContactTel, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ContactTel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.Birthday)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control datepicker" , @type = "text" } })
+                        @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                @Html.LabelRequiredFor(model => model.ContactEmail)
+            </div>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactEmail, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                @Html.LabelRequiredFor(model => model.ContactAddress)
+            </div>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContactAddress, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContactAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                @Html.LabelRequiredFor(model => model.Remark)
+            </div>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @await Html.PartialAsync("_PartialFormSubmit")
+    </div>
+}

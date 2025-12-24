@@ -1,0 +1,231 @@
+@model powererp.Models.Companys
+
+@{
+    ViewData["Title"] = "資料修改";
+    Layout = "_LayoutAdmin";
+    SessionService.ColumnName = "Remark";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal mt-2">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelRequiredFor(model => model.CompNo)
+                    </div>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.CompNo, new { htmlAttributes = new { @class = "form-control" ,
+                        @readonly = "readonly" , @disabled = "disabled"} })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelRequiredFor(model => model.ShortName)
+                </div>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.ShortName, new { htmlAttributes = new { @class = "form-control" ,
+                                        @readonly = "readonly" , @disabled = "disabled" } })
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row form-group">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2">
+                    <span class="control-label">@SessionService.RowData</span>
+                </div>
+                <div class="col-md-10">
+                    @Html.TextAreaFor(model => model.Remark, 10, 0, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row form-group">
+        <div class="col-md-12">
+            <input type="submit" value="異動存檔" class="btn btn-primary" />
+            <button type="button" class="btn btn-secondary" onclick="showDetailPreview()">
+                <i class="bi bi-eye"></i> 預覽
+            </button>
+            <a class="btn btn-success"
+                href="@Url.Action(ActionService.Index, ActionService.Controller, new { area = ActionService.Area })">
+                返回列表
+            </a>
+        </div>
+    </div>
+</div>
+}
+
+<!-- 預覽明細資料的 Modal -->
+<div class="modal fade" id="detailPreviewModal" tabindex="-1" aria-labelledby="detailPreviewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailPreviewModalLabel">明細資料預覽</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- 
+                使用 overflow-y: auto 來啟用垂直滾動條
+                max-height: 70vh - 最大高度為視窗高度的 70%
+                overflow-y: auto - 當內容超出時顯示垂直捲軸
+             -->
+            <div class="modal-body" id="detailPreviewContent" style="max-height: 70vh; overflow-y: auto;">
+                <!-- DetailText HTML 內容會顯示在這裡 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function showDetailPreview() {
+            var data = @Html.Raw(Json.Serialize(Model.Remark ?? ""));
+            if (data) {
+                var html = '<div class="mb-3">' +
+                    '<div class="mt-3">' + data + '</div>' +
+                    '</div>';
+                document.getElementById('detailPreviewContent').innerHTML = html;
+            } else {
+                document.getElementById('detailPreviewContent').innerHTML = '<p class="text-muted">無明細資料</p>';
+            }
+            var modal = new bootstrap.Modal(document.getElementById('detailPreviewModal'));
+            modal.show();
+        }
+    </script>
+}
+
+@section ScriptsBody {
+    <!-- 使用 CDN 版本的 CKEditor 5 以支援完整表格功能 -->
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.css" />
+    <script src="https://cdn.ckeditor.com/ckeditor5/43.3.1/ckeditor5.umd.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/43.3.1/translations/zh.umd.js"></script>
+    <script src="@Url.Content("~/lib/imagemodal/imagemodal.js")"></script>
+
+    <script>
+        let editor;
+        const { ClassicEditor, Essentials, Bold, Italic, Underline, Font, Paragraph, Heading,
+            Link, List, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, ImageUpload,
+            Table, TableToolbar, TableProperties, TableCellProperties, TableColumnResize,
+            MediaEmbed, BlockQuote, CodeBlock, Alignment } = CKEDITOR;
+
+        // 自訂圖片上傳適配器
+        class UploadAdapter {
+            constructor(loader) {
+                this.loader = loader;
+            }
+
+            upload() {
+                return this.loader.file
+                    .then(file => new Promise((resolve, reject) => {
+                        const data = new FormData();
+                        data.append('upload', file);
+
+                        fetch('@Url.Action("CKEditorUploadImage", ActionService.Controller, new { area = ActionService.Area })', {
+                            method: 'POST',
+                            body: data
+                        })
+                            .then(response => response.json())
+                            .then(result => {
+                                if (result.error) {
+                                    reject(result.error.message);
+                                } else {
+                                    resolve({
+                                        default: result.url
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                reject('上傳失敗: ' + error);
+                            });
+                    }));
+            }
+
+            abort() {
+                // 處理上傳中止
+            }
+        }
+
+        function CustomUploadAdapterPlugin(editor) {
+            editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                return new UploadAdapter(loader);
+            };
+        }
+        var columnId = '#' + '@SessionService.ColumnName';
+        ClassicEditor
+            .create(document.querySelector(columnId), {
+                language: 'zh',
+                plugins: [
+                    Essentials, Bold, Italic, Underline, Font, Paragraph, Heading,
+                    Link, List, Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, ImageUpload,
+                    Table, TableToolbar, TableProperties, TableCellProperties, TableColumnResize,
+                    MediaEmbed, BlockQuote, CodeBlock, Alignment
+                ],
+                extraPlugins: [CustomUploadAdapterPlugin],
+                toolbar: {
+                    items: [
+                        'undo', 'redo',
+                        '|', 'heading',
+                        '|', 'bold', 'italic', 'underline',
+                        '|', 'link', 'uploadImage', 'insertTable', 'mediaEmbed',
+                        '|', 'bulletedList', 'numberedList', 'outdent', 'indent',
+                        '|', 'fontSize', 'fontColor', 'fontBackgroundColor',
+                        '|', 'alignment',
+                        '|', 'blockQuote', 'codeBlock'
+                    ]
+                },
+                image: {
+                    toolbar: [
+                        'imageStyle:inline',
+                        'imageStyle:block',
+                        'imageStyle:side',
+                        '|',
+                        'toggleImageCaption',
+                        'imageTextAlternative',
+                        '|',
+                        'resizeImage'
+                    ]
+                },
+                table: {
+                    contentToolbar: [
+                        'tableColumn', 'tableRow', 'mergeTableCells',
+                        'tableProperties', 'tableCellProperties'
+                    ]
+                }
+            })
+            .then(newEditor => {
+                editor = newEditor;
+                // 設定編輯區域最小高度
+                const editorElement = editor.ui.view.editable.element;
+                editorElement.style.minHeight = '400px';
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        // 表單提交前同步 CKEditor 內容
+        $('form').on('submit', function () {
+            if (editor) {
+                $(columnId).val(editor.getData());
+            }
+        });
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/imagemodal/imagemodal.css")" />
+}

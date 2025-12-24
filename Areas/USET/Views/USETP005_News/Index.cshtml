@@ -1,0 +1,147 @@
+﻿@model IEnumerable<powererp.Models.News>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <thead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th>
+                    @await Html.PartialAsync("_PartialFormFunction")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ImageUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CodeName)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.PublishDate)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.HeaderName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                SessionService.RowId = item.Id;
+                SessionService.RowData = item.HeaderName;
+                <tr>
+                    @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                    {
+                        <td>
+                            @await Html.PartialAsync("_PartialFormEdit")
+                            @await Html.PartialAsync("_PartialFormDelete")
+                        </td>
+                    }
+                    <td>
+                        @await Html.PartialAsync("_PartialFormUpload")
+                        @await Html.PartialAsync("_PartialFormPreview")
+                    </td>
+                    <td>
+                        <img src="@Url.Content(ImageService.GetUniqueFileName(item.ImageUrl))" alt=""
+                            style="max-width: 80px;cursor:pointer"
+                            onclick="showImageModal('@Url.Content(item.ImageUrl)')" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodeName)
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.PublishDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HeaderName)
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- 預覽明細資料的 Modal -->
+<div class="modal fade" id="detailPreviewModal" tabindex="-1" aria-labelledby="detailPreviewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailPreviewModalLabel">明細資料預覽</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- 
+                使用 overflow-y: auto 來啟用垂直滾動條
+                max-height: 70vh - 最大高度為視窗高度的 70%
+                overflow-y: auto - 當內容超出時顯示垂直捲軸
+             -->
+            <div class="modal-body" id="detailPreviewContent" style="max-height: 70vh; overflow-y: auto;">
+                <!-- DetailText HTML 內容會顯示在這裡 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_PartialFormImageModal")
+
+@section Scripts {
+    <script>
+        // 儲存所有資料項目的完整資訊
+        var newsDetailData =
+            {
+                                @foreach (var item in Model)
+            {
+                <text>'@item.Id': {
+                    codeName: @Html.Raw(Json.Serialize(item.CodeName ?? "")),
+                    publishDate: @Html.Raw(Json.Serialize(item.PublishDate.ToString("yyyy-MM-dd") ?? "")),
+                    headerName: @Html.Raw(Json.Serialize(item.HeaderName ?? "")),
+                                                    detailText: @Html.Raw(Json.Serialize(item.DetailText ?? ""))},
+                </text>
+        }
+                        };
+        function showDetailPreview(id) {
+            var data = newsDetailData[id];
+            if (data) {
+                var html = '<div class="mb-3">' +
+                    '<div class="row mb-2"><div class="col-6"><span class="fw-bold">分類：</span>' + data.codeName + '</div>' +
+                    '<div class="col-6"><span class="fw-bold">發佈日期：</span>' + data.publishDate + '</div></div>' +
+                    '<div class="row mb-3"><div class="col-12"><span class="fw-bold">標題：</span>' + data.headerName + '</div></div>' +
+                    '<hr>' +
+                    '<div class="mt-3">' + data.detailText + '</div>' +
+                    '</div>';
+                document.getElementById('detailPreviewContent').innerHTML = html;
+            } else {
+                document.getElementById('detailPreviewContent').innerHTML = '<p class="text-muted">無明細資料</p>';
+            }
+            var modal = new bootstrap.Modal(document.getElementById('detailPreviewModal'));
+            modal.show();
+        }
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/imagemodal/imagemodal.css")" />
+}
+
+@section ScriptsBody {
+    <script src="@Url.Content("~/lib/imagemodal/imagemodal.js")"></script>
+}

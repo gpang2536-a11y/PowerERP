@@ -1,0 +1,25 @@
+@{
+    var formSecurity = SessionService.FormSecurity;
+    bool bln_valid = (formSecurity == null) ? false : formSecurity.IsDelete;
+    if (SessionService.IsReadonlyMode)
+    { bln_valid = false; }
+    else
+    {
+        if (AppService.DebugMode)
+        { bln_valid = true; }
+        else
+        {
+            if (bln_valid)
+            {
+                if (SessionService.IsFormLocked || (SessionService.IsConfirmMode && SessionService.IsConfirm) ||
+                (SessionService.IsCancelMode && SessionService.IsCancel))
+                    bln_valid = false;
+            }
+        }
+    }
+}
+@if (bln_valid)
+{
+    <input type="button" id="@ActionService.Delete" value="@SessionService.GetActionName(enAction.Delete)"
+        class="btn btn-danger" onclick="DeleteData(@SessionService.RowId , '@SessionService.RowData' )" />
+}

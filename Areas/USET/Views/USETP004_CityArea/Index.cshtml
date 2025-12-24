@@ -1,0 +1,111 @@
+﻿@model IEnumerable<powererp.Models.CityAreas>
+
+@{
+    ViewData["Title"] = SessionService.PrgName;
+    Layout = "_LayoutAdmin";
+    var value = TempData.Get<FormSecurity>("FormSecurity");
+    var BaseModel = (IEnumerable<SelectListItem>)ViewBag.MasterList;
+    decimal ldcm_lat = 0;
+    decimal ldcm_lng = 0;
+}
+
+@await Html.PartialAsync("_PartialFormHeader")
+
+@using (Html.BeginForm("ChangeBaseNo", ActionService.Controller,
+new { area = ActionService.Area }, FormMethod.Post, false,
+new { id = "baseNoForm", role = "form" }))
+{
+    <div class="row mx-1 mb-2">
+        <div class="col-md-12">
+            <div class="float-start pt-2 me-1">
+                <span class="control-label fw-bold">縣市名稱：</span>
+            </div>
+            <div class="float-start">
+                @Html.DropDownList("BaseNo", BaseModel, new { @class = "form-control", onchange = "BaseNoChanged();" })
+            </div>
+        </div>
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <thead class="table-secondary">
+            <tr>
+                @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                {
+                    <th>
+                        @await Html.PartialAsync("_PartialFormCreate")
+                    </th>
+                }
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.AreaName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Latitude)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Longitude)
+                </th>
+                <th>
+                    地圖
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                ldcm_lat = item.Latitude ?? 0;
+                ldcm_lng = item.Longitude ?? 0;
+                SessionService.RowId = item.Id;
+                SessionService.RowData = item.AreaName;
+                <tr>
+                    @if (value.IsAddEditDelete && !SessionService.IsReadonlyMode)
+                    {
+                        <td>
+                            @await Html.PartialAsync("_PartialFormEdit")
+                            @await Html.PartialAsync("_PartialFormDelete")
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AreaName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Latitude)
+                    </td>
+                    <td class="fixedcolumn fixedcolumn-data">
+                        @Html.DisplayFor(modelItem => item.Longitude)
+                    </td>
+                    <td>
+                        @if (ldcm_lat > 0 && ldcm_lng > 0)
+                        {
+                            <button type="button" class="btn btn-sm btn-primary"
+                                onclick="openGoogleMap('@item.Latitude', '@item.Longitude')">
+                                <i class="bi bi-geo-alt-fill"></i> 查看
+                            </button>
+                        }
+                    </td>
+                    <td class="table-wrap">
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section ScriptsBody
+{
+    <script>
+        function BaseNoChanged() {
+            $("#baseNoForm").submit();
+        }
+
+        function openGoogleMap(lat, lng) {
+            var url = 'https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng;
+            window.open(url, '_blank');
+        }
+    </script>
+}

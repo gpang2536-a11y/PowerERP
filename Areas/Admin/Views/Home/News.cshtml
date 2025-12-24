@@ -1,0 +1,147 @@
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@model IEnumerable<powererp.Models.News>
+@{
+    ViewData["Title"] = "最新消息";
+    Layout = "_LayoutAdmin";
+    string img_url = "";
+}
+<div class="row mx-1">
+    <div class="col-md-12">
+        <div class="float-start page-info me-2">頁數:</div>
+        <div class="float-start me-2">
+            @Html.PagedListPager((IPagedList)Model, x => Url.Action("News",
+            ActionService.Controller, new
+            {
+                area = ActionService.Area,
+                id = x
+            }))
+        </div>
+        <div class="float-start page-info">
+            @ViewBag.PageInfo
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered mb-0">
+        <tdead class="table-secondary">
+            <tr>
+                <th>
+                    預覽
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ImageUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.CodeName)
+                </th>
+                <th class="fixedcolumn">
+                    @Html.DisplayNameSortFor(model => model.PublishDate)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.HeaderName)
+                </th>
+                <th>
+                    @Html.DisplayNameSortFor(model => model.Remark)
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    SessionService.RowId = item.Id;
+                    SessionService.RowData = item.HeaderName;
+                    img_url = item.ImageUrl + "?t=" + DateTime.Now.ToString("yyyyMMddHHmmssfff");
+                    <tr>
+                        <td>
+                            @await Html.PartialAsync("_PartialFormPreview")
+                        </td>
+                        <td>
+                            <img src="@Url.Content(img_url)" alt="" style="max-width: 80px;cursor:pointer"
+                                onclick="showImageModal('@Url.Content(img_url)')" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CodeName)
+                        </td>
+                        <td class="fixedcolumn fixedcolumn-data">
+                            @Html.DisplayFor(modelItem => item.PublishDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.HeaderName)
+                        </td>
+                        <td class="table-wrap">
+                            @Html.DisplayFor(modelItem => item.Remark)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+    </table>
+</div><!-- 預覽明細資料的 Modal -->
+<div class="modal fade" id="detailPreviewModal" tabindex="-1" aria-labelledby="detailPreviewModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailPreviewModalLabel">明細資料預覽</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- 
+                使用 overflow-y: auto 來啟用垂直滾動條
+                max-height: 70vh - 最大高度為視窗高度的 70%
+                overflow-y: auto - 當內容超出時顯示垂直捲軸
+             -->
+            <div class="modal-body" id="detailPreviewContent" style="max-height: 70vh; overflow-y: auto;">
+                <!-- DetailText HTML 內容會顯示在這裡 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_PartialFormImageModal")
+
+@section Scripts {
+    <script>
+        function showDetailPreview(id) {
+            // 顯示載入中訊息
+            document.getElementById('detailPreviewContent').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">載入中...</span></div></div>';
+
+            // 開啟 Modal
+            var modal = new bootstrap.Modal(document.getElementById('detailPreviewModal'));
+            modal.show();
+
+            // 呼叫後端 API 取得資料
+            fetch('@Url.Action("GetNewData", "Home", new { area = "Admin" })?id=' + id)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        var html = '<div class="mb-3">' +
+                            '<div class="row mb-2"><div class="col-6"><span class="fw-bold">分類：</span>' + (data.CodeName || '') + '</div>' +
+                            '<div class="col-6"><span class="fw-bold">發佈日期：</span>' + (data.PublishDate ? new Date(data.PublishDate).toLocaleDateString('zh-TW') : '') + '</div></div>' +
+                            '<div class="row mb-3"><div class="col-12"><span class="fw-bold">標題：</span>' + (data.HeaderName || '') + '</div></div>' +
+                            '<hr>' +
+                            '<div class="mt-3">' + (data.DetailText || '') + '</div>' +
+                            '</div>';
+                        document.getElementById('detailPreviewContent').innerHTML = html;
+                    } else {
+                        document.getElementById('detailPreviewContent').innerHTML = '<p class="text-muted">無明細資料</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('取得資料失敗:', error);
+                    document.getElementById('detailPreviewContent').innerHTML = '<p class="text-danger">載入資料失敗，請稍後再試</p>';
+                });
+        }
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/lib/imagemodal/imagemodal.css")" />
+}
+
+@section ScriptsBody {
+    <script src="@Url.Content("~/lib/imagemodal/imagemodal.js")"></script>
+}

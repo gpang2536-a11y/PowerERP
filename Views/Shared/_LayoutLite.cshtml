@@ -1,0 +1,108 @@
+@{
+    ViewData["Title"] = AppService.AppName;
+    string appInfo = $"{AppService.AppName}";
+    string cardSizeClass = (string.IsNullOrEmpty(SessionService.CardSize)) ? "card-size-max" : SessionService.CardSize;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ASP.NET MVC Core - Bootstrap 5 Responsive Admin">
+    <meta name="author" content="Johnson">
+    <meta name="keyword" content="ASP.NET MVC Core, Dashboard, Admin, Template, Theme, Bootstrap, Responsive">
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/favicon.ico")">
+    <title>@appInfo - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="@Url.Content("~/lib/jqueryui/themes/base/jquery-ui.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap/dist/css/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap-icons/font/bootstrap-icons.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/toastr.js/toastr.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/datepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/datepicker/timepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/fontawesome/css/all.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/flag-icons/css/flag-icons.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/bootstrap-select/css/bootstrap-select.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/sweetalert2/sweetalert2.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/lib/niceadmin/assets/css/style.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js")"></script>
+    <script src="@Url.Content("~/lib/jqueryui/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/lib/Chart.js/chart.umd.min.js")"></script>
+    <script src="@Url.Content("~/lib/ckeditor5/ckeditor.js")"></script>
+    <script src="@Url.Content("~/lib/ckeditor5/translations/zh.min.js")"></script>
+    <script src="@Url.Content("~/lib/fontawesome/js/all.js")"></script>
+    <script src="@Url.Content("~/lib/moment.js/moment.min.js")"></script>
+    <script src="@Url.Content("~/lib/moment.js/locale/zh-tw.min.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/datepicker.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/datepicker-zh-TW.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/timepicker.js")"></script>
+    <script src="@Url.Content("~/lib/datepicker/timepicker-zh-TW.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/dist/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/dist/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/packages/core/locales-all.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/packages/bootstrap5/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/fullcalendar/packages/google-calendar/index.global.min.js")"></script>
+    <script src="@Url.Content("~/lib/sweetalert2/sweetalert2.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap-select/js/bootstrap-select.min.js")"></script>
+    <script src="@Url.Content("~/lib/bootstrap-select/js/i18n/defaults-zh_TW.min.js")"></script>
+    <script src="@Url.Content("~/lib/toastr.js/toastr.min.js")"></script>
+    <script src="@Url.Content("~/js/site.js")" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Updated: Apr 7 2025 with Bootstrap v5.3.5
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="@Url.Action("Index", "Home", new { area = "Admin" })" class="logo d-flex align-items-center">
+                    <img src="assets/img/logo.png" alt="">
+                    <span class="d-none d-lg-block">@appInfo</span>
+                </a>
+            </div><!-- End Logo -->
+        </header><!-- End Header -->
+        <main class="mt-5 pt-5">
+            <div class="card border-secondary @cardSizeClass">
+                <div class="card-header bg-secondary text-white">
+                    <div class="float-start">
+                        <div class="float-start">
+                            <h5 style="margin-bottom: 0">@SessionService.PrgName</h5>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(SessionService.ActionName))
+                    {
+                        <div class="float-end">
+                            <h5 style="margin-bottom: 0">@SessionService.ActionName</h5>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(SessionService.SubActionName))
+                    {
+                        <div class="float-end ms-2">
+                            <h5 style="margin-bottom: 0">@SessionService.SubActionName</h5>
+                        </div>
+                    }
+                </div>
+                <div class="card-body m-1">
+                    @RenderBody()
+                </div>
+            </div>
+        </main><!-- End #main -->
+
+    </div>
+    <script src="@Url.Content("~/lib/niceadmin/assets/js/main.js")"></script>
+    @await RenderSectionAsync("ScriptsBody", required: false)
+    @await Html.PartialAsync("_PartialAlertMessage")
+</body>
+
+</html>
