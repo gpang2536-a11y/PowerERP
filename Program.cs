@@ -172,6 +172,12 @@ builder.Services.AddSession(options =>
         options.Cookie.Name = "mvcfull8";
         // 表示此 Cookie 限伺服器讀取設定，document.cookie 無法存取
         options.Cookie.HttpOnly = true;
+
+
+        // 移除 HTTPS 限制
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+        options.Cookie.SameSite = SameSiteMode.Lax;  // 新增這行
+        options.Cookie.IsEssential = true;  // 新增這行
     });
 //enable the session-based TempData provider
 builder.Services.AddRazorPages().AddSessionStateTempDataProvider();

@@ -9,7 +9,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}\\powererp.csproj",
+                "${workspaceFolder}/powererp.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -21,7 +21,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}\\powererp.csproj",
+                "${workspaceFolder}/powererp.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -35,7 +35,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}\\powererp.csproj"
+                "${workspaceFolder}/powererp.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
