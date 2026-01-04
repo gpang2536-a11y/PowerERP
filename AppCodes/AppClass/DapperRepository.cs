@@ -8,11 +8,15 @@ using X.PagedList;
 using X.PagedList.Extensions;
 using static Dapper.SqlMapper;
 
+
 /// <summary>
 /// Dapper Repository 類別
 /// </summary>
 public class DapperRepository : BaseClass
 {
+    private static IConfiguration? _cachedConfiguration = null;
+    private static readonly object _configLock = new object();
+
     #region 建構子(Constructor)
     /// <summary>
     /// Dapper Repository 建構子
@@ -89,6 +93,21 @@ public class DapperRepository : BaseClass
     public CommandType CommandType { get; set; }
     #endregion
     #region 連線字串相關屬性
+
+    // public string GetConnectionString(string connectionName)
+    // {
+    //     var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+    //     var config = builder.Build();
+    //     var connectionString = config.GetConnectionString(connectionName) ?? "";
+    //     return connectionString;
+    // }
+
+
+
+
+
+
+
     /// <summary>
     /// 取得連線字串
     /// </summary>
@@ -96,11 +115,54 @@ public class DapperRepository : BaseClass
     /// <returns></returns>
     public string GetConnectionString(string connectionName)
     {
-        var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-        var config = builder.Build();
-        var connectionString = config.GetConnectionString(connectionName) ?? "";
+        if (_cachedConfiguration == null)
+        {
+            lock (_configLock)
+            {
+                if (_cachedConfiguration == null)
+                {
+                    try
+                    {
+                        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
+                        var builder = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)  // ← 關鍵改動
+                            .AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: false);
+
+                        _cachedConfiguration = builder.Build();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"⚠️ DapperRepository: 讀取設定檔錯誤: {ex.Message}");
+
+                        // 使用預設連線字串
+                        var fallbackConfig = new Dictionary<string, string>
+                    {
+                        { "ConnectionStrings:dbconn", "Server=localhost;Database=powererp;User ID=sa;Password=1qaz@wsx;TrustServerCertificate=True;Connection Timeout=120;Command Timeout=180" }
+                    };
+
+                        _cachedConfiguration = new ConfigurationBuilder()
+                            .AddInMemoryCollection(fallbackConfig!)
+                            .Build();
+                    }
+                }
+            }
+        }
+
+        var connectionString = _cachedConfiguration.GetConnectionString(connectionName) ?? "";
         return connectionString;
     }
+
+
+
+
+
+
+
+
+
+
     /// <summary>
     /// 檢查 connectionName 中的 connectionString 是否連線正常
     /// </summary>

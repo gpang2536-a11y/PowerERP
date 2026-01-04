@@ -51,12 +51,6 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             return model;
         }
 
-        // ===== 新增非同步版本 =====
-        public async Task<Users> GetDataAsync(string dataNo)
-        {
-            return await Task.Run(() => GetData(dataNo));
-        }
-
         public override List<string> GetSearchColumns()
         {
             //由系統自動取得文字欄位的集合

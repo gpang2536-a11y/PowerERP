@@ -122,18 +122,66 @@ public static class AppService
     /// </summary>
     /// <value></value>
     public static string MenuAction { get { return "Init"; } }
-    /// <summary>
-    /// 取得連線字串
-    /// </summary>
-    /// <param name="KeyName">參數名稱</param>
-    /// <returns></returns>
+
+    // public static string GetApplicationString(string KeyName)
+    // {
+    //     string str_section = $"Applications:{KeyName}";
+    //     var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
+    //     var config = builder.Build();
+    //     return config.GetValue<string>(str_section) ?? "";
+    // }
+
+
+
+
+
+    private static IConfiguration? _cachedConfiguration = null;
+    private static readonly object _configLock = new object();
+
     public static string GetApplicationString(string KeyName)
     {
-        string str_section = $"Applications:{KeyName}";
-        var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-        var config = builder.Build();
-        return config.GetValue<string>(str_section) ?? "";
+        if (_cachedConfiguration == null)
+        {
+            lock (_configLock)
+            {
+                if (_cachedConfiguration == null)
+                {
+                    try
+                    {
+                        var builder = new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+
+                        _cachedConfiguration = builder.Build();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"⚠️ 讀取設定檔錯誤: {ex.Message}");
+                        // 建立空的 Configuration
+                        _cachedConfiguration = new ConfigurationBuilder().Build();
+                    }
+                }
+            }
+        }
+
+        try
+        {
+            string str_section = $"Applications:{KeyName}";
+            return _cachedConfiguration[str_section] ?? "";
+        }
+        catch
+        {
+            // 返回預設值
+            if (KeyName == "ApplicationSettings:AppName") return "PowerERP";
+            if (KeyName == "ApplicationSettings:Version") return "1.0.0";
+            return "";
+        }
     }
+
+
+
+
+
 
     /// <summary>
     /// 取得本機名稱

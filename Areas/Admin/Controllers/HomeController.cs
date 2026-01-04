@@ -25,6 +25,41 @@ namespace powererp.Areas.Admin.Controllers
             return View();
         }
 
+
+
+
+
+        // [HttpGet]
+        // [Login(RoleList = "Mis,User")]
+        // public IActionResult Index()
+        // {
+        //     if (!string.IsNullOrEmpty(SessionService.ErrorMessage))
+        //     {
+        //         TempData["ErrorMessage"] = SessionService.ErrorMessage;
+        //         SessionService.ErrorMessage = "";
+        //     }
+
+        //     ActionService.SetPrgInfo("Dashboard", "首頁儀表板");
+        //     ActionService.SetActionName();
+        //     ActionService.SetSubActionName();
+        //     ActionService.SetActionCardSize(enCardSize.Max);
+
+        //     // ✅ 在 Controller 中準備資料
+        //     using var calendar = new z_sqlCalendars();
+        //     using var news = new z_sqlNews();
+
+        //     ViewBag.CalendarList = calendar.GetNearCalendar("User", SessionService.UserNo, 6);
+        //     ViewBag.NewsList = news.GetNearNews(6);
+
+        //     return View();
+        // }
+
+
+
+
+
+
+
         /// <summary>
         /// 程式未完成
         /// </summary>

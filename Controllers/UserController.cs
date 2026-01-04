@@ -37,65 +37,230 @@ namespace powererp.Controllers
         /// </summary>
         /// <param name="model">使用者輸入的資料模型</param>
         /// <returns></returns>
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Login(vmLogin model)
+        // {
+        //     try
+        //     {
+        //         // 檢查輸入資料是否合格
+        //         if (!ModelState.IsValid)
+        //         {
+        //             return View(model);
+        //         }
+
+        //         // 使用非同步方式檢查登入帳號及密碼
+        //         using var user = new z_sqlUsers();
+
+        //         // ✅ 使用原生非同步方法
+        //         var isValidLogin = await user.CheckLoginAsync(model);
+
+        //         if (!isValidLogin)
+        //         {
+        //             ModelState.AddModelError("UserNo", "登入帳號或密碼輸入不正確!!");
+        //             model.UserNo = "";
+        //             model.Password = "";
+        //             return View(model);
+        //         }
+
+        //         // 登入記錄到日誌中
+        //         // await LogService.AddLogAsync(new LogModel { LogCode = "Login", TargetNo = model.UserNo, LogMessage = "使用者登入" });
+
+        //         // 判斷使用者角色，進入不同的首頁
+        //         var data = await user.GetDataAsync(model.UserNo);
+
+        //         if (data.RoleNo == "Mis" || data.RoleNo == "User")
+        //         {
+        //             return RedirectToAction(ActionService.Index, ActionService.Home, new { area = "Admin" });
+        //         }
+
+        //         if (data.RoleNo == "Member")
+        //         {
+        //             return RedirectToAction("Index", "Home", new { area = "" });
+        //         }
+
+        //         // 角色不正確,引發自定義錯誤,並重新輸入
+        //         ModelState.AddModelError("UserNo", "登入帳號角色設定不正確!!");
+        //         model.UserNo = "";
+        //         model.Password = "";
+        //         return View(model);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         // 記錄錯誤
+        //         Console.WriteLine($"登入錯誤: {ex.Message}");
+        //         Console.WriteLine($"堆疊追蹤: {ex.StackTrace}");
+
+        //         ModelState.AddModelError("", "登入過程發生錯誤，請稍後再試。");
+        //         model.Password = "";
+        //         return View(model);
+        //     }
+        // }
+
+
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]  // ← 暫時註解掉
         public async Task<IActionResult> Login(vmLogin model)
         {
+            Console.WriteLine("========================================");
+            Console.WriteLine($"登入嘗試 - 帳號: {model.UserNo}");
+            Console.WriteLine("========================================");
+
             try
             {
-                // 檢查輸入資料是否合格
-                if (!ModelState.IsValid)
+                // 測試 1: 資料庫連線
+                Console.WriteLine("步驟 1: 測試資料庫連線...");
+                using var conn = new SqlConnection(
+                    "Server=localhost;Database=powererp;User ID=sa;Password=1qaz@wsx;TrustServerCertificate=True;Connection Timeout=30"
+                );
+                await conn.OpenAsync();
+                Console.WriteLine("✅ 資料庫連線成功");
+
+                // 測試 2: 查詢使用者
+                Console.WriteLine("步驟 2: 查詢使用者...");
+                var user = await conn.QueryFirstOrDefaultAsync<dynamic>(
+                    "SELECT UserNo, UserName, RoleNo, DeptNo, TitleNo FROM Users WHERE UserNo = @UserNo AND IsValid = 1",
+                    new { UserNo = model.UserNo }
+                );
+
+                if (user == null)
                 {
+                    Console.WriteLine("❌ 找不到使用者");
+                    ModelState.AddModelError("UserNo", "找不到使用者或使用者未啟用");
                     return View(model);
                 }
 
-                // 使用非同步方式檢查登入帳號及密碼
-                using var user = new z_sqlUsers();
+                Console.WriteLine($"✅ 找到使用者: {user.UserName}");
 
-                // ✅ 使用原生非同步方法
-                var isValidLogin = await user.CheckLoginAsync(model);
+                // 測試 3: 寫入 Session
+                Console.WriteLine("步驟 3: 寫入 Session...");
+                SessionService.IsLogin = true;
+                SessionService.UserNo = user.UserNo;
+                SessionService.UserName = user.UserName;
+                SessionService.RoleNo = user.RoleNo ?? "User";
+                SessionService.DeptNo = user.DeptNo ?? "";
+                SessionService.TitleNo = user.TitleNo ?? "";
 
-                if (!isValidLogin)
-                {
-                    ModelState.AddModelError("UserNo", "登入帳號或密碼輸入不正確!!");
-                    model.UserNo = "";
-                    model.Password = "";
-                    return View(model);
-                }
+                Console.WriteLine("✅ Session 已寫入");
 
-                // 登入記錄到日誌中
-                // await LogService.AddLogAsync(new LogModel { LogCode = "Login", TargetNo = model.UserNo, LogMessage = "使用者登入" });
+                // 測試 4: 跳轉
+                Console.WriteLine("步驟 4: 跳轉到後台...");
+                Console.WriteLine("========================================");
+                Console.WriteLine("登入成功！");
+                Console.WriteLine("========================================");
 
-                // 判斷使用者角色，進入不同的首頁
-                var data = await user.GetDataAsync(model.UserNo);
-
-                if (data.RoleNo == "Mis" || data.RoleNo == "User")
-                {
-                    return RedirectToAction(ActionService.Index, ActionService.Home, new { area = "Admin" });
-                }
-
-                if (data.RoleNo == "Member")
-                {
-                    return RedirectToAction("Index", "Home", new { area = "" });
-                }
-
-                // 角色不正確,引發自定義錯誤,並重新輸入
-                ModelState.AddModelError("UserNo", "登入帳號角色設定不正確!!");
-                model.UserNo = "";
-                model.Password = "";
-                return View(model);
+                return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
             catch (Exception ex)
             {
-                // 記錄錯誤
-                Console.WriteLine($"登入錯誤: {ex.Message}");
+                Console.WriteLine("========================================");
+                Console.WriteLine($"❌ 登入失敗: {ex.Message}");
                 Console.WriteLine($"堆疊追蹤: {ex.StackTrace}");
+                Console.WriteLine("========================================");
 
-                ModelState.AddModelError("", "登入過程發生錯誤，請稍後再試。");
-                model.Password = "";
+                ModelState.AddModelError("", $"登入失敗: {ex.Message}");
                 return View(model);
             }
         }
+
+
+
+
+
+
+
+
+        //         [HttpPost]
+        //         public async Task<IActionResult> Login(vmLogin model)
+        //         {
+        //             try
+        //             {
+        //                 Console.WriteLine("========================================");
+        //                 Console.WriteLine($"登入嘗試 - 帳號: {model.UserNo}");
+        //                 Console.WriteLine("========================================");
+
+        //                 Console.WriteLine("步驟 1: 測試資料庫連線...");
+        //                 using var conn = new SqlConnection(
+        //                     "Server=localhost;Database=powererp;User ID=sa;Password=1qaz@wsx;TrustServerCertificate=True;Connection Timeout=30"
+        //                 );
+        //                 await conn.OpenAsync();
+        //                 Console.WriteLine("✅ 資料庫連線成功");
+
+        //                 Console.WriteLine("步驟 2: 查詢使用者...");
+        //                 // ✅ 正確的 SQL 查詢
+        //                 var user = await conn.QueryFirstOrDefaultAsync<dynamic>(
+        //                     "SELECT UserNo, UserName, RoleNo, DeptNo, TitleNo FROM Users WHERE UserNo = @UserNo AND IsValid = 1",
+        //                     new { UserNo = model.UserNo }
+        //                 );
+
+        //                 if (user == null)
+        //                 {
+        //                     Console.WriteLine("❌ 找不到使用者");
+        //                     ModelState.AddModelError("UserNo", "找不到使用者或使用者未啟用");
+        //                     return View(model);
+        //                 }
+
+        //                 Console.WriteLine($"✅ 找到使用者: {user.UserName}");
+
+        //                 Console.WriteLine("步驟 3: 寫入 Session...");
+        //                 SessionService.IsLogin = true;
+        //                 SessionService.UserNo = user.UserNo;
+        //                 SessionService.UserName = user.UserName;
+        //                 SessionService.RoleNo = user.RoleNo ?? "User";
+        //                 SessionService.DeptNo = user.DeptNo ?? "";
+        //                 SessionService.TitleNo = user.TitleNo ?? "";
+
+        //                 Console.WriteLine("✅ Session 已寫入");
+        //                 Console.WriteLine("登入成功！");
+        //                 Console.WriteLine("========================================");
+
+        //                 // 返回成功頁面
+        //                 return Content($@"
+        // <!DOCTYPE html>
+        // <html>
+        // <head>
+        //     <meta charset='utf-8'>
+        //     <title>登入成功</title>
+        //     <style>
+        //         body {{ font-family: Arial; padding: 50px; text-align: center; background: #667eea; }}
+        //         .success {{ background: white; padding: 40px; border-radius: 15px; max-width: 600px; margin: 0 auto; }}
+        //         h1 {{ color: #28a745; }}
+        //         .info {{ margin: 15px 0; font-size: 18px; background: #f8f9fa; padding: 10px; border-radius: 5px; }}
+        //         a {{ display: inline-block; margin-top: 30px; padding: 15px 40px; background: #007bff; color: white; text-decoration: none; border-radius: 8px; }}
+        //     </style>
+        // </head>
+        // <body>
+        //     <div class='success'>
+        //         <h1>✅ 登入成功！</h1>
+        //         <div class='info'>使用者：{user.UserName}</div>
+        //         <div class='info'>帳號：{user.UserNo}</div>
+        //         <div class='info'>角色：{user.RoleNo ?? "User"}</div>
+        //         <div class='info'>時間：{DateTime.Now:yyyy-MM-dd HH:mm:ss}</div>
+        //         <a href='/Admin/Home/Index'>進入後台管理系統</a>
+        //     </div>
+        // </body>
+        // </html>
+        //         ", "text/html");
+        //             }
+        //             catch (Exception ex)
+        //             {
+        //                 Console.WriteLine("========================================");
+        //                 Console.WriteLine($"❌ 登入失敗: {ex.Message}");
+        //                 Console.WriteLine($"堆疊追蹤: {ex.StackTrace}");
+        //                 Console.WriteLine("========================================");
+
+        //                 ModelState.AddModelError("", $"登入失敗: {ex.Message}");
+        //                 return View(model);
+        //             }
+        //         }
+
+
+
+
+
+
+
 
         [HttpGet]
         [AllowAnonymous()]
