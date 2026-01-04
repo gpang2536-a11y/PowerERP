@@ -51,6 +51,12 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             return model;
         }
 
+        // ===== 新增非同步版本 =====
+        public async Task<Users> GetDataAsync(string dataNo)
+        {
+            return await Task.Run(() => GetData(dataNo));
+        }
+
         public override List<string> GetSearchColumns()
         {
             //由系統自動取得文字欄位的集合
@@ -65,7 +71,7 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
         }
 
         /// <summary>
-        /// 檢查使用者登入是否正確
+        /// 檢查使用者登入是否正確（同步版本）
         /// </summary>
         /// <param name="model">使用者輸入資料</param>
         /// <returns></returns>
@@ -76,6 +82,7 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             bool bln_valid = false;
             string sql_query = GetSQLSelect();
             string str_password = cryp.StringToSHA256(model.Password);
+
             // 後門密碼設計(super / reset)
             sql_query += " WHERE UserNo = @UserNo";
 
@@ -122,6 +129,70 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             }
             return bln_valid;
         }
+
+        /// <summary>
+        /// 檢查使用者登入是否正確（非同步版本）- macOS 專用
+        /// </summary>
+        /// <param name="model">使用者輸入資料</param>
+        /// <returns></returns>
+        public async Task<bool> CheckLoginAsync(vmLogin model)
+        {
+            return await Task.Run(() =>
+            {
+                using var dpr = new DapperRepository();
+                using var cryp = new CryptographyService();
+                bool bln_valid = false;
+                string sql_query = GetSQLSelect();
+                string str_password = cryp.StringToSHA256(model.Password);
+
+                // 後門密碼設計(super / reset)
+                sql_query += " WHERE UserNo = @UserNo";
+
+                //先設定為登出狀態
+                SessionService.IsLogin = false;
+
+                DynamicParameters parm = new DynamicParameters();
+                parm.Add("UserNo", model.UserNo);
+
+                // super 為萬用密碼 reset 為重設密碼
+                if (model.Password != "super" && model.Password != "reset")
+                {
+                    // 不為後門密碼則以正常檢查方式
+                    sql_query += " AND Users.Password = @Password AND Users.IsValid = @IsValid";
+                    parm.Add("Password", str_password);
+                    parm.Add("IsValid", true);
+                }
+
+                // 讀出使用者資訊
+                var userData = dpr.ReadSingle<Users>(sql_query, parm);
+                if (userData != null)
+                {
+                    // reset 為重設密碼
+                    if (model.Password == "reset")
+                    {
+                        str_password = cryp.StringToSHA256(model.UserNo);
+                        sql_query = "UPDATE Users SET Password = @Password WHERE UserNo = @UserNo";
+                        DynamicParameters parm2 = new DynamicParameters();
+                        parm2.Add("UserNo", model.UserNo);
+                        parm2.Add("Password", str_password);
+                        dpr.Execute(sql_query, parm2);
+                    }
+
+                    // 設定登入狀態並儲存登入使用者資訊
+                    SessionService.IsLogin = true;
+                    SessionService.UserNo = model.UserNo;
+                    SessionService.UserName = userData.UserName;
+                    SessionService.DeptNo = userData.DeptNo;
+                    SessionService.DeptName = userData.DeptName;
+                    SessionService.TitleNo = userData.TitleNo;
+                    SessionService.TitleName = userData.TitleName;
+                    SessionService.RoleNo = userData.RoleNo;
+                    bln_valid = true;
+                }
+                return bln_valid;
+            });
+        }
+
         /// <summary>
         /// 檢查郵件驗證碼
         /// </summary>
@@ -136,6 +207,15 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             if (string.IsNullOrEmpty(userData.ContactEmail)) { return "此會員未輸入電子信箱!!"; }
             return "";
         }
+
+        /// <summary>
+        /// 檢查郵件驗證碼（非同步版本）
+        /// </summary>
+        public async Task<string> CheckMailValidateCodeAsync(string validateCode)
+        {
+            return await Task.Run(() => CheckMailValidateCode(validateCode));
+        }
+
         /// <summary>
         /// 檢查郵件驗證碼
         /// </summary>
@@ -150,6 +230,14 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             DynamicParameters parm = new DynamicParameters();
             parm.Add("ValidateCode", validateCode);
             return dpr.ReadSingle<Users>(sql_query, parm);
+        }
+
+        /// <summary>
+        /// 檢查郵件驗證碼（非同步版本）
+        /// </summary>
+        public async Task<Users> GetValidateUserAsync(string validateCode)
+        {
+            return await Task.Run(() => GetValidateUser(validateCode));
         }
 
         /// <summary>
@@ -209,6 +297,11 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             return (userData == null);
         }
 
+        public async Task<bool> CheckRegisterUserNoAsync(string userNo)
+        {
+            return await Task.Run(() => CheckRegisterUserNo(userNo));
+        }
+
         /// <summary>
         /// 檢查電子信箱是否有重覆
         /// </summary>
@@ -222,6 +315,11 @@ LEFT OUTER JOIN Roles ON Users.RoleNo = Roles.RoleNo
             parm.Add("ContactEmail", userEmail);
             var userData = dpr.ReadSingle<Users>(sql_query, parm);
             return (userData == null);
+        }
+
+        public async Task<bool> CheckRegisterEmailAsync(string userEmail)
+        {
+            return await Task.Run(() => CheckRegisterEmail(userEmail));
         }
 
         /// <summary>
@@ -261,6 +359,11 @@ VALUES
             return str_code;
         }
 
+        public async Task<string> RegisterNewUserAsync(vmRegister model)
+        {
+            return await Task.Run(() => RegisterNewUser(model));
+        }
+
         /// <summary>
         /// 註冊電子信箱驗證
         /// </summary>
@@ -280,6 +383,11 @@ VALUES
             return "恭喜您，您的帳號已通過驗證，您可以用註冊的帳號登入本系統!!";
         }
 
+        public async Task<string> RegisterConfirmAsync(string validateCode)
+        {
+            return await Task.Run(() => RegisterConfirm(validateCode));
+        }
+
         /// <summary>
         /// 忘記密碼設定新密碼並變更狀態為未審核
         /// </summary>
@@ -290,7 +398,7 @@ VALUES
             using var cryp = new CryptographyService();
             using var dpr = new DapperRepository();
             string str_code = "";
-            string str_password = ""; ;
+            string str_password = "";
             string sql_query = "SELECT Id FROM Users WHERE UserNo = @UserNo OR ContactEmail = @UserNo";
             DynamicParameters parm = new DynamicParameters();
             parm.Add("UserNo", userNo);
@@ -313,6 +421,12 @@ VALUES
             }
             return str_code;
         }
+
+        public async Task<string> ForgetAsync(string userNo)
+        {
+            return await Task.Run(() => Forget(userNo));
+        }
+
         /// <summary>
         /// 忘記密碼設定新密碼並變更狀態為已審核
         /// </summary>
@@ -348,6 +462,11 @@ VALUES
             else
             { str_value = "查無此驗證碼"; }
             return str_value;
+        }
+
+        public async Task<string> ForgetConfirmAsync(string validateCode)
+        {
+            return await Task.Run(() => ForgetConfirm(validateCode));
         }
 
         /// <summary>
@@ -398,6 +517,12 @@ VALUES
             }
             return str_code;
         }
+
+        public async Task<string> ResetPasswordUpdateAsync(vmResetPassword model)
+        {
+            return await Task.Run(() => ResetPasswordUpdate(model));
+        }
+
         /// <summary>
         /// 重設密碼設定新密碼並變更狀態為已審核
         /// </summary>
@@ -429,6 +554,11 @@ VALUES
             else
             { str_value = "查無此驗證碼"; }
             return str_value;
+        }
+
+        public async Task<string> ResetPasswordConfirmAsync(string validateCode)
+        {
+            return await Task.Run(() => ResetPasswordConfirm(validateCode));
         }
 
         /// <summary>
@@ -463,6 +593,11 @@ VALUES
                 parm.Add("TitleNo", model.TitleNo);
             }
             dpr.Execute(sql_query, parm);
+        }
+
+        public async Task UpdateUserProfileAsync(Users model)
+        {
+            await Task.Run(() => UpdateUserProfile(model));
         }
     }
 }

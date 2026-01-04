@@ -11,46 +11,39 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using X.PagedList;
 global using X.PagedList.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// ===== 加入 Kestrel 伺服器配置 (解決 macOS 連線問題) =====
+// ===== macOS 關鍵修正：允許同步 I/O 和移除速率限制 =====
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    // 設定連線保持活動時間
-    serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
+    // 關鍵修正 1：允許同步 I/O
+    serverOptions.AllowSynchronousIO = true;
 
-    // 設定請求標頭逾時
-    serverOptions.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(1);
+    // 關鍵修正 2：完全移除資料傳輸速率限制
+    serverOptions.Limits.MinRequestBodyDataRate = null;
+    serverOptions.Limits.MinResponseDataRate = null;
 
-    // 設定最大請求大小 (50 MB)
-    serverOptions.Limits.MaxRequestBodySize = 52428800;
+    // 關鍵修正 3：延長所有逾時時間
+    serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(10);
+    serverOptions.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(5);
 
-    // 設定最小資料傳輸速率 (防止連線過早中斷)
-    serverOptions.Limits.MinRequestBodyDataRate = new Microsoft.AspNetCore.Server.Kestrel.Core.MinDataRate(
-        bytesPerSecond: 100,
-        gracePeriod: TimeSpan.FromSeconds(10)
-    );
+    // 關鍵修正 4：增加請求大小限制
+    serverOptions.Limits.MaxRequestBodySize = 104857600; // 100MB
 
-    serverOptions.Limits.MinResponseDataRate = new Microsoft.AspNetCore.Server.Kestrel.Core.MinDataRate(
-        bytesPerSecond: 100,
-        gracePeriod: TimeSpan.FromSeconds(10)
-    );
+    // 關鍵修正 5：停用 HTTP/2（強制使用 HTTP/1.1）
+    serverOptions.ConfigureEndpointDefaults(lo =>
+    {
+        lo.Protocols = HttpProtocols.Http1;
+    });
 });
-// ===== Kestrel 配置結束 =====
-
-
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -60,32 +53,18 @@ builder.Services.AddSingleton<CssService>();
 #endregion
 
 #region Controller設定
-//若要將應用程式設定為遵守瀏覽器 Accept 標頭，請將 RespectBrowserAcceptHeader 屬性設定為 true：
 builder.Services.AddControllers(options =>
-{ options.RespectBrowserAcceptHeader = true; });
-//若要設定 System.Text.Json 型格式器的功能，請使用 Microsoft.AspNetCore.Mvc.JsonOptions.JsonSerializerOptions。
-// .AddJsonOptions(options =>
-// {
-//     options.JsonSerializerOptions.PropertyNamingPolicy = null;
-// });
-//預設 JSON 格式器使用 System.Text.Json。 若要使用 Newtonsoft.Json 型格式器，請安裝
-// .AddNewtonsoftJson(options =>
-// {
-//     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-// });
-builder.Services.AddRazorPages();
-#endregion
+{
+    options.RespectBrowserAcceptHeader = true;
+});
 
-#region 解決 Json 格式中文亂碼問題
 builder.Services.AddRazorPages()
-        .AddJsonOptions(options =>
-        {
-            //原本是 JsonNamingPolicy.CamelCase，強制頭文字轉小寫，我偏好維持原樣，設為null
-            options.JsonSerializerOptions.PropertyNamingPolicy = null;
-            //允許基本拉丁英文及中日韓文字維持原字元
-            options.JsonSerializerOptions.Encoder =
-                JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs);
-        });
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.Encoder =
+            JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs);
+    });
 #endregion
 
 #region 環境設定檔設定
@@ -100,14 +79,19 @@ builder.Configuration
 
 #region 資料庫連線設定
 builder.Services.AddDbContext<dbEntities>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
-#endregion
-
-#region OpenAPI 設定
-//builder.Services.AddOpenApi(options =>
-//{
-//    options.OpenApiVersion = OpenApiSpecVersion.OpenApi2_0;
-//});
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("dbconn"),
+        sqlServerOptions =>
+        {
+            // 設定命令執行逾時時間（秒）
+            sqlServerOptions.CommandTimeout(180);
+            // 啟用連線重試機制
+            sqlServerOptions.EnableRetryOnFailure(
+                maxRetryCount: 3,
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorNumbersToAdd: null);
+        });
+});
 #endregion
 
 #region WebAPI 設定
@@ -133,7 +117,6 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // using System.Reflection;
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
@@ -155,63 +138,40 @@ builder.Services.AddAuthentication(
     })
     .AddJwtBearer(options =>
     {
-        options.IncludeErrorDetails = true; // 當驗證失敗時，會顯示失敗的詳細錯誤原因
+        options.IncludeErrorDetails = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            // 配置驗證發行者
-            ValidateIssuer = true, // 是否要啟用驗證發行者
-            ValidIssuer = str_issuer, // 簽發者
-            // 配置驗證接收者
-            // (由於一般沒有區分特別對象，因此通常不太需要設定，也不太需要驗證)
-            ValidateAudience = false, //是否要啟用驗證接收者
-            ValidAudience = str_audience, // 接收者
-            // 是否要啟用驗證有效時間
+            ValidateIssuer = true,
+            ValidIssuer = str_issuer,
+            ValidateAudience = false,
+            ValidAudience = str_audience,
             ValidateLifetime = true,
-            // 是否要啟用驗證金鑰，一般不需要去驗證，因為通常Token內只會有簽章
             ValidateIssuerSigningKey = false,
-            // 配置簽章驗證用金鑰
-            // 這裡配置是用來解Http Request內Token加密
-            // 如果Secret Key跟當初建立Token所使用的Secret Key不一樣的話會導致驗證失敗
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(str_signing_key)
             ),
-            // 是不是有過期時間
             RequireExpirationTime = true,
-            //時間偏移量（允許誤差時間）
             ClockSkew = TimeSpan.FromSeconds(30)
         };
     });
 #endregion
 
 #region Session設定
-// 需先加入 Nuget Package "Microsoft.AspNetCore.Session"
-// 將 Session 存在 ASP.NET Core 記憶體中
 builder.Services.AddDistributedMemoryCache();
-// 設定加入 AddHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
-// 設定 Session 參數值
+
 builder.Services.AddSession(options =>
-    {
-        // 設定 Session 過期時間, 單位為秒 , 20分鐘 = 20*60 = 1,200秒
-        //options.IdleTimeout = TimeSpan.FromSeconds(1200);
-        // 設定 Session 過期時間, 單位為分鐘
-        options.IdleTimeout = TimeSpan.FromMinutes(20);
-        // 限制只有在 HTTPS 連線的情況下，才允許使用 Session
-        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.Name = "mvcfull8";
-        // 表示此 Cookie 限伺服器讀取設定，document.cookie 無法存取
-        options.Cookie.HttpOnly = true;
+{
+    options.IdleTimeout = TimeSpan.FromHours(2);
+    options.Cookie.Name = "mvcfull8";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.IsEssential = true;
+});
 
-
-        // 移除 HTTPS 限制
-        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-        options.Cookie.SameSite = SameSiteMode.Lax;  // 新增這行
-        options.Cookie.IsEssential = true;  // 新增這行
-    });
-//enable the session-based TempData provider
 builder.Services.AddRazorPages().AddSessionStateTempDataProvider();
 builder.Services.AddControllersWithViews().AddSessionStateTempDataProvider();
-//註冊 HttpContextAccessor DI 物件
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 #endregion
 
@@ -221,46 +181,28 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-// app.UseHttpsRedirection();
-
 app.UseRouting();
 
-#region 設定使用 Session
 app.UseSession();
-#endregion
-// 重要：將 app.UseAuthentication 及 app.UseAuthorization 放在 app.UseRouting 之後，
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-
-#region OpenAPI 設定
-//app.MapOpenApi();
-#endregion
-
-#region WebAPI設定
 app.UseSwagger();
 app.UseSwaggerUI();
-#endregion
 
-//app.MapStaticAssets();
 app.UseStaticFiles();
 
-// 1. 區域路由(有 initPage 參數)
 app.MapControllerRoute(
     name: "forms",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}/{initPage?}");
 
-// 2. 區域路由(無 initPage 參數)
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-// 3. 非區域路由(首頁等)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
