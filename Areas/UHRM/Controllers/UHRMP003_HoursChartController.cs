@@ -33,7 +33,8 @@ namespace powererp.Areas.Mis.Controllers
         public IActionResult Init(string id = "", int initPage = 1)
         {
             //設定程式編號及名稱
-            SessionService.BaseNo = DateTime.Today.Year.ToString();
+            // SessionService.BaseNo = DateTime.Today.Year.ToString();
+            SessionService.BaseNo = "2025";
             SessionService.IsReadonlyMode = false; //非唯讀模式
             SessionService.IsLockMode = false; //非表單模式
             SessionService.IsConfirmMode = false; //非確認模式

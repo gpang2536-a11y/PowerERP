@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace powererp.Models
 {
-    public class z_sqlTitles : DapperSql<Overtimes>
+    public class z_sqlTitles : DapperSql<Titles>
     {
         public z_sqlTitles()
         {

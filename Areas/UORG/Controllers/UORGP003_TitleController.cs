@@ -108,7 +108,7 @@ namespace powererp.Areas.Mis.Controllers
         [HttpPost]
         [Login(RoleList = "User")]
         [Security(Mode = enSecurityMode.AddEdit)]
-        public IActionResult CreateEdit(Overtimes model)
+        public IActionResult CreateEdit(Titles model)
         {
             //檢查是否有違反 Metadata 中的 Validation 驗證
             if (!ModelState.IsValid) return View(model);

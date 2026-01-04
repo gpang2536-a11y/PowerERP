@@ -23,6 +23,35 @@ using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+// ===== 加入 Kestrel 伺服器配置 (解決 macOS 連線問題) =====
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    // 設定連線保持活動時間
+    serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
+
+    // 設定請求標頭逾時
+    serverOptions.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(1);
+
+    // 設定最大請求大小 (50 MB)
+    serverOptions.Limits.MaxRequestBodySize = 52428800;
+
+    // 設定最小資料傳輸速率 (防止連線過早中斷)
+    serverOptions.Limits.MinRequestBodyDataRate = new Microsoft.AspNetCore.Server.Kestrel.Core.MinDataRate(
+        bytesPerSecond: 100,
+        gracePeriod: TimeSpan.FromSeconds(10)
+    );
+
+    serverOptions.Limits.MinResponseDataRate = new Microsoft.AspNetCore.Server.Kestrel.Core.MinDataRate(
+        bytesPerSecond: 100,
+        gracePeriod: TimeSpan.FromSeconds(10)
+    );
+});
+// ===== Kestrel 配置結束 =====
+
+
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -200,13 +229,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseRouting();
 
+#region 設定使用 Session
+app.UseSession();
+#endregion
 // 重要：將 app.UseAuthentication 及 app.UseAuthorization 放在 app.UseRouting 之後，
 app.UseAuthentication();
 app.UseAuthorization();
 
-#region 設定使用 Session
-app.UseSession();
-#endregion
+
 
 #region OpenAPI 設定
 //app.MapOpenApi();
