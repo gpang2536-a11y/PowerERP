@@ -6,6 +6,46 @@ using System.Data;
 /// </summary>
 public class AdoNetSqlClient : BaseClass
 {
+    // ✅ 靜態配置快取
+    private static IConfiguration? _cachedConfiguration = null;
+    private static readonly object _configLock = new object();
+    private static bool _isInitialized = false;
+
+    // ✅ 靜態建構函式
+    static AdoNetSqlClient()
+    {
+        InitializeConfiguration();
+    }
+
+    // ✅ 初始化配置（只執行一次）
+    private static void InitializeConfiguration()
+    {
+        if (_isInitialized) return;
+
+        lock (_configLock)
+        {
+            if (_isInitialized) return;
+
+            try
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+
+                _cachedConfiguration = builder.Build();
+                _isInitialized = true;
+
+                Console.WriteLine("✅ AdoNetSqlClient: Configuration 已初始化");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️ AdoNetSqlClient: 初始化失敗: {ex.Message}");
+                _cachedConfiguration = new ConfigurationBuilder().Build();
+                _isInitialized = true;
+            }
+        }
+    }
+
     #region 建構子(Constructor)
     /// <summary>
     /// 建構子
@@ -17,6 +57,7 @@ public class AdoNetSqlClient : BaseClass
         ConnName = "dbconn";
         Open();
     }
+
     /// <summary>
     /// 建構子
     /// </summary>
@@ -29,6 +70,7 @@ public class AdoNetSqlClient : BaseClass
         ConnName = commName;
         Open();
     }
+
     /// <summary>
     /// 建構子
     /// </summary>
@@ -40,6 +82,7 @@ public class AdoNetSqlClient : BaseClass
         ConnName = "dbconn";
         Open();
     }
+
     /// <summary>
     /// 初始化物件
     /// </summary>
@@ -49,19 +92,23 @@ public class AdoNetSqlClient : BaseClass
         cmd.Connection = conn;
     }
     #endregion
+
     #region 屬性(Property)
     /// <summary>
     /// 連線物件
     /// </summary>
     public SqlConnection conn { get; set; } = new SqlConnection();
+
     /// <summary>
     /// 命令物件
     /// </summary>
     public SqlCommand cmd { get; set; } = new SqlCommand();
+
     /// <summary>
     /// 連線設定檔名稱
     /// </summary>
     public string ConnName { get; set; } = "";
+
     /// <summary>
     /// SQL 指令
     /// </summary>
@@ -70,6 +117,7 @@ public class AdoNetSqlClient : BaseClass
         get { return cmd.CommandText; }
         set { cmd.CommandText = value; }
     }
+
     /// <summary>
     /// SQL 命令類型
     /// </summary>
@@ -78,18 +126,22 @@ public class AdoNetSqlClient : BaseClass
         get { return cmd.CommandType; }
         set { cmd.CommandType = value; }
     }
+
     /// <summary>
     /// StoreProcedure 名稱
     /// </summary>
     public string ProcedureName { get; set; } = "";
+
     /// <summary>
     /// 執行指令後影響的筆數
     /// </summary>
     int RowAffected { get; set; } = 0;
+
     /// <summary>
     /// 錯誤訊息
     /// </summary>
     public string ErrorMessage { get; set; } = "";
+
     /// <summary>
     /// 回傳執行後是否有記錄
     /// </summary>
@@ -113,6 +165,7 @@ public class AdoNetSqlClient : BaseClass
         }
     }
     #endregion
+
     #region Connection 物件功能
     /// <summary>
     /// 資料庫連線
@@ -123,6 +176,7 @@ public class AdoNetSqlClient : BaseClass
         SetConnectionString();
         conn.Open();
     }
+
     /// <summary>
     /// 資料庫關閉連線
     /// </summary>
@@ -130,16 +184,26 @@ public class AdoNetSqlClient : BaseClass
     {
         conn.Close();
     }
+
     /// <summary>
     /// 設定連線字串
     /// </summary>
     public void SetConnectionString()
     {
-        var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-        var config = builder.Build();
-        conn.ConnectionString = config.GetConnectionString(ConnName) ?? "";
+        try
+        {
+            // ✅ 使用已快取的配置
+            conn.ConnectionString = _cachedConfiguration?.GetConnectionString(ConnName)
+                ?? "Server=localhost;Database=powererp;User ID=sa;Password=1qaz@wsx;TrustServerCertificate=True;Connection Timeout=120;Command Timeout=180;MultipleActiveResultSets=true";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"⚠️ AdoNetSqlClient.SetConnectionString 錯誤: {ex.Message}");
+            conn.ConnectionString = "Server=localhost;Database=powererp;User ID=sa;Password=1qaz@wsx;TrustServerCertificate=True;Connection Timeout=120;Command Timeout=180;MultipleActiveResultSets=true";
+        }
     }
     #endregion
+
     #region Command 物件功能
     /// <summary>
     /// 執行 SQL 命令
@@ -164,6 +228,7 @@ public class AdoNetSqlClient : BaseClass
         }
         return RowAffected;
     }
+
     /// <summary>
     /// 執行 SQL 命令
     /// </summary>
@@ -189,6 +254,7 @@ public class AdoNetSqlClient : BaseClass
         }
         return RowAffected;
     }
+
     /// <summary>
     /// 執行 SQL 命令
     /// </summary>
@@ -215,6 +281,7 @@ public class AdoNetSqlClient : BaseClass
         cmd.CommandType = CommandType.Text;
         return RowAffected;
     }
+
     /// <summary>
     /// 執行 SQL 命令
     /// </summary>
@@ -243,7 +310,8 @@ public class AdoNetSqlClient : BaseClass
         cmd.CommandType = CommandType.Text;
         return RowAffected;
     }
-        /// <summary>
+
+    /// <summary>
     /// 加入參數
     /// </summary>
     /// <param name="parameterName">參數名稱</param>
@@ -255,6 +323,7 @@ public class AdoNetSqlClient : BaseClass
         cmd.Parameters.AddWithValue(parameterName, value);
     }
     #endregion
+
     #region 取得資料功能
     /// <summary>
     /// 執行 SQL 指令並取回 DataSet,並自動關閉資料庫連線
@@ -264,6 +333,7 @@ public class AdoNetSqlClient : BaseClass
     {
         return GetDataSet(true);
     }
+
     /// <summary>
     /// 執行 SQL 指令並取回 DataSet
     /// </summary>
@@ -287,6 +357,7 @@ public class AdoNetSqlClient : BaseClass
         if (closeDb) Close();
         return dsReturn;
     }
+
     /// <summary>
     /// 執行 SQL 指令並取回 DataTable,並自動關閉資料庫連線
     /// </summary>
@@ -295,6 +366,7 @@ public class AdoNetSqlClient : BaseClass
     {
         return GetDataTable(true);
     }
+
     /// <summary>
     /// 執行 SQL 指令並取回 DataTable
     /// </summary>
@@ -315,6 +387,7 @@ public class AdoNetSqlClient : BaseClass
         }
         return dtReturn;
     }
+
     /// <summary>
     /// 取得指定欄位的字串型態值
     /// </summary>
@@ -340,6 +413,7 @@ public class AdoNetSqlClient : BaseClass
         }
         return str_value;
     }
+
     /// <summary>
     /// 取得指定欄位的日期型態值
     /// </summary>
@@ -360,6 +434,7 @@ public class AdoNetSqlClient : BaseClass
         }
         return dtm_value;
     }
+
     /// <summary>
     /// 取得指定欄位的數字型態值
     /// </summary>
@@ -381,6 +456,7 @@ public class AdoNetSqlClient : BaseClass
         }
         return dec_value;
     }
+
     /// <summary>
     /// 取得指定欄位的整數型態值
     /// </summary>

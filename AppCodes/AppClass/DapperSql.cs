@@ -21,60 +21,83 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         if (string.IsNullOrEmpty(OrderByDirection)) OrderByDirection = DefaultOrderByDirection;
     }
     #endregion
+
     #region 屬性(Property)
     /// <summary>
-    /// Dapper 物件
+    /// Dapper 物件 - ✅ 使用 Lazy initialization 而非在類別層級直接創建
     /// </summary>
-    /// <returns></returns>
-    public DapperRepository dpr = new DapperRepository();
+    private DapperRepository? _dpr = null;
+    public DapperRepository dpr
+    {
+        get
+        {
+            if (_dpr == null)
+            {
+                _dpr = new DapperRepository();
+            }
+            return _dpr;
+        }
+    }
+
     /// <summary>
     /// Entity Object
     /// </summary>
     /// <returns></returns>
     public TEntity EntityObject => (TEntity)Activator.CreateInstance(typeof(TEntity)) ?? throw new InvalidOperationException($"Cannot create instance of type {typeof(TEntity).Name}");
+
     /// <summary>
     /// Entity Name
     /// </summary>
     /// <returns></returns>
     public string EntityName { get { return typeof(TEntity).Name; } }
+
     /// <summary>
     /// 影響筆數
     /// </summary>
     /// <value></value>
     public int AffectedRows { get; set; } = 0;
+
     /// <summary>
     /// 連線字串名稱
     /// </summary>
     public string ConnName { get; set; } = "dbconn";
+
     /// <summary>
     /// 錯誤訊息
     /// </summary>
     public string ErrorMessage { get; set; } = "";
+
     /// <summary>
     /// 預設 SQL 排序指令
     /// </summary>
     public virtual string DefaultOrderByColumn { get; set; } = "";
+
     /// <summary>
     /// 預設 SQL 排序方式指令
     /// </summary>
     public virtual string DefaultOrderByDirection { get; set; } = "";
+
     public virtual string DropDownValueColumn { get; set; } = "";
     public virtual string DropDownTextColumn { get; set; } = "";
     public virtual string DropDownOrderColumn { get; set; } = "";
+
     /// <summary>
     /// OrderBy 排序指令
     /// </summary>
     /// <value></value>
     public string OrderByColumn { get; set; } = "";
+
     /// <summary>
     /// OrderBy 排序方式
     /// </summary>
     public string OrderByDirection { get; set; } = "";
+
     /// <summary>
     /// 模糊搜尋的欄位集合
     /// </summary>
     public List<string> SearchColumns { get; set; } = new List<string>();
     #endregion
+
     #region SQL 查詢指令相關的函數
     /// <summary>
     /// 為 SQL 查詢指令加入資料列編號欄位
@@ -89,6 +112,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         str_query = str_rowno + " " + str_query;
         return str_query;
     }
+
     /// <summary>
     /// 取得與設定 SQL 查詢欄位及表格指令
     /// </summary>
@@ -100,6 +124,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         str_query = dpr.GetSQLSelectCommand(EntityObject);
         return str_query;
     }
+
     /// <summary>
     /// 取得與設定明細 SQL 查詢欄位及表格指令
     /// </summary>
@@ -111,6 +136,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         str_query = dpr.GetSQLSelectCommand(EntityObject);
         return str_query;
     }
+
     /// <summary>
     /// 取得刪除詳細資料的 SQL 指令
     /// </summary>
@@ -120,6 +146,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         string str_query = "";
         return str_query;
     }
+
     /// <summary>
     /// 取得與設定 SQL 查詢條件式指令
     /// </summary>
@@ -129,6 +156,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         string str_query = "";
         return str_query;
     }
+
     /// <summary>
     /// 取得與設定 SQL 查詢排序指令
     /// </summary>
@@ -164,9 +192,9 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
             }
         }
         return str_query;
-
     }
     #endregion
+
     #region SQL 增刪改指令相關的函數
     /// <summary>
     /// 取得與設定 SQL 新增指令
@@ -177,6 +205,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         //自動由表格 Class 產生 Insert 查詢指令
         return dpr.GetSQLInsertCommand(EntityObject);
     }
+
     /// <summary>
     /// 取得與設定 SQL 刪除指令
     /// </summary>
@@ -186,6 +215,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         //自動由表格 Class 產生 Delete 查詢指令
         return dpr.GetSQLDeleteCommand(EntityObject);
     }
+
     /// <summary>
     /// 取得與設定 SQL 修改指令
     /// </summary>
@@ -196,6 +226,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         return dpr.GetSQLUpdateCommand(EntityObject);
     }
     #endregion
+
     #region 資料查詢相關的函數
     /// <summary>
     /// 取得與設定模糊搜尋的欄位集合
@@ -207,6 +238,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         SearchColumns = dpr.GetStringColumnList(EntityObject);
         return SearchColumns;
     }
+
     /// <summary>
     ///  取得與設定下拉式選單資料集
     /// </summary>
@@ -218,6 +250,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return model;
     }
+
     /// <summary>
     ///  取得與設定下拉式選單資料集
     /// </summary>
@@ -230,6 +263,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return model;
     }
+
     /// <summary>
     /// 取得與設定下拉式選單資料集
     /// </summary>
@@ -244,12 +278,13 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return model;
     }
+
     /// <summary>
     /// 取得與設定下拉式選單資料集
     /// </summary>
     /// <param name="valueColumn">資料欄位名稱</param>
     /// <param name="textColumn">顯示欄位名稱</param>
-    /// <param name="orderColumn">排序欄位名稱</param>/// 
+    /// <param name="orderColumn">排序欄位名稱</param>
     /// <param name="textIncludeValue">顯示欄位名稱是否顯示資料欄位</param>
     /// <returns></returns>
     public virtual List<SelectListItem> GetDropDownList(string valueColumn, string textColumn, string orderColumn, bool textIncludeValue = false)
@@ -262,6 +297,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         return model;
     }
     #endregion
+
     #region 取得資料相關的函數(同步呼叫)
     /// <summary>
     /// 取得單筆資料(同步呼叫)
@@ -282,6 +318,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         }
         return model;
     }
+
     /// <summary>
     /// 取得單筆資料(同步呼叫)
     /// </summary>
@@ -297,6 +334,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(同步呼叫)
     /// </summary>
@@ -307,6 +345,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         var model = GetDataList(parm, "");
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(同步呼叫)
     /// </summary>
@@ -317,6 +356,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         var model = GetDataList(parm, "");
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(同步呼叫)
     /// </summary>
@@ -328,6 +368,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         var model = GetDataList(parm, searchString);
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(同步呼叫)
     /// </summary>
@@ -351,6 +392,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return model;
     }
+
     /// <summary>
     /// 取得表單表頭單筆資料(同步呼叫)
     /// </summary>
@@ -386,9 +428,9 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
     /// <param name="baseno"></param>
     public virtual void SetBaseNo(string baseno)
     {
-
     }
     #endregion
+
     #region 取得資料相關的函數(非同步呼叫)
     /// <summary>
     /// 取得單筆資料(非同步呼叫)
@@ -410,6 +452,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         }
         return model;
     }
+
     /// <summary>
     /// 取得單筆資料(非同步呼叫)
     /// </summary>
@@ -425,6 +468,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(非同步不分頁呼叫)
     /// </summary>
@@ -435,6 +479,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         var model = await GetDataListAsync(parm, "");
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(非同步不分頁呼叫)
     /// </summary>
@@ -445,6 +490,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         var model = await GetDataListAsync(parm, "");
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(非同步不分頁呼叫)
     /// </summary>
@@ -456,6 +502,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         var model = await GetDataListAsync(parm, searchString);
         return model;
     }
+
     /// <summary>
     /// 取得多筆資料(非同步不分頁呼叫)
     /// </summary>
@@ -480,6 +527,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         return model;
     }
     #endregion
+
     #region 資料增刪改相關的函數(同步呼叫)
     /// <summary>
     /// 新增或修改資料(同步呼叫)
@@ -494,6 +542,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
             AffectedRows = Edit(model);
         return AffectedRows;
     }
+
     /// <summary>
     /// 新增資料(同步呼叫)
     /// </summary>
@@ -506,6 +555,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return AffectedRows;
     }
+
     /// <summary>
     /// 更新資料(同步呼叫)
     /// </summary>
@@ -518,6 +568,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return AffectedRows;
     }
+
     /// <summary>
     /// 刪除資料(同步呼叫)
     /// </summary>
@@ -530,6 +581,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return AffectedRows;
     }
+
     /// <summary>
     /// 刪除明細資料(同步呼叫)
     /// </summary>
@@ -545,6 +597,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         return AffectedRows;
     }
     #endregion
+
     #region 資料增刪改相關的函數(非同步呼叫)
     /// <summary>
     /// 新增或修改資料(非同步呼叫)
@@ -560,6 +613,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
             AffectedRows = await EditAsync(model);
         return AffectedRows;
     }
+
     /// <summary>
     /// 新增資料(非同步呼叫)
     /// </summary>
@@ -573,6 +627,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return AffectedRows;
     }
+
     /// <summary>
     /// 更新資料(非同步呼叫)
     /// </summary>
@@ -586,6 +641,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         ErrorMessage = dpr.ErrorMessage;
         return AffectedRows;
     }
+
     /// <summary>
     /// 刪除資料(非同步呼叫)
     /// </summary>
@@ -600,6 +656,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         return AffectedRows;
     }
     #endregion
+
     #region 表單表頭與表單明細相關函數
     /// <summary>
     /// 取得第一筆資料
@@ -656,7 +713,6 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
     /// </summary>
     public virtual void SetMasterPage()
     {
-
     }
 
     public List<TEntity> GetAllData()
@@ -668,6 +724,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         return models.ToList();
     }
     #endregion
+
     #region 其它相關函數(公用)
     /// <summary>
     /// 檢查是否有重覆輸入值
@@ -681,6 +738,7 @@ public class DapperSql<[DynamicallyAccessedMembers(DynamicallyAccessedMemberType
         return str_message;
     }
     #endregion
+
     #region 其它相關函數(私用)
     /// <summary>
     /// 取得真實排序欄位

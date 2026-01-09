@@ -415,10 +415,38 @@ public class DapperRepository : BaseClass
     /// <typeparam name="T">回傳泛型類型</typeparam>
     /// <param name="query">命令字串</param>
     /// <returns></returns>
+    // public T ReadSingle<T>(string query)
+    // {
+    //     ErrorMessage = "";
+    //     T ReturnValue = (T)Activator.CreateInstance(typeof(T));
+    //     using var conn = new SqlConnection(ConnectionString);
+    //     try
+    //     {
+    //         conn.Open();
+    //         ReturnValue = conn.QueryFirstOrDefault<T>(query);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         ErrorMessage = ex.Message;
+    //     }
+    //     finally
+    //     {
+    //         conn.Close();
+    //     }
+    //     return ReturnValue;
+    // }
+
+
+
+
+
+
+    // 測試：只修改 ReadSingle 方法
     public T ReadSingle<T>(string query)
     {
         ErrorMessage = "";
-        T ReturnValue = (T)Activator.CreateInstance(typeof(T));
+        T ReturnValue = default(T);  // ✅ 改用 default(T) 更安全
+
         using var conn = new SqlConnection(ConnectionString);
         try
         {
@@ -428,13 +456,21 @@ public class DapperRepository : BaseClass
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
+            Console.WriteLine($"⚠️ ReadSingle 錯誤: {ex.Message}");
         }
-        finally
-        {
-            conn.Close();
-        }
+        // ✅ 移除 finally 區塊，讓 using 自動處理
+
         return ReturnValue;
     }
+
+
+
+
+
+
+
+
+
     /// <summary>
     /// 讀取單筆記錄
     /// </summary>
@@ -492,6 +528,9 @@ public class DapperRepository : BaseClass
         }
         return ReturnValue;
     }
+
+
+
     /// <summary>
     /// 讀取單筆記錄(非同步)
     /// </summary>

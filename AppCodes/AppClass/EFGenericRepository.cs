@@ -7,9 +7,50 @@ using System.Linq.Expressions;
 /// <typeparam name="TEntity">EF Model 裡面的Type</typeparam>
 public class EFGenericRepository<TEntity> : BaseClass where TEntity : class
 {
+    // ✅ 靜態配置快取
+    private static IConfiguration? _cachedConfiguration = null;
+    private static readonly object _configLock = new object();
+    private static bool _isInitialized = false;
+
+    // ✅ 靜態建構函式
+    static EFGenericRepository()
+    {
+        InitializeConfiguration();
+    }
+
+    // ✅ 初始化配置（只執行一次）
+    private static void InitializeConfiguration()
+    {
+        if (_isInitialized) return;
+
+        lock (_configLock)
+        {
+            if (_isInitialized) return;
+
+            try
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
+
+                _cachedConfiguration = builder.Build();
+                _isInitialized = true;
+
+                Console.WriteLine("✅ EFGenericRepository: Configuration 已初始化");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️ EFGenericRepository: 初始化失敗: {ex.Message}");
+                _cachedConfiguration = new ConfigurationBuilder().Build();
+                _isInitialized = true;
+            }
+        }
+    }
+
     #region 欄位(Field)
     protected readonly DbContext Context;
     #endregion
+
     #region 建構子(Constructor)
     /// <summary>
     /// 建構EF一個Entity的Repository，需傳入此Entity的Context。
@@ -19,21 +60,30 @@ public class EFGenericRepository<TEntity> : BaseClass where TEntity : class
     {
         Context = inContext;
     }
+
     /// <summary>
-    /// 建構EF一個Entity的Repository，預設使用 dbEntities 為 Entity的Contex
+    /// 建構EF一個Entity的Repository，預設使用 dbEntities 為 Entity的Context
     /// </summary>
     public EFGenericRepository()
     {
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-        var connectionString = configuration.GetConnectionString("dbconn");
-        var optionsBuilder = new DbContextOptionsBuilder<dbEntities>();
-        optionsBuilder.UseSqlServer(connectionString);
-        Context = new dbEntities(optionsBuilder.Options);
+        try
+        {
+            // ✅ 使用已快取的配置
+            var connectionString = _cachedConfiguration?.GetConnectionString("dbconn")
+                ?? "Server=localhost;Database=powererp;User ID=sa;Password=1qaz@wsx;TrustServerCertificate=True;Connection Timeout=120;Command Timeout=180;MultipleActiveResultSets=true";
+
+            var optionsBuilder = new DbContextOptionsBuilder<dbEntities>();
+            optionsBuilder.UseSqlServer(connectionString);
+            Context = new dbEntities(optionsBuilder.Options);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"⚠️ EFGenericRepository 建構錯誤: {ex.Message}");
+            throw;
+        }
     }
     #endregion
+
     #region CRUD 查詢功能
     /// <summary>
     /// 取得第一筆符合條件的內容 (同步)
@@ -116,6 +166,7 @@ public class EFGenericRepository<TEntity> : BaseClass where TEntity : class
         if (saveChange) SaveChanges();
     }
     #endregion
+
     #region CRUD 新增、更新、刪除功能
     /// <summary>
     /// 新增一筆資料 (同步)
@@ -233,6 +284,7 @@ public class EFGenericRepository<TEntity> : BaseClass where TEntity : class
         if (saveChange) await SaveChangesAsync();
     }
     #endregion
+
     #region 存檔功能
     /// <summary>
     /// 儲存異動。
